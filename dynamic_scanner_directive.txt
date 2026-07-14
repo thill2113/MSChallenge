@@ -27,6 +27,13 @@ watchlist of exactly 3 targets.
   backend query, candleCount=0. RVOL already captures the volume-surge intent.)
 * Save the 3 tickers to context to pass into Phase 2.
 
+## 2b. INDEX-ETF MOMENTUM TIER (added)
+Broad-index ETFs rarely clear the +3% single-name gate; they get their own
+thresholds, all other rules (liquidity, delta floor, sizing) unchanged:
+* QQQ: momentum trigger = +1.0% on the day.
+* TQQQ (3x leveraged): standard +3.0% trigger (leverage restores the bar).
+Both are permanent watchlist members alongside the dynamic scan output.
+
 ## 3. PHASE 2: THE VOLATILITY BREAKOUT STRATEGY
 For each active asset:
 1. Liquidity Filter: (Ask - Bid) / Mid-Price. If spread > 15% (or the tighter
