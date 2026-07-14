@@ -28,7 +28,10 @@ SAFEGUARDS  (added per user request)
 ========================================================================
 
 RISK / SIZING LIMITS
-- MAX_POSITION_PCT      = 5%    of total equity per position.
+- MAX_POSITION_PCT      = 10%   of total equity per position (raised from 5%).
+- MIN_DELTA             = 0.20  minimum absolute delta for any options entry —
+                                 blocks deep-OTM "lottery ticket" contracts the
+                                 budget filter would otherwise nominate.
 - MAX_SPREAD_PCT        = 8%    (tightened from 20%; options books are wide —
                                  20% lets you fill deep in the spread).
 - MAX_SLIPPAGE_PCT      = 2%    above the ask on a marketable limit.

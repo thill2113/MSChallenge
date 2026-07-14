@@ -36,7 +36,9 @@ For each active asset:
    submit).
 
 ## 4. EXECUTION & SIZING
-* Capital Limit: 5% of total equity per setup, from live get_portfolio.
+* Capital Limit: 10% of total equity per setup, from live get_portfolio.
+* Options entries: minimum delta 0.20 (absolute). Contracts below the floor
+  are rejected regardless of price — no deep-OTM lottery tickets.
 * Order Type: Marketable Limit (Ask * 1.02). NO MARKET ORDERS.
 
 ## 5. POSITION MANAGEMENT (Scale & Trail) — applies when running live
