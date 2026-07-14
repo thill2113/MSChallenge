@@ -63,6 +63,19 @@ DATA SANITY GATES (abort the asset if any fail)
 - Bid <= 0, Ask <= 0, or Ask < Bid.
 - Mid-price is 0 or the % move looks like a bad tick (> configurable sanity band).
 
+DISCIPLINE RULES  (added 2026-07-14 after first live session)
+- FLYER_BUDGET: discretionary trades that bypass system gates (0DTE lottery
+  plays, delta-floor violations, off-scan entries) are capped at 50% of the
+  CURRENT DAY'S REALIZED P&L. No realized profit = no flyer. A flyer loss must
+  never turn a green day red. (Session 1 evidence: the one gate-bypassing
+  trade consumed 65% of the day's underperformance vs the pure system.)
+- TRIGGER-ONLY EXITS: positions exit ONLY on a fired trigger — scale-out
+  level, trailing stop, time-stop, or daily-loss kill switch. No impulse
+  exits between triggers. If holding to the stop feels too uncomfortable,
+  the position was sized too big; fix the size next trade, not the exit.
+  (Session 1 evidence: the one off-plan exit cost ~$9 vs plan; every
+  rule-driven exit was well-timed.)
+
 AUDIT
 - Log every asset scanned, the metrics computed, the pass/fail of each gate, and
   every order payload (submitted, reviewed, or blocked) with a timestamp.

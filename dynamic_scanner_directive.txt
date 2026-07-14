@@ -53,6 +53,14 @@ For each active asset:
 * Trailing Stop: 15% trail from the high-water mark of observed Mid-Price; on
   breach, limit-sell the remainder via marketable limit.
 
+## 5b. DISCIPLINE RULES (added after session 1)
+* Flyer budget: any trade bypassing system gates (0DTE lotteries, delta-floor
+  violations) is capped at 50% of the current day's REALIZED P&L. No banked
+  profit, no flyer. A flyer must never flip a green day red.
+* Trigger-only exits: positions close only on scale-out, trailing stop,
+  time-stop, or kill switch. No impulse exits. Discomfort holding to the stop
+  means the size was wrong, not the exit.
+
 ## 6. AUDIT LOG
 Output a concise log: the 3 assets selected, metrics evaluated, and every order
 payload (validated / blocked). No conversational filler.
