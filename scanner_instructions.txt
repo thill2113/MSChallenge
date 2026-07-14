@@ -28,7 +28,14 @@ SAFEGUARDS  (added per user request)
 ========================================================================
 
 RISK / SIZING LIMITS
-- MAX_POSITION_PCT      = 10%   of total equity per position (raised from 5%).
+- MAX_POSITION_PCT      = 10%   of total equity per position (baseline).
+- SMALL_ACCOUNT_OPTIONS_EXCEPTION = 25%  — when no delta-compliant options
+                                 contract fits the 10% budget (single-contract
+                                 minimum exceeds it), the options budget may
+                                 stretch to 25% of equity, ONE such position at
+                                 a time. Prefer cheaper underlyings first.
+                                 Exception retires once equity ≥ ~$1,100 (10%
+                                 covers a delta-0.20 contract on large-caps).
 - MIN_DELTA             = 0.20  minimum absolute delta for any options entry —
                                  blocks deep-OTM "lottery ticket" contracts the
                                  budget filter would otherwise nominate.
