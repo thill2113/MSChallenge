@@ -54,6 +54,8 @@ For each active asset:
   breach, limit-sell the remainder via marketable limit.
 
 ## 5b. DISCIPLINE RULES (added after session 1)
+* Entry cutoff: no new positions after 19:15 UTC (3:15pm ET). Late signals
+  are logged for next-open re-evaluation, not traded. Exits stay active.
 * Flyer budget: any trade bypassing system gates (0DTE lotteries, delta-floor
   violations) is capped at 50% of the current day's REALIZED P&L. No banked
   profit, no flyer. A flyer must never flip a green day red.
