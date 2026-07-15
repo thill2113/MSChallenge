@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-15T18:55:00Z",
+  "last_updated_utc": "2026-07-15T19:07:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 504.19,
