@@ -39,9 +39,26 @@ RISK / SIZING LIMITS
 - MIN_DELTA             = 0.20  minimum absolute delta for any options entry —
                                  blocks deep-OTM "lottery ticket" contracts the
                                  budget filter would otherwise nominate.
-- MAX_SPREAD_PCT        = 8%    (tightened from 20%; options books are wide —
-                                 20% lets you fill deep in the spread).
+- MAX_SPREAD_PCT        = 10%   with PENNY-FLOOR EXCEPTION: accept when
+                                 spread% ≤ 10% OR (ask − bid) == $0.01.
+                                 Cheap contracts fail %-spread math on a
+                                 single-tick book despite being maximally
+                                 liquid in absolute terms.
 - MAX_SLIPPAGE_PCT      = 2%    above the ask on a marketable limit.
+- MIN_DTE               = 3     minimum days to expiration on all option
+                                 entries (target 3–7 DTE); avoids the
+                                 vertical end of the theta curve. 0DTE is
+                                 STRICTLY FORBIDDEN unless a separate,
+                                 tighter manual trailing stop is attached —
+                                 premium evaporates in minutes.
+                                 (Session 1 evidence: the one 0DTE trade
+                                 lost 89% in 43 minutes.)
+- ORDER_TTL             = 30s   a marketable limit (ask × 1.02) unfilled
+                                 after 15–30 seconds is stale: cancel
+                                 immediately, pull a fresh quote, and
+                                 recalculate. Never leave a resting limit
+                                 working for minutes — it becomes a free
+                                 option for the market.
 - MAX_OPEN_POSITIONS    = 3     concurrent positions from this scanner.
 - MAX_DAILY_LOSS_PCT    = 6%    of starting-day equity. If realized+unrealized
                                  P&L for the day breaches this, HALT: open no new
