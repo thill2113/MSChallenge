@@ -1,0 +1,2 @@
+timestamp_utc,scan,ticker,last_price,signal_metric,direction,contract,mid,max_loss_1lot,notes
+2026-07-15T18:55Z,earnings_iv_crush,AA,48.24,IV 66% / earnings 2026-07-16 pm,neutral,2026-07-17 $48 ATM straddle (note only),3.65,365.00,ATM straddle implies ~7.6% earnings move; no contract pick per rules; manual run
