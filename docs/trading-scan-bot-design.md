@@ -30,6 +30,20 @@ formatting the alert), never as the decision-maker.
 First live run returned 10 names (EQPT at 6.7x relative options volume,
 IBM, DINO, ARR, CLSK, AEHR, NTSK, INFY, FIG, C).
 
+**All four Tier-1 scans are now live** (2026-07-15):
+
+| Scan | `scan_id` | First-run results |
+|---|---|---|
+| Unusual Options Flow — Liquid Names | `6558236c-7882-4606-b2d5-18d35d1a4dd8` | 10 names |
+| Oversold Quality — Mean Reversion | `09464e44-f975-4237-b2a6-030d64526cc0` | ORCL (RSI 25), TU (RSI 29) |
+| Momentum Breakout | `1ae663e1-0219-48c6-997d-ffc847914a61` | 0 (quiet tape; strict by design) |
+| Earnings IV Crush Setup | `53aa75e0-e8d9-4387-9e7b-3a06a0858715` | 8 names (NOW, TXN, ASML, AA, ALK, QS, LBRT, BMNR) |
+
+Filter details as implemented (deviations from the original sketch):
+- **Oversold Quality**: RSI(14, 1d) < 30; market cap > $10B; avg volume (30d) > 2M; P/E BETWEEN 5–40. As designed.
+- **Momentum Breakout**: % change (1d, close) > 4%; relative volume (30d) > 2x; market cap > $2B; last > $5. The "price above EMA(50)" idea was dropped — the scanner can only compare a datapoint against constants, not against another datapoint.
+- **Earnings IV Crush**: built from the UPCOMING_EARNINGS preset so the earnings window stays *relative* (0–7 days out, never goes stale); plus IV > 60%, open interest > 10k, market cap > $2B, avg volume (30d) > 1M, stocks only.
+
 **Pre-existing scan** (untitled, `5ef6974d-...`): % change > 3% + relative
 volume > 1.5x — a basic momentum screen. Keep it as a secondary confirmation
 list: names appearing on BOTH scans are the highest-conviction candidates.
@@ -64,10 +78,15 @@ strategy expressed as hard filters. Add these next:
   the trade and just watch — this one needs the most discipline.
 
 ### Tier 2 — Scheduled runner + second-stage contract rules
-A Routine (scheduled trigger) runs each scan at fixed times — e.g. 9:45am ET
-(after opening chop), 12:30pm, and 3:30pm ET — then applies **contract
-selection rules** to each hit using the option-chain tools. These rules are
-also fixed, not judgment calls:
+A Routine (scheduled trigger) runs each scan at fixed times — 9:45am ET
+(after opening chop), 12:45pm, and 3:45pm ET on weekdays (cron
+`45 13,16,19 * * 1-5` UTC during EDT; shift one hour for EST) — then applies
+**contract selection rules** to each hit using the option-chain tools. Each
+firing spawns a fresh session that reads this document, runs the four scans,
+ranks candidates (multi-scan hits first), applies the rules below to the top
+5, appends survivors to `journal/alerts.csv`, and sends a push/email alert.
+It never places, reviews, or stages orders. The rules are fixed, not
+judgment calls:
 
 1. Expiry: 30–45 DTE (weeklies only for the earnings scan).
 2. Delta: 0.30–0.45 for directional longs; 0.20–0.30 short strikes for
