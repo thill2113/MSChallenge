@@ -7,3 +7,5 @@ timestamp_utc,action,symbol,contract,qty,fill_price,fees,realized_pnl,trigger_ty
 2026-07-14T18:09:16,SELL,NVDA,NVDA $217.50C 2026-07-17,1,1.18,0.02,3.92,human_impulse,4,-5,no trigger fired; off-plan exit; contract marked 1.27 at day end; MFE/MAE approx
 2026-07-14T18:29:56,BUY,QQQ,QQQ $723.00C 2026-07-14,1,0.18,0.02,,flyer_user_0dte,,,gate-bypass flyer; delta 0.197 at exec (below floor); limit 0.23 improved
 2026-07-14T19:12:07,SELL,QQQ,QQQ $723.00C 2026-07-14,1,0.02,0.02,-16.08,salvage_user,0,-89,never traded above entry; MFE/MAE approx from snapshots
+2026-07-15T16:13:43,BUY,DKNG,DKNG $27.00C 2026-07-24,1,0.49,0.04,,system_entry,,,two-sided breakout call; +3.49% momentum; 0.42% off high; delta 0.35; spread 8.7%; fits 10% baseline; 9-DTE (above target); first live session-2 trade
+2026-07-15T16:36:58,SELL,DKNG,DKNG $27.00C 2026-07-24,1,0.38,0.04,-11.08,broker_stop_triggered,0,-22.4,GTC stop-limit fired at $0.42 trigger while agent disconnected; failed breakout / bull trap on red tape; stop saved ~$16 vs $0.215 later mark; MFE~0 (never green)

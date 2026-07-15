@@ -5,11 +5,11 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-15T14:33:00Z",
+  "last_updated_utc": "2026-07-15T16:40:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 515.68,
-    "cash_approx": 515.68,
+    "equity_approx": 504.60,
+    "cash_approx": 504.60,
     "sizing": {
       "baseline_10pct": 51.57,
       "exception_25pct": 128.92,
@@ -19,11 +19,12 @@
   "open_positions": [],
   "resting_stop_orders": [],
   "realized_pnl_by_day": {
-    "2026-07-14": 15.68
+    "2026-07-14": 15.68,
+    "2026-07-15": -11.08
   },
   "session_stats": {
-    "trades_total": 8,
-    "system_trades": { "count": 3, "wins": 3, "pnl": 31.76 },
+    "trades_total": 9,
+    "system_trades": { "count": 4, "wins": 3, "losses": 1, "pnl": 20.68 },
     "discretionary_trades": { "count": 2, "pnl_vs_plan": -25.0 }
   },
   "logged_signals": [
@@ -39,6 +40,12 @@
       "signal": "IONQ $34P 2026-07-24 @ ~$0.97 (IONQ $38.07, -3.1%, 0.79% off intraday low; delta -0.256, spread 7.7%, cost ~$97, put/breakdown side)",
       "status": "DRY-RUN candidate: passed ALL gates in REVIEW_ONLY scan; broker review clean. Not placed (dry-run). First real put-side candidate the two-sided logic produced.",
       "note": "used 07/24 (9 DTE) because 07/17 (2 DTE) fails MIN_DTE 3 and no expiration exists in the exact 3-7 DTE window on a Wednesday"
+    },
+    {
+      "date": "2026-07-15T16:13Z",
+      "signal": "DKNG $27C 2026-07-24 — first LIVE session-2 trade",
+      "status": "CLOSED / stopped out: bought $0.49, broker stop-limit filled $0.38 at 16:36 (−$11.08). Failed breakout / bull trap — DKNG was lone green name on a broadly red tape, reversed in ~25 min. Broker-resident stop fired while agent was disconnected; saved ~$16 vs later $0.215 mark.",
+      "lesson": "broker-resident stop validated (first live fire). Signal-quality note: a solo breakout against a red broad tape is lower-probability."
     }
   ],
   "watchlist": {
@@ -57,6 +64,7 @@
     "trail width 15% vs 10-12%",
     "IV sanity check threshold",
     "cash-account T+1 settlement / GFV tracking",
-    "DTE-window gap: on Wed-Fri, standard weeklies give only 2-DTE (this Fri) or 9-DTE (next Fri) — nothing lands in the exact 3-7 target. Frozen rule permits 9-DTE (clears MIN_DTE 3 floor) but it's above target. Decide next revision: widen target to 3-10, or accept nearest expiry above the 3-day floor."
+    "DTE-window gap: on Wed-Fri, standard weeklies give only 2-DTE (this Fri) or 9-DTE (next Fri) — nothing lands in the exact 3-7 target. Frozen rule permits 9-DTE (clears MIN_DTE 3 floor) but it's above target. Decide next revision: widen target to 3-10, or accept nearest expiry above the 3-day floor.",
+    "MARKET-BREADTH / REGIME FILTER: DKNG 07/15 was a failed breakout — it was the only green watchlist name on a broadly red tape (NVDA -2%, TQQQ -2.7%, IONQ -5.6%). A solo long breakout against a selling market reversed fast. Consider a regime gate: suppress LONG breakouts when the broad index (QQQ) is red >X% intraday, and mirror for shorts. Needs more samples before formalizing."
   ]
 }
