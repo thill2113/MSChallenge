@@ -32,7 +32,16 @@ Tradeable at current (~$515) equity:
   TSLA*, COIN*, MSTR, NVDA (originals; *TSLA/COIN options exceed budgets —
   effectively log-only) | CLSK, ERAS (earned via scan, session 1; ERAS
   options illiquid — log-only) | NFLX (added session 2 — $74/share, delta-0.20
-  contracts fit the 25% exception).
+  contracts fit the 25% exception) | MARA (~$12), SOFI (~$19), DKNG (~$25)
+  — baseline-budget fits | IONQ (~$39) — exception fit (all added session 2,
+  verified weekly chains).
+
+CORRELATION CLUSTERS (for the max-2-per-cluster rule in Discipline Rules):
+  crypto-beta:  MSTR, COIN, CLSK, MARA
+  nasdaq-beta:  NVDA, QQQ, TQQQ, PLTR, GOOGL, AMD-class megacaps
+  idiosyncratic: NFLX, DKNG, IONQ, SOFI, ERAS, TSLA, dynamic-scan names
+  (assign new names to a cluster when added; when unsure, cluster by what
+  actually moves them, not by sector label)
 Log-only until equity grows or budget rules change (delta-0.20 contracts
 price out even the 25% exception):
   HOOD (~$113), PLTR (~$134), GOOGL (~$360) — added session 2 by user.
@@ -76,6 +85,11 @@ Conditional on lot size (added session 1: a 1-lot cannot scale out, so the
 ## 5b. DISCIPLINE RULES (added after session 1)
 * Entry cutoff: no new positions after 19:15 UTC (3:15pm ET). Late signals
   are logged for next-open re-evaluation, not traded. Exits stay active.
+* Correlation cap: max 2 OPEN positions per correlation cluster (see §2a).
+  A third same-cluster signal is logged, not traded, even if every other
+  gate passes. Rationale: on 2026-07-14 the scanner held NVDA while
+  nominating TQQQ and multiple bitcoin miners — 3 open positions could all
+  have been one macro bet.
 * Flyer budget: any trade bypassing system gates (0DTE lotteries, delta-floor
   violations) is capped at 50% of the current day's REALIZED P&L. No banked
   profit, no flyer. A flyer must never flip a green day red.

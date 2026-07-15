@@ -81,6 +81,10 @@ DATA SANITY GATES (abort the asset if any fail)
 - Mid-price is 0 or the % move looks like a bad tick (> configurable sanity band).
 
 DISCIPLINE RULES  (added 2026-07-14 after first live session)
+- CORRELATION_CAP: max 2 open positions per correlation cluster
+  (crypto-beta / nasdaq-beta / idiosyncratic — cluster map lives in
+  dynamic_scanner_directive.txt §2a). A third same-cluster signal is
+  logged, not traded. MAX_OPEN_POSITIONS=3 remains the global cap.
 - ENTRY_CUTOFF: no NEW positions in the final 45 minutes of the regular
   session (after 19:15 UTC / 3:15pm ET). Late-day signals become overnight
   gap risk on short-dated options with no stop protection until the next
