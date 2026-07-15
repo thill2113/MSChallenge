@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-15T19:26:00Z",
+  "last_updated_utc": "2026-07-15T20:00:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 504.19,
@@ -23,17 +23,21 @@
       "qty": 1,
       "entry_price": 0.41,
       "entry_utc": "2026-07-15T18:54:06Z",
-      "hwm": 0.41,
+      "hwm": 0.435,
       "hwm_direction": "put (favorable = price rises as SOFI falls)",
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a57d764-aeff-41f3-aaf7-fadfb345d1ec",
-      "stop_trigger": 0.35,
-      "stop_limit": 0.31
+      "resting_stop_order_id": "6a57e6a6-04c2-4d10-a0b2-88b33ba5f72b",
+      "stop_trigger": 0.37,
+      "stop_limit": 0.33,
+      "ratchet_history": [
+        {"utc": "2026-07-15T18:54:28Z", "hwm": 0.41, "stop": 0.35, "limit": 0.31},
+        {"utc": "2026-07-15T19:59:34Z", "hwm": 0.435, "stop": 0.37, "limit": 0.33}
+      ]
     }
   ],
   "resting_stop_orders": [
-    {"order_id": "6a57d764-aeff-41f3-aaf7-fadfb345d1ec", "symbol": "SOFI", "type": "stop_limit", "stop": 0.35, "limit": 0.31, "gtc": true}
+    {"order_id": "6a57e6a6-04c2-4d10-a0b2-88b33ba5f72b", "symbol": "SOFI", "type": "stop_limit", "stop": 0.37, "limit": 0.33, "gtc": true}
   ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
