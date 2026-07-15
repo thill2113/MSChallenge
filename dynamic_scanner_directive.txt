@@ -28,11 +28,15 @@ watchlist of exactly 3 targets.
 * Save the 3 tickers to context to pass into Phase 2.
 
 ## 2a. STANDING WATCHLIST (in addition to dynamic scan output)
-TSLA, COIN, MSTR, NVDA (originals) | CLSK, ERAS (earned via scan, session 1)
-| HOOD (added session 2 by user — NOTE: at ~$113/share, delta-0.20 contracts
-cost $150+, exceeding even the 25% exception at current equity; HOOD signals
-will be LOGGED but untradeable until account equity ≈ $600+ for exception
-sizing or the budget rules change).
+Tradeable at current (~$515) equity:
+  TSLA*, COIN*, MSTR, NVDA (originals; *TSLA/COIN options exceed budgets —
+  effectively log-only) | CLSK, ERAS (earned via scan, session 1; ERAS
+  options illiquid — log-only) | NFLX (added session 2 — $74/share, delta-0.20
+  contracts fit the 25% exception).
+Log-only until equity grows or budget rules change (delta-0.20 contracts
+price out even the 25% exception):
+  HOOD (~$113), PLTR (~$134), GOOGL (~$360) — added session 2 by user.
+  Signals are evaluated and logged every scan, not traded.
 
 ## 2b. INDEX-ETF MOMENTUM TIER (added)
 Broad-index ETFs rarely clear the +3% single-name gate; they get their own
