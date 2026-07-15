@@ -27,6 +27,13 @@ watchlist of exactly 3 targets.
   backend query, candleCount=0. RVOL already captures the volume-surge intent.)
 * Save the 3 tickers to context to pass into Phase 2.
 
+## 2a. STANDING WATCHLIST (in addition to dynamic scan output)
+TSLA, COIN, MSTR, NVDA (originals) | CLSK, ERAS (earned via scan, session 1)
+| HOOD (added session 2 by user — NOTE: at ~$113/share, delta-0.20 contracts
+cost $150+, exceeding even the 25% exception at current equity; HOOD signals
+will be LOGGED but untradeable until account equity ≈ $600+ for exception
+sizing or the budget rules change).
+
 ## 2b. INDEX-ETF MOMENTUM TIER (added)
 Broad-index ETFs rarely clear the +3% single-name gate; they get their own
 thresholds, all other rules (liquidity, delta floor, sizing) unchanged:
