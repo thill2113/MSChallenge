@@ -93,13 +93,21 @@ Conditional on lot size (added session 1: a 1-lot cannot scale out, so the
   it upward via cancel/replace as the HWM rises. Polling-only stops are
   never the sole protection.
 
-## 5c. STATE PERSISTENCE (added session 2)
+## 5c. STATE PERSISTENCE & LEDGERS (added session 2)
 After every fill, signal, or stop adjustment, update and commit:
 * state.json — open positions (entry, qty, HWM, resting stop order id),
   logged untradeable/blocked signals, day's realized P&L (feeds FLYER_BUDGET).
-* trades.csv — append-only ledger of every execution with its trigger type.
-Purpose: survives session loss; accumulates the sample needed to tune
-scale-out vs trail, trail width, and time-of-day rules on real data.
+* trades.csv — append-only ledger of every execution with trigger type PLUS
+  mfe_pct / mae_pct (max favorable / adverse excursion while held, recorded
+  by the position-watch loop at close of each trade). MFE/MAE is the data
+  that eventually settles trail width and scale-out threshold empirically.
+* virtual_trades.csv — paper ledger for LOG-ONLY names (HOOD, PLTR, GOOGL,
+  TSLA, COIN, QQQ, ERAS): every fully-gated signal on them is recorded as a
+  virtual entry at the quoted marketable-limit price and virtually managed
+  by the same Scale & Trail rules. Costs nothing; ~triples the rate of
+  evidence about whether the triggers have edge.
+Purpose: survives session loss; accumulates the sample that earns the next
+ruleset revision (see freeze notice in scanner_instructions.txt).
 
 ## 5b. DISCIPLINE RULES (added after session 1)
 * Entry cutoff: no new positions after 19:15 UTC (3:15pm ET). Late signals

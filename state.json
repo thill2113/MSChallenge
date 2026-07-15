@@ -1,5 +1,11 @@
 {
-  "last_updated_utc": "2026-07-15T07:15:00Z",
+  "ruleset_version": "1.0-frozen-2026-07-15",
+  "freeze": {
+    "active": true,
+    "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
+    "next_scan_mode": "REVIEW_ONLY (dry-run after 2026-07-15 revision batch); live from following scan"
+  },
+  "last_updated_utc": "2026-07-15T07:30:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 515.68,
