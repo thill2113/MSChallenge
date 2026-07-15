@@ -5,19 +5,36 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-15T16:40:00Z",
+  "last_updated_utc": "2026-07-15T18:55:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 504.60,
-    "cash_approx": 504.60,
+    "equity_approx": 504.19,
+    "cash_approx": 463.19,
     "sizing": {
       "baseline_10pct": 51.57,
       "exception_25pct": 128.92,
       "exception_retires_at_equity": 1100
     }
   },
-  "open_positions": [],
-  "resting_stop_orders": [],
+  "open_positions": [
+    {
+      "symbol": "SOFI",
+      "contract": "SOFI $17.50P 2026-07-24",
+      "qty": 1,
+      "entry_price": 0.41,
+      "entry_utc": "2026-07-15T18:54:06Z",
+      "hwm": 0.41,
+      "hwm_direction": "put (favorable = price rises as SOFI falls)",
+      "trail_pct": 15,
+      "management": "trail-only (1-lot)",
+      "resting_stop_order_id": "6a57d764-aeff-41f3-aaf7-fadfb345d1ec",
+      "stop_trigger": 0.35,
+      "stop_limit": 0.31
+    }
+  ],
+  "resting_stop_orders": [
+    {"order_id": "6a57d764-aeff-41f3-aaf7-fadfb345d1ec", "symbol": "SOFI", "type": "stop_limit", "stop": 0.35, "limit": 0.31, "gtc": true}
+  ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08
@@ -25,7 +42,8 @@
   "session_stats": {
     "trades_total": 9,
     "system_trades": { "count": 4, "wins": 3, "losses": 1, "pnl": 20.68 },
-    "discretionary_trades": { "count": 2, "pnl_vs_plan": -25.0 }
+    "discretionary_trades": { "count": 2, "pnl_vs_plan": -25.0 },
+    "open_positions_count": 1
   },
   "logged_signals": [
     {
