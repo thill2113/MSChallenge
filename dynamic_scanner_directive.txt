@@ -54,13 +54,19 @@ thresholds, all other rules (liquidity, delta floor, sizing) unchanged:
 * TQQQ (3x leveraged): standard +3.0% trigger (leverage restores the bar).
 Both are permanent watchlist members alongside the dynamic scan output.
 
-## 3. PHASE 2: THE VOLATILITY BREAKOUT STRATEGY
+## 3. PHASE 2: THE VOLATILITY BREAKOUT STRATEGY (two-sided)
 For each active asset:
-1. Liquidity Filter: (Ask - Bid) / Mid-Price. If spread > 15% (or the tighter
-   MAX_SPREAD_PCT), ABORT the asset.
-2. Breakout Trigger: asset must be trading within 1% of its intraday High.
-3. If both met, mark as a candidate entry (REVIEW_ONLY: build + validate, do not
-   submit).
+1. Liquidity Filter: (Ask - Bid) / Mid-Price ≤ 10% OR ask−bid == $0.01;
+   otherwise ABORT the asset.
+2. LONG side — Breakout Trigger: underlying up ≥ +3% on day AND trading
+   within 1% of its intraday High → candidate CALL entry.
+3. SHORT side (added session 2) — Breakdown Trigger: underlying down ≤ −3%
+   on day AND trading within 1% of its intraday Low → candidate PUT entry.
+   Identical delta floor (|delta| ≥ 0.20), DTE, sizing, spread, earnings,
+   and correlation rules apply. Index tier mirrors too (QQQ ∓1.0%, TQQQ ∓3.0%).
+4. EARNINGS_GATE: skip any candidate whose underlying reports earnings
+   within 2 calendar days (get_earnings_calendar).
+5. Candidates passing all gates → broker review → human confirmation.
 
 ## 4. EXECUTION & SIZING
 * Capital Limit: 10% of total equity per setup, from live get_portfolio.
@@ -81,6 +87,19 @@ Conditional on lot size (added session 1: a 1-lot cannot scale out, so the
 * IF Qty > 1: at +50% unrealized gain, limit-sell 50% to secure capital,
   then attach the 15% trailing stop to the remainder.
 * All stop executions via marketable limit, never market.
+* BROKER-RESIDENT STOPS (added session 2): on entry fill, immediately place
+  a GTC stop-limit sell-to-close at the initial stop (15% below entry),
+  human-confirmed as part of the entry decision. Monitoring passes ratchet
+  it upward via cancel/replace as the HWM rises. Polling-only stops are
+  never the sole protection.
+
+## 5c. STATE PERSISTENCE (added session 2)
+After every fill, signal, or stop adjustment, update and commit:
+* state.json — open positions (entry, qty, HWM, resting stop order id),
+  logged untradeable/blocked signals, day's realized P&L (feeds FLYER_BUDGET).
+* trades.csv — append-only ledger of every execution with its trigger type.
+Purpose: survives session loss; accumulates the sample needed to tune
+scale-out vs trail, trail width, and time-of-day rules on real data.
 
 ## 5b. DISCIPLINE RULES (added after session 1)
 * Entry cutoff: no new positions after 19:15 UTC (3:15pm ET). Late signals

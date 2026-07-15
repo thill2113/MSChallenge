@@ -81,6 +81,16 @@ DATA SANITY GATES (abort the asset if any fail)
 - Mid-price is 0 or the % move looks like a bad tick (> configurable sanity band).
 
 DISCIPLINE RULES  (added 2026-07-14 after first live session)
+- EARNINGS_GATE: no entries within 2 calendar days of the underlying's
+  earnings date (check get_earnings_calendar per candidate). Short-dated
+  options into earnings = IV-crush + gap risk that no other gate catches.
+- BROKER_STOPS: on every entry fill, immediately place a GTC stop-limit
+  sell-to-close at the initial stop level (15% below entry mark), confirmed
+  by the human as part of the entry decision. Monitoring passes RATCHET the
+  stop up (cancel/replace) as the high-water mark rises; the floor always
+  rests at the broker so protection exists BETWEEN monitoring passes, not
+  only during them. Soft (polling-only) stops are forbidden as the sole
+  protection on any position.
 - CORRELATION_CAP: max 2 open positions per correlation cluster
   (crypto-beta / nasdaq-beta / idiosyncratic — cluster map lives in
   dynamic_scanner_directive.txt §2a). A third same-cluster signal is

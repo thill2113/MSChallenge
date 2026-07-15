@@ -1,0 +1,9 @@
+timestamp_utc,action,symbol,contract,qty,fill_price,fees,realized_pnl,trigger_type,notes
+2026-07-14T17:13:58,BUY,CLSK,CLSK $13.50C 2026-07-17,1,0.33,0.02,,system_entry,dynamic scan; delta 0.36; spread 3.1%; limit 0.34 improved
+2026-07-14T17:14:01,BUY,CLSK,CLSK $14.00C 2026-07-17,1,0.21,0.02,,system_entry,dynamic scan; delta 0.25; spread 5.1%
+2026-07-14T17:17:06,BUY,NVDA,NVDA $217.50C 2026-07-17,1,1.14,0.02,,system_entry,static watchlist; delta 0.24; 25% exception; filled 3min after placement
+2026-07-14T17:54:06,SELL,CLSK,CLSK $13.50C 2026-07-17,1,0.49,0.02,15.92,scale_out_trigger,+50% trigger fired at sale; limit 0.45 improved
+2026-07-14T17:58:23,SELL,CLSK,CLSK $14.00C 2026-07-17,1,0.33,0.02,11.92,scale_out_trigger,+69% at trigger check; loop pass caught it
+2026-07-14T18:09:16,SELL,NVDA,NVDA $217.50C 2026-07-17,1,1.18,0.02,3.92,human_impulse,no trigger fired; off-plan exit; contract marked 1.27 at day end
+2026-07-14T18:29:56,BUY,QQQ,QQQ $723.00C 2026-07-14,1,0.18,0.02,,flyer_user_0dte,gate-bypass flyer; delta 0.197 at exec (below floor); limit 0.23 improved
+2026-07-14T19:12:07,SELL,QQQ,QQQ $723.00C 2026-07-14,1,0.02,0.02,-16.08,salvage_user,QQQ broke down; salvaged ahead of 19:37 time-stop

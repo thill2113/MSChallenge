@@ -1,0 +1,49 @@
+{
+  "last_updated_utc": "2026-07-15T07:15:00Z",
+  "account": {
+    "number_masked": "****4177",
+    "equity_approx": 515.68,
+    "cash_approx": 515.68,
+    "sizing": {
+      "baseline_10pct": 51.57,
+      "exception_25pct": 128.92,
+      "exception_retires_at_equity": 1100
+    }
+  },
+  "open_positions": [],
+  "resting_stop_orders": [],
+  "realized_pnl_by_day": {
+    "2026-07-14": 15.68
+  },
+  "session_stats": {
+    "trades_total": 8,
+    "system_trades": { "count": 3, "wins": 3, "pnl": 31.76 },
+    "discretionary_trades": { "count": 2, "pnl_vs_plan": -25.0 }
+  },
+  "logged_signals": [
+    {
+      "date": "2026-07-14T19:27Z",
+      "signal": "MSTR $105C 2026-07-17 @ $1.11 (MSTR $97.49, +5.8%, 0.6% off high)",
+      "blocked_by": "ENTRY_CUTOFF",
+      "status": "STALE for original contract: 07/17 expiry now fails MIN_DTE 3; if MSTR momentum+breakout re-fire, evaluate 2026-07-24 expirations",
+      "followup": "priority re-check at first scan after 2026-07-15 open"
+    }
+  ],
+  "watchlist": {
+    "tradeable": ["MSTR", "NVDA", "CLSK", "NFLX", "MARA", "SOFI", "DKNG", "IONQ", "TQQQ"],
+    "log_only_priced_out": ["TSLA", "COIN", "HOOD", "PLTR", "GOOGL", "QQQ"],
+    "log_only_illiquid_options": ["ERAS"]
+  },
+  "correlation_clusters": {
+    "crypto_beta": ["MSTR", "COIN", "CLSK", "MARA"],
+    "nasdaq_beta": ["NVDA", "QQQ", "TQQQ", "PLTR", "GOOGL"],
+    "idiosyncratic": ["NFLX", "DKNG", "IONQ", "SOFI", "ERAS", "TSLA"]
+  },
+  "saved_scan_id": "5ef6974d-5db9-4469-8448-932e92159315",
+  "open_tuning_questions": [
+    "scale-out vs trail-only for multi-lots (needs 30+ trades of ledger data)",
+    "trail width 15% vs 10-12%",
+    "IV sanity check threshold",
+    "cash-account T+1 settlement / GFV tracking"
+  ]
+}
