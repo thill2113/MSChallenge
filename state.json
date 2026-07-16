@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-16T15:24:00Z",
+  "last_updated_utc": "2026-07-16T17:35:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 512.46,
@@ -106,6 +106,12 @@
       "signal": "Broad selloff deepened (QQQ -1.16%, NVDA -3.03%, TQQQ -3.53%). 4 names passed underlying-level gates: NVDA (0.10% off low, tightest of the day), IONQ (0.41% off low, 5th attempt -- FINALLY converted), MSTR (0.60%), CLSK (0.60%). MARA (1.39%) and TQQQ (1.04%) narrowly missed breakdown.",
       "status": "TRADED: IONQ $34P only. NVDA and MSTR both failed CONTRACT-level checks despite passing underlying gates -- every delta>=0.20 strike cost 2x+ over even the 25% exception ($249-383 vs $128.92 cap). CLSK failed on spread (13-18% vs 10% gate) at every delta-compliant strike despite being cheap enough on cost.",
       "tuning_flag": "MAJOR FINDING: underlying-level momentum+breakdown gates are a necessary but NOT sufficient filter. On this session's tape, only 1 of 4 qualifying underlyings (25%) survived contract-level economics (delta x spread x cost simultaneously). NVDA/MSTR are structurally too expensive for this account at any compliant delta -- this is now confirmed on BOTH the call side (session 1, NVDA/QQQ) and the put side (session 2). Recommend: (1) don't present underlying-level passes as 'candidates' without a contract pre-check, it wastes review cycles; (2) consider dropping NVDA/MSTR/QQQ/GOOGL from the tradeable-signal path entirely and moving them to log-only until equity is much higher; (3) CLSK's spread instability (tight one day, 13-18% the next) suggests options liquidity there is thinner than assumed -- worth tracking over more sessions before trusting it as a baseline-budget staple."
+    },
+    {
+      "date": "2026-07-16T17:34Z",
+      "signal": "CLSK -6.83% (1.11% off low), MARA -6.30% (1.05% off low), TQQQ -3.86% (0.70% off low, PASSED breakdown).",
+      "status": "NO TRADE. CLSK/MARA failed breakdown position (narrow misses). TQQQ passed every underlying+contract gate (68P: delta -0.31, spread 9.7%) but every delta>=0.20 strike costs $177-332, requiring the single 25% exception slot -- which IONQ already occupies. Blocked by capital allocation, not signal quality.",
+      "tuning_flag": "Second time in one session a good signal was blocked purely by the single-exception-slot rule (IONQ already using it). At this account size, only ~1 in 3 open-position slots can ever hold anything pricier than the baseline budget. Open question: is a single exception slot too restrictive, or is this exactly the discipline that's supposed to cap concentration? Leave for post-freeze review with more samples."
     }
   ],
   "watchlist": {
