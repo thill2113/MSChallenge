@@ -5,11 +5,11 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-15T20:00:00Z",
+  "last_updated_utc": "2026-07-16T14:24:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 504.19,
-    "cash_approx": 463.19,
+    "equity_approx": 512.46,
+    "cash_approx": 463.46,
     "sizing": {
       "baseline_10pct": 51.57,
       "exception_25pct": 128.92,
@@ -74,6 +74,12 @@
       "signal": "IONQ $34P 2026-07-24 re-fired: IONQ $37.01, -5.80%, 0.41% off intraday low (tighter than the 14:30 attempt). Would pass ALL gates (momentum, breakdown, cluster 0/2 idio-slot-free since SOFI already counted, position cap 2/3).",
       "blocked_by": "ENTRY_CUTOFF (scan ran 19:25 UTC, past 19:15 cutoff)",
       "status": "LOGGED, not traded. Third time IONQ has qualified on momentum today; second time on full breakdown position. Re-check at next open — do not auto-chase overnight gap."
+    },
+    {
+      "date": "2026-07-16T14:24Z",
+      "signal": "Full rescan, new session day. MARA -3.86% (2.21% off low) and IONQ -3.47% (1.43% off low, its FOURTH near-miss across two sessions) both pass momentum but fail breakdown position. 0 candidates passed all gates.",
+      "status": "NO TRADE. Broad tape red again (QQQ -0.91%, NVDA -1.92%, TQQQ -2.85%, both index tiers just short of trigger too).",
+      "tuning_flag": "IONQ has approached the breakdown trigger 4x across 2 sessions (0.79%->spread-blocked, 0.41%->cutoff-blocked, 1.11%->drifted-out, now 1.43%->drifted-out) without ever converting. Possible chop around its low, or the 1% breakdown band may be too tight for IONQ's volatility specifically. Candidate for per-symbol or ATR-scaled breakout/breakdown bands in next revision."
     }
   ],
   "watchlist": {
@@ -93,6 +99,7 @@
     "IV sanity check threshold",
     "cash-account T+1 settlement / GFV tracking",
     "DTE-window gap: on Wed-Fri, standard weeklies give only 2-DTE (this Fri) or 9-DTE (next Fri) — nothing lands in the exact 3-7 target. Frozen rule permits 9-DTE (clears MIN_DTE 3 floor) but it's above target. Decide next revision: widen target to 3-10, or accept nearest expiry above the 3-day floor.",
-    "MARKET-BREADTH / REGIME FILTER: DKNG 07/15 was a failed breakout — it was the only green watchlist name on a broadly red tape (NVDA -2%, TQQQ -2.7%, IONQ -5.6%). A solo long breakout against a selling market reversed fast. Consider a regime gate: suppress LONG breakouts when the broad index (QQQ) is red >X% intraday, and mirror for shorts. Needs more samples before formalizing."
+    "MARKET-BREADTH / REGIME FILTER: DKNG 07/15 was a failed breakout — it was the only green watchlist name on a broadly red tape (NVDA -2%, TQQQ -2.7%, IONQ -5.6%). A solo long breakout against a selling market reversed fast. Consider a regime gate: suppress LONG breakouts when the broad index (QQQ) is red >X% intraday, and mirror for shorts. Needs more samples before formalizing.",
+    "PER-SYMBOL BREAKOUT/BREAKDOWN BAND: IONQ has missed the 1%-off-high/low breakdown gate 4 times across 2 sessions despite repeatedly qualifying on momentum (see 2026-07-16T14:24Z signal). A fixed 1% band may not suit a name with IONQ's volatility (52wk range $25.89-$84.64). Consider scaling the band by ATR or historical volatility per symbol instead of a flat 1% for all watchlist names."
   ]
 }
