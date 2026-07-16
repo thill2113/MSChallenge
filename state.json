@@ -109,10 +109,17 @@
     }
   ],
   "watchlist": {
-    "tradeable": ["MSTR", "NVDA", "CLSK", "NFLX", "MARA", "SOFI", "DKNG", "IONQ", "TQQQ"],
-    "log_only_priced_out": ["TSLA", "COIN", "HOOD", "PLTR", "GOOGL", "QQQ"],
+    "tradeable": ["CLSK", "NFLX", "MARA", "SOFI", "DKNG", "IONQ", "TQQQ"],
+    "log_only_priced_out": ["TSLA", "COIN", "HOOD", "PLTR", "GOOGL", "QQQ", "MSTR", "NVDA"],
     "log_only_illiquid_options": ["ERAS"]
   },
+  "watchlist_change_log": [
+    {
+      "utc": "2026-07-16T15:30:00Z",
+      "change": "Moved MSTR and NVDA from tradeable to log_only_priced_out.",
+      "reason": "2026-07-16T15:17Z scan: both passed underlying momentum+breakdown gates but every delta>=0.20 put cost $249-383, 2x+ over even the 25% exception cap ($128.92). Confirms the same wall hit by NVDA calls and QQQ in session 1. Signals still evaluated and logged each scan; will not be nominated for trades unless account equity grows enough to afford them (~$1,500+ estimated) or a cheaper expiration/strike structure is found."
+    }
+  ],
   "correlation_clusters": {
     "crypto_beta": ["MSTR", "COIN", "CLSK", "MARA"],
     "nasdaq_beta": ["NVDA", "QQQ", "TQQQ", "PLTR", "GOOGL"],

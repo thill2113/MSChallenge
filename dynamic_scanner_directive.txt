@@ -29,12 +29,11 @@ watchlist of exactly 3 targets.
 
 ## 2a. STANDING WATCHLIST (in addition to dynamic scan output)
 Tradeable at current (~$515) equity:
-  TSLA*, COIN*, MSTR, NVDA (originals; *TSLA/COIN options exceed budgets —
-  effectively log-only) | CLSK, ERAS (earned via scan, session 1; ERAS
-  options illiquid — log-only) | NFLX (added session 2 — $74/share, delta-0.20
-  contracts fit the 25% exception) | MARA (~$12), SOFI (~$19), DKNG (~$25)
-  — baseline-budget fits | IONQ (~$39) — exception fit (all added session 2,
-  verified weekly chains).
+  CLSK, ERAS (earned via scan, session 1; ERAS options illiquid — log-only
+  in practice) | NFLX (added session 2 — $74/share, delta-0.20 contracts fit
+  the 25% exception) | MARA (~$12), SOFI (~$19), DKNG (~$25) — baseline-budget
+  fits | IONQ (~$36) — exception fit (all added session 2, verified weekly
+  chains).
 
 CORRELATION CLUSTERS (for the max-2-per-cluster rule in Discipline Rules):
   crypto-beta:  MSTR, COIN, CLSK, MARA
@@ -42,10 +41,18 @@ CORRELATION CLUSTERS (for the max-2-per-cluster rule in Discipline Rules):
   idiosyncratic: NFLX, DKNG, IONQ, SOFI, ERAS, TSLA, dynamic-scan names
   (assign new names to a cluster when added; when unsure, cluster by what
   actually moves them, not by sector label)
+
 Log-only until equity grows or budget rules change (delta-0.20 contracts
-price out even the 25% exception):
-  HOOD (~$113), PLTR (~$134), GOOGL (~$360) — added session 2 by user.
-  Signals are evaluated and logged every scan, not traded.
+price out even the 25% exception; signals still evaluated and logged every
+scan, never traded):
+  HOOD (~$113), PLTR (~$134), GOOGL (~$360), TSLA (~$395), COIN (~$165) —
+  originals/session-2 adds, never fit.
+  MSTR (~$94), NVDA (~$207) — MOVED to log-only 2026-07-16 after the
+  15:17 UTC scan: both passed momentum+breakdown gates but every strike at
+  delta ≥0.20 costs $249-383, 2x+ over even the 25% exception cap ($128.92).
+  Confirms the same pricing wall NVDA calls and QQQ hit in session 1 — this
+  account cannot afford a delta-compliant contract on either name at any
+  reasonable strike. Re-evaluate once equity reaches roughly $1,500+.
 
 ## 2b. INDEX-ETF MOMENTUM TIER (added)
 Broad-index ETFs rarely clear the +3% single-name gate; they get their own
