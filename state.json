@@ -5,11 +5,11 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-16T17:35:00Z",
+  "last_updated_utc": "2026-07-16T20:53:04Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 512.46,
-    "cash_approx": 344.30,
+    "equity_approx": 552.42,
+    "cash_approx": 347.42,
     "sizing": {
       "baseline_10pct": 51.57,
       "exception_25pct": 128.92,
@@ -23,41 +23,46 @@
       "qty": 1,
       "entry_price": 0.41,
       "entry_utc": "2026-07-15T18:54:06Z",
-      "hwm": 0.435,
+      "hwm": 0.65,
       "hwm_direction": "put (favorable = price rises as SOFI falls)",
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a57e6a6-04c2-4d10-a0b2-88b33ba5f72b",
-      "stop_trigger": 0.37,
-      "stop_limit": 0.33,
+      "resting_stop_order_id": "6a5944af-9f65-4e3d-bf18-37923cde013a",
+      "stop_trigger": 0.55,
+      "stop_limit": 0.50,
+      "stop_order_state": "queued (market closed at ratchet time, activates next regular session)",
+      "unrealized_pct_at_last_check": 58.5,
       "ratchet_history": [
         {"utc": "2026-07-15T18:54:28Z", "hwm": 0.41, "stop": 0.35, "limit": 0.31},
-        {"utc": "2026-07-15T19:59:34Z", "hwm": 0.435, "stop": 0.37, "limit": 0.33}
+        {"utc": "2026-07-15T19:59:34Z", "hwm": 0.435, "stop": 0.37, "limit": 0.33},
+        {"utc": "2026-07-16T20:53:03Z", "hwm": 0.65, "stop": 0.55, "limit": 0.50}
       ]
-    }
-  ],
+    },
     {
       "symbol": "IONQ",
       "contract": "IONQ $34.00P 2026-07-24",
       "qty": 1,
       "entry_price": 1.16,
       "entry_utc": "2026-07-16T15:23:29Z",
-      "hwm": 1.16,
+      "hwm": 1.395,
       "hwm_direction": "put (favorable = price rises as IONQ falls)",
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a58f787-e66d-4a0a-94a4-d044d61be1db",
-      "stop_trigger": 0.99,
-      "stop_limit": 0.89,
-      "sizing_note": "used the single 25% exception slot (23% of equity); no other exception position may open until this closes",
+      "resting_stop_order_id": "6a5944b0-434a-4d1c-8d28-b46cd9098ba4",
+      "stop_trigger": 1.19,
+      "stop_limit": 1.09,
+      "stop_order_state": "queued (market closed at ratchet time, activates next regular session)",
+      "unrealized_pct_at_last_check": 20.3,
+      "sizing_note": "used the single 25% exception slot (23% of equity at entry); no other exception position may open until this closes",
       "ratchet_history": [
-        {"utc": "2026-07-16T15:23:51Z", "hwm": 1.16, "stop": 0.99, "limit": 0.89}
+        {"utc": "2026-07-16T15:23:51Z", "hwm": 1.16, "stop": 0.99, "limit": 0.89},
+        {"utc": "2026-07-16T20:53:04Z", "hwm": 1.395, "stop": 1.19, "limit": 1.09}
       ]
     }
   ],
   "resting_stop_orders": [
-    {"order_id": "6a57e6a6-04c2-4d10-a0b2-88b33ba5f72b", "symbol": "SOFI", "type": "stop_limit", "stop": 0.37, "limit": 0.33, "gtc": true},
-    {"order_id": "6a58f787-e66d-4a0a-94a4-d044d61be1db", "symbol": "IONQ", "type": "stop_limit", "stop": 0.99, "limit": 0.89, "gtc": true}
+    {"order_id": "6a5944af-9f65-4e3d-bf18-37923cde013a", "symbol": "SOFI", "type": "stop_limit", "stop": 0.55, "limit": 0.50, "gtc": true, "state": "queued"},
+    {"order_id": "6a5944b0-434a-4d1c-8d28-b46cd9098ba4", "symbol": "IONQ", "type": "stop_limit", "stop": 1.19, "limit": 1.09, "gtc": true, "state": "queued"}
   ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
@@ -112,6 +117,12 @@
       "signal": "CLSK -6.83% (1.11% off low), MARA -6.30% (1.05% off low), TQQQ -3.86% (0.70% off low, PASSED breakdown).",
       "status": "NO TRADE. CLSK/MARA failed breakdown position (narrow misses). TQQQ passed every underlying+contract gate (68P: delta -0.31, spread 9.7%) but every delta>=0.20 strike costs $177-332, requiring the single 25% exception slot -- which IONQ already occupies. Blocked by capital allocation, not signal quality.",
       "tuning_flag": "Second time in one session a good signal was blocked purely by the single-exception-slot rule (IONQ already using it). At this account size, only ~1 in 3 open-position slots can ever hold anything pricier than the baseline budget. Open question: is a single exception slot too restrictive, or is this exactly the discipline that's supposed to cap concentration? Leave for post-freeze review with more samples."
+    },
+    {
+      "date": "2026-07-16T20:53Z",
+      "signal": "Close-of-day check: SOFI +58.5% unrealized ($0.41->$0.65), IONQ +20.3% unrealized ($1.16->$1.395). Both stops were stale (SOFI stop last ratcheted at HWM $0.435, two ratchets behind; IONQ stop never ratcheted since entry).",
+      "status": "User asked to 'override positions if worth it' intending TQQQ (see 17:34Z entry) -- that window was already gone: market closed at 20:00 UTC and TQQQ's option chain has extended_hours_state=disabled, plus ENTRY_CUTOFF would have blocked it anyway. Redirected the override into the actually-valuable action: ratcheted both resting stops to lock in the session's gains. SOFI stop 0.37->0.55 (locks ~34% min gain vs prior ~-10% floor). IONQ stop 0.99->1.19 (locks ~2.6% min gain vs prior -15% floor). Both orders queued (GTC, market closed) -- will activate at next regular session open.",
+      "note": "IMPORTANT BUG FOUND AND FIXED: state.json had been invalid JSON since the 2026-07-16T15:24Z edit that added the IONQ open_positions entry outside the array's closing bracket. Any automated process (e.g. the scheduled scan) attempting json.load on this file since then would have failed silently or fallen back to stale/no state. File structure rewritten and validated with python3 json.load this pass. Lesson: state.json edits need a validation step (json.load check) before commit, not just visual review."
     }
   ],
   "watchlist": {
@@ -139,6 +150,7 @@
     "cash-account T+1 settlement / GFV tracking",
     "DTE-window gap: on Wed-Fri, standard weeklies give only 2-DTE (this Fri) or 9-DTE (next Fri) — nothing lands in the exact 3-7 target. Frozen rule permits 9-DTE (clears MIN_DTE 3 floor) but it's above target. Decide next revision: widen target to 3-10, or accept nearest expiry above the 3-day floor.",
     "MARKET-BREADTH / REGIME FILTER: DKNG 07/15 was a failed breakout — it was the only green watchlist name on a broadly red tape (NVDA -2%, TQQQ -2.7%, IONQ -5.6%). A solo long breakout against a selling market reversed fast. Consider a regime gate: suppress LONG breakouts when the broad index (QQQ) is red >X% intraday, and mirror for shorts. Needs more samples before formalizing.",
-    "PER-SYMBOL BREAKOUT/BREAKDOWN BAND: IONQ has missed the 1%-off-high/low breakdown gate 4 times across 2 sessions despite repeatedly qualifying on momentum (see 2026-07-16T14:24Z signal). A fixed 1% band may not suit a name with IONQ's volatility (52wk range $25.89-$84.64). Consider scaling the band by ATR or historical volatility per symbol instead of a flat 1% for all watchlist names."
+    "PER-SYMBOL BREAKOUT/BREAKDOWN BAND: IONQ has missed the 1%-off-high/low breakdown gate 4 times across 2 sessions despite repeatedly qualifying on momentum (see 2026-07-16T14:24Z signal). A fixed 1% band may not suit a name with IONQ's volatility (52wk range $25.89-$84.64). Consider scaling the band by ATR or historical volatility per symbol instead of a flat 1% for all watchlist names.",
+    "STATE FILE VALIDATION: state.json went invalid for ~5.5 hours (2026-07-16 15:24 to 20:53 UTC) after a bad edit before anyone noticed. Add a json.load validation step to the state-write process (or a pre-commit hook) so this can't recur silently."
   ]
 }
