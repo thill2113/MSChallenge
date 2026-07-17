@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-17T14:22:00Z",
+  "last_updated_utc": "2026-07-17T17:35:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 610.34,
@@ -112,6 +112,12 @@
       "status": "AGENT TRACKING ERROR (self-reported): after ratcheting SOFI's stop (13:39) and entering MARA (14:04), the agent did NOT re-poll positions/orders and carried forward a stale assumption that both were open. Consequently it mis-reported to the user from ~13:53 to 14:21: called SOFI 'riding', showed SOFI +178% unrealized in a P&L table, described 'SOFI + MARA 2/3 slots', and in the 14:18 rescan warned MARA 'could round-trip toward its stop' when MARA had ALREADY stopped out at 14:10. Surfaced only when the user asked to 'ratchet SOFI' and the agent finally pulled a fresh quote/position and found the fills.",
       "day_realized": "2026-07-17 total = +105.76 (SOFI +54.92, IONQ +57.92, MARA -7.08). Green day. FLYER_BUDGET today = 50% x 105.76 = $52.88 if requested.",
       "lesson": "ROOT CAUSE: broker-resident stops fire silently server-side (by design -- same as DKNG session 1); the agent's polling model only detects fills when it actively re-queries. FIX for open_tuning_questions: after ANY stop is placed/ratcheted, and at the START of every check-in/scan, re-poll get_option_positions + get_option_orders BEFORE reporting position state -- never report an open position from memory. The broker stops did their job perfectly (both filled at/above limit, no slippage, protected the gains through the bounce); the failure was purely in the agent's situational awareness, not in execution or money."
+    },
+    {
+      "date": "2026-07-17T17:34Z",
+      "signal": "Afternoon scan. Position poll FIRST (per new freshness rule) confirmed FLAT -- rule working as intended. Tape has fully V-reversed: QQQ -2.2% at open -> -0.58% now. IONQ +1.9% and SOFI +1.3% now GREEN on the day (both above prior close); CLSK +1.7% green. MARA -4.0% and NFLX -7.6% still red but +2.3%/+2.9% off their lows (breakdown position gate fails). Nothing hit +3% breakout either.",
+      "status": "NO TRADE. Both sides empty on the reversal. Notably vindicates the day's exits: SOFI and IONQ puts would be near-worthless now that both underlyings are green -- the broker stop (SOFI) and discretionary close (IONQ) both got out well ahead of the reversal.",
+      "profit_capture_decision": "User raised that realized +105.76 vs a peak-sum ~+162 unrealized felt like money left on the table, and proposed take-profit over trailing. Resolved: Option 1 (surface-on-spike + MFE-capture logging) ADOPTED now as freeze-safe monitoring behavior (dynamic_scanner_directive.txt 5d); Option 2 (mechanical profit-tier tightening the trail) QUEUED for freeze-lift, to be calibrated from the logged capture data. Honest framing given to user: a naive fixed take-profit would have done WORSE on SOFI today ($0.82 vs the $0.96 the trail actually captured) and nothing on IONQ; the real gap was the wide trail's give-back on a parabolic spike, addressable mechanically only post-freeze with data. User steer: prefer not to break the freeze; combine the two as a sequence."
     }
   ],
   "watchlist": {
@@ -134,7 +140,7 @@
   "saved_scan_id": "5ef6974d-5db9-4469-8448-932e92159315",
   "open_tuning_questions": [
     "scale-out vs trail-only for multi-lots (needs 30+ trades of ledger data)",
-    "trail width 15% vs 10-12%",
+    "PROFIT-CAPTURE / trail width (updated 2026-07-17): Option 1 ADOPTED now (freeze-safe) -- profit-take surfacing on parabolic spikes + MFE-capture logging, see dynamic_scanner_directive.txt 5d. Option 2 (mechanical profit-tier that tightens trail 15%->~8% once up +80%) is QUEUED for freeze-lift, to be calibrated FROM the logged capture-ratio data, not guessed. Motivating datapoint: SOFI 2026-07-17 peak $1.14 -> trail fired $0.96 (~$18 give-back on 1-lot); same day IONQ discretionary close beat the trail. n=8 completed trades so far, too few to set the tier width.",
     "IV sanity check threshold",
     "cash-account T+1 settlement / GFV tracking",
     "DTE-window gap: on Wed-Fri, standard weeklies give only 2-DTE (this Fri) or 9-DTE (next Fri) — nothing lands in the exact 3-7 target. Frozen rule permits 9-DTE (clears MIN_DTE 3 floor) but it's above target. Decide next revision: widen target to 3-10, or accept nearest expiry above the 3-day floor.",

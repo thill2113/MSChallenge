@@ -100,6 +100,36 @@ Conditional on lot size (added session 1: a 1-lot cannot scale out, so the
   it upward via cancel/replace as the HWM rises. Polling-only stops are
   never the sole protection.
 
+## 5d. PROFIT-CAPTURE SURFACING (added 2026-07-17 — FREEZE-SAFE, NOT a parameter change)
+This is monitoring behavior + data collection, not a change to any frozen
+value. It exists because the 15% trail, while correct for trend capture,
+gives back a large chunk of a fast parabolic spike (SOFI 2026-07-17: peak
+mark $1.14 -> trail fired $0.96, ~$18 given back on a 1-lot). Two parts:
+
+  (a) SURFACE, don't auto-exit. When an OPEN position is both (i) up a lot
+      AND (ii) spiking hard intraday (rule of thumb: a large single-session
+      unrealized gain that just went vertical — the IONQ 0.42->2.04 shape),
+      PROACTIVELY surface a review-and-confirm "take profit into strength?"
+      decision. The human decides. This is exactly the IONQ $34P close that
+      beat both hold and trail on 2026-07-17. It is discretionary and only
+      works while the session is live and the human is reachable — it is a
+      complement to the broker stop, never a replacement.
+
+  (b) LOG MFE-capture on every closed trade. Capture ratio =
+      (realized_exit - entry) / (HWM_peak - entry). Record it alongside the
+      existing mfe_pct/mae_pct in trades.csv notes. This is the dataset that
+      makes the eventual mechanical fix (see below) evidence-based instead of
+      reactive.
+
+  QUEUED FOR FREEZE-LIFT (Option 2, mechanical, DO NOT implement until the
+  freeze lifts at 20-30 completed trades): once MFE-capture data across the
+  sample shows systematic give-back on winners, add a profit-tier that
+  tightens the trail — e.g. once unrealized >= +80%, switch the trail from
+  15% to a width the data supports (~8-10%). Calibrate the threshold AND the
+  width from the logged capture ratios; do not guess them. A tighter trail
+  also stops out earlier on noise, so this is a two-edged change that must be
+  earned with evidence, not adopted off one salient give-back.
+
 ## 5c. STATE PERSISTENCE & LEDGERS (added session 2)
 After every fill, signal, or stop adjustment, update and commit:
 * state.json — open positions (entry, qty, HWM, resting stop order id),
