@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-17T14:15:00Z",
+  "last_updated_utc": "2026-07-17T13:34:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 552.42,
@@ -23,19 +23,20 @@
       "qty": 1,
       "entry_price": 0.41,
       "entry_utc": "2026-07-15T18:54:06Z",
-      "hwm": 0.65,
+      "hwm": 1.02,
       "hwm_direction": "put (favorable = price rises as SOFI falls)",
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a5944af-9f65-4e3d-bf18-37923cde013a",
-      "stop_trigger": 0.55,
-      "stop_limit": 0.50,
-      "stop_order_state": "queued (market closed at ratchet time, activates next regular session)",
-      "unrealized_pct_at_last_check": 58.5,
+      "resting_stop_order_id": "6a5a2f3b-dc77-49e4-b784-1a37fb0d6f47",
+      "stop_trigger": 0.86,
+      "stop_limit": 0.81,
+      "stop_order_state": "confirmed, regular session",
+      "unrealized_pct_at_last_check": 148.8,
       "ratchet_history": [
         {"utc": "2026-07-15T18:54:28Z", "hwm": 0.41, "stop": 0.35, "limit": 0.31},
         {"utc": "2026-07-15T19:59:34Z", "hwm": 0.435, "stop": 0.37, "limit": 0.33},
-        {"utc": "2026-07-16T20:53:03Z", "hwm": 0.65, "stop": 0.55, "limit": 0.50}
+        {"utc": "2026-07-16T20:53:03Z", "hwm": 0.65, "stop": 0.55, "limit": 0.50},
+        {"utc": "2026-07-17T13:33:47Z", "hwm": 1.02, "stop": 0.86, "limit": 0.81, "note": "SOFI gapped down hard at Friday open, mark jumped 0.65->1.02"}
       ]
     },
     {
@@ -44,25 +45,26 @@
       "qty": 1,
       "entry_price": 1.16,
       "entry_utc": "2026-07-16T15:23:29Z",
-      "hwm": 1.395,
+      "hwm": 1.655,
       "hwm_direction": "put (favorable = price rises as IONQ falls)",
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a5944b0-434a-4d1c-8d28-b46cd9098ba4",
-      "stop_trigger": 1.19,
-      "stop_limit": 1.09,
-      "stop_order_state": "queued (market closed at ratchet time, activates next regular session)",
-      "unrealized_pct_at_last_check": 20.3,
+      "resting_stop_order_id": "6a5a2f3c-b3d6-411c-be82-4a8e2c3d2596",
+      "stop_trigger": 1.41,
+      "stop_limit": 1.29,
+      "stop_order_state": "confirmed, regular session",
+      "unrealized_pct_at_last_check": 42.7,
       "sizing_note": "used the single 25% exception slot (23% of equity at entry); no other exception position may open until this closes",
       "ratchet_history": [
         {"utc": "2026-07-16T15:23:51Z", "hwm": 1.16, "stop": 0.99, "limit": 0.89},
-        {"utc": "2026-07-16T20:53:04Z", "hwm": 1.395, "stop": 1.19, "limit": 1.09}
+        {"utc": "2026-07-16T20:53:04Z", "hwm": 1.395, "stop": 1.19, "limit": 1.09},
+        {"utc": "2026-07-17T13:33:48Z", "hwm": 1.655, "stop": 1.41, "limit": 1.29, "note": "IONQ gapped down hard at Friday open, mark jumped 1.395->1.655"}
       ]
     }
   ],
   "resting_stop_orders": [
-    {"order_id": "6a5944af-9f65-4e3d-bf18-37923cde013a", "symbol": "SOFI", "type": "stop_limit", "stop": 0.55, "limit": 0.50, "gtc": true, "state": "queued"},
-    {"order_id": "6a5944b0-434a-4d1c-8d28-b46cd9098ba4", "symbol": "IONQ", "type": "stop_limit", "stop": 1.19, "limit": 1.09, "gtc": true, "state": "queued"}
+    {"order_id": "6a5a2f3b-dc77-49e4-b784-1a37fb0d6f47", "symbol": "SOFI", "type": "stop_limit", "stop": 0.86, "limit": 0.81, "gtc": true, "state": "unconfirmed (just placed, regular session)"},
+    {"order_id": "6a5a2f3c-b3d6-411c-be82-4a8e2c3d2596", "symbol": "IONQ", "type": "stop_limit", "stop": 1.41, "limit": 1.29, "gtc": true, "state": "unconfirmed (just placed, regular session)"}
   ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
@@ -129,6 +131,12 @@
       "signal": "User asked what other tickers belong in the 0DTE flyer sleeve (flyer_sleeve.txt), beyond NDX. Verified live chains/quotes on the Agentic account rather than guessing.",
       "status": "ADDED XSP (S&P 500 Mini Index) to flyer_sleeve.txt Section 1. Verified: true daily 0DTE chain, cash-settled, 0.36-delta 07-17 call quoted bid/ask 1.03/1.10 (~7% spread, OI 444, vol 2,851) -- genuinely liquid and affordable at $110/contract. Confirmed SPXW (full-size SPX) quotes the identical 0.36-delta strike at $11.00 ask (~$1,100/lot, 10x XSP) -- unaffordable at this account's equity, so XSP not SPX is the right instrument. Checked and rejected: QQQ/SPY 0DTE (equity/ETF-settled -> assignment risk on this CASH-type account, unlike index-settled XSP/NDX/SPX), RUT/RUTW (full-size too expensive like SPX; RUTW weeklies are the thin-book pattern already flagged for CLSK), MRUT (mini RUT exists but has no true daily/0DTE expiration, nearest is several days out -- doesn't serve this sleeve), VIX (mechanically not a same-day index-level bet; roll/settlement quirks make it a different trade, not included).",
       "note": "This only edits which underlyings the FLYER sleeve is allowed to scan -- it does not touch the frozen core ruleset and does not place any trade. Every actual flyer trade still goes through live candidate selection + human confirmation per flyer_sleeve.txt Section 4."
+    },
+    {
+      "date": "2026-07-17T13:33Z",
+      "signal": "Friday regular-session open: both open positions gapped hard in the favorable direction, exactly as the Thursday after-hours equity move suggested. SOFI mark 0.65->1.02 (stock fell to $17.13 after hours per user-shared screenshot), IONQ mark 1.395->1.655 (stock fell to $34.58).",
+      "status": "RATCHETED both resting stops immediately at open, before any scan. SOFI: stop 0.55/limit 0.50 -> stop 0.86/limit 0.81 (cancel+replace, old order confirmed cancelled before new one placed, no race). IONQ: stop 1.19/limit 1.09 -> stop 1.41/limit 1.29, same clean cancel-then-place sequence. SOFI now +148.8% unrealized, IONQ +42.7% unrealized.",
+      "note": "Validates the priority-ordering call from the after-hours check: ratchet before scanning, since stale stops would have left real gains unprotected through this gap."
     }
   ],
   "watchlist": {
