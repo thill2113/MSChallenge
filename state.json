@@ -5,14 +5,14 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-17T13:40:00Z",
+  "last_updated_utc": "2026-07-17T13:55:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 552.42,
-    "cash_approx": 347.42,
+    "equity_approx": 636.80,
+    "cash_approx": 521.38,
     "sizing": {
-      "baseline_10pct": 51.57,
-      "exception_25pct": 128.92,
+      "baseline_10pct": 63.68,
+      "exception_25pct": 159.20,
       "exception_retires_at_equity": 1100
     }
   },
@@ -39,44 +39,22 @@
         {"utc": "2026-07-17T13:33:47Z", "hwm": 1.02, "stop": 0.86, "limit": 0.81, "note": "SOFI gapped down hard at Friday open, mark jumped 0.65->1.02"},
         {"utc": "2026-07-17T13:39:52Z", "hwm": 1.14, "stop": 0.97, "limit": 0.92, "note": "selloff still accelerating 6min into session, mark 1.02->1.14"}
       ]
-    },
-    {
-      "symbol": "IONQ",
-      "contract": "IONQ $34.00P 2026-07-24",
-      "qty": 1,
-      "entry_price": 1.16,
-      "entry_utc": "2026-07-16T15:23:29Z",
-      "hwm": 2.02,
-      "hwm_direction": "put (favorable = price rises as IONQ falls)",
-      "trail_pct": 15,
-      "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a5a30aa-92a6-44c0-800b-ebd607aab300",
-      "stop_trigger": 1.72,
-      "stop_limit": 1.60,
-      "stop_order_state": "unconfirmed (just placed, regular session)",
-      "unrealized_pct_at_last_check": 74.1,
-      "sizing_note": "used the single 25% exception slot (23% of equity at entry); no other exception position may open until this closes",
-      "ratchet_history": [
-        {"utc": "2026-07-16T15:23:51Z", "hwm": 1.16, "stop": 0.99, "limit": 0.89},
-        {"utc": "2026-07-16T20:53:04Z", "hwm": 1.395, "stop": 1.19, "limit": 1.09},
-        {"utc": "2026-07-17T13:33:48Z", "hwm": 1.655, "stop": 1.41, "limit": 1.29, "note": "IONQ gapped down hard at Friday open, mark jumped 1.395->1.655"},
-        {"utc": "2026-07-17T13:39:54Z", "hwm": 2.02, "stop": 1.72, "limit": 1.60, "note": "selloff still accelerating, mark 1.655->2.02"}
-      ]
     }
   ],
+  "exception_slot": "FREE as of 2026-07-17T13:52:53Z (IONQ closed); one position at a time may use 25% sizing until equity >= 1100",
   "resting_stop_orders": [
-    {"order_id": "6a5a30a8-7dfd-477b-bf33-90fed33d5c62", "symbol": "SOFI", "type": "stop_limit", "stop": 0.97, "limit": 0.92, "gtc": true, "state": "unconfirmed (just placed, regular session)"},
-    {"order_id": "6a5a30aa-92a6-44c0-800b-ebd607aab300", "symbol": "IONQ", "type": "stop_limit", "stop": 1.72, "limit": 1.60, "gtc": true, "state": "unconfirmed (just placed, regular session)"}
+    {"order_id": "6a5a30a8-7dfd-477b-bf33-90fed33d5c62", "symbol": "SOFI", "type": "stop_limit", "stop": 0.97, "limit": 0.92, "gtc": true, "state": "confirmed, regular session"}
   ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
-    "2026-07-15": -11.08
+    "2026-07-15": -11.08,
+    "2026-07-17": 57.92
   },
   "session_stats": {
-    "trades_total": 10,
-    "system_trades": { "count": 5, "wins": 3, "losses": 1, "pnl": 20.68 },
+    "trades_total": 13,
+    "system_trades": { "count": 6, "wins": 4, "losses": 1, "pnl": 78.60, "note": "IONQ counted as system entry; exit was user_confirmed_close (off-trigger, deliberate) not a trail fire" },
     "discretionary_trades": { "count": 2, "pnl_vs_plan": -25.0 },
-    "open_positions_count": 2
+    "open_positions_count": 1
   },
   "logged_signals": [
     {
@@ -139,6 +117,12 @@
       "signal": "Friday regular-session open: both open positions gapped hard in the favorable direction, exactly as the Thursday after-hours equity move suggested. SOFI mark 0.65->1.02 (stock fell to $17.13 after hours per user-shared screenshot), IONQ mark 1.395->1.655 (stock fell to $34.58).",
       "status": "RATCHETED both resting stops immediately at open, before any scan. SOFI: stop 0.55/limit 0.50 -> stop 0.86/limit 0.81 (cancel+replace, old order confirmed cancelled before new one placed, no race). IONQ: stop 1.19/limit 1.09 -> stop 1.41/limit 1.29, same clean cancel-then-place sequence. SOFI now +148.8% unrealized, IONQ +42.7% unrealized.",
       "note": "Validates the priority-ordering call from the after-hours check: ratchet before scanning, since stale stops would have left real gains unprotected through this gap."
+    },
+    {
+      "date": "2026-07-17T13:52Z",
+      "signal": "IONQ $34P CLOSED at $1.74 (+$57.92 realized, +50% on entry $1.16). User-confirmed deliberate close, not a trail fire.",
+      "status": "Rationale: at-the-money max-gamma leg (delta -0.47) had started giving back (mark 2.04 -> 1.845 in 6 min) with spread widening to ~11% on thin volume; sold into remaining strength at marketable limit, filled with $0.04 improvement, $0.02 above where the trailing stop would have triggered (and without stop-limit fill risk). SOFI kept riding on its trail (deep ITM, delta -0.72, stop 0.97/0.92 locking ~+124% min). Exception slot now FREE. Day realized: +$57.92 -> FLYER_BUDGET today = $28.96 if requested.",
+      "note": "Honest classification: this was an off-trigger exit sanctioned deliberately (options 1/2/3 discussed, user chose consolidation over impulse liquidation of both). Distinct from session-1 'human_impulse' NVDA exit: full analysis first, single leg only, thesis retained via SOFI. Watch for hindsight bias when reviewing: if IONQ keeps tanking this 'cost' money vs the trail; if it bounces the close beat the stop. Logged both possibilities before outcome known."
     }
   ],
   "watchlist": {
