@@ -5,77 +5,32 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-17T14:05:00Z",
+  "last_updated_utc": "2026-07-17T14:22:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 636.80,
-    "cash_approx": 479.34,
+    "equity_approx": 610.34,
+    "cash_approx": 610.34,
+    "note": "FLAT / all cash as of 2026-07-17T14:10:47Z. equity == cash, no open positions.",
     "sizing": {
-      "baseline_10pct": 63.68,
-      "exception_25pct": 159.20,
+      "baseline_10pct": 61.03,
+      "exception_25pct": 152.59,
       "exception_retires_at_equity": 1100
     }
   },
-  "open_positions": [
-    {
-      "symbol": "SOFI",
-      "contract": "SOFI $17.50P 2026-07-24",
-      "qty": 1,
-      "entry_price": 0.41,
-      "entry_utc": "2026-07-15T18:54:06Z",
-      "hwm": 1.14,
-      "hwm_direction": "put (favorable = price rises as SOFI falls)",
-      "trail_pct": 15,
-      "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a5a30a8-7dfd-477b-bf33-90fed33d5c62",
-      "stop_trigger": 0.97,
-      "stop_limit": 0.92,
-      "stop_order_state": "unconfirmed (just placed, regular session)",
-      "unrealized_pct_at_last_check": 178.0,
-      "ratchet_history": [
-        {"utc": "2026-07-15T18:54:28Z", "hwm": 0.41, "stop": 0.35, "limit": 0.31},
-        {"utc": "2026-07-15T19:59:34Z", "hwm": 0.435, "stop": 0.37, "limit": 0.33},
-        {"utc": "2026-07-16T20:53:03Z", "hwm": 0.65, "stop": 0.55, "limit": 0.50},
-        {"utc": "2026-07-17T13:33:47Z", "hwm": 1.02, "stop": 0.86, "limit": 0.81, "note": "SOFI gapped down hard at Friday open, mark jumped 0.65->1.02"},
-        {"utc": "2026-07-17T13:39:52Z", "hwm": 1.14, "stop": 0.97, "limit": 0.92, "note": "selloff still accelerating 6min into session, mark 1.02->1.14"}
-      ]
-    },
-    {
-      "symbol": "MARA",
-      "contract": "MARA $10.50P 2026-07-24",
-      "qty": 1,
-      "entry_price": 0.42,
-      "entry_utc": "2026-07-17T14:04:13Z",
-      "hwm": 0.42,
-      "hwm_direction": "put (favorable = price rises as MARA falls)",
-      "trail_pct": 15,
-      "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a5a366c-eb5c-4c78-a36a-4d82371f0b38",
-      "stop_trigger": 0.36,
-      "stop_limit": 0.32,
-      "stop_order_state": "unconfirmed (just placed, regular session)",
-      "unrealized_pct_at_last_check": 0,
-      "sizing_note": "fits 10% baseline ($42 vs $63.68); exception slot NOT used, remains free",
-      "ratchet_history": [
-        {"utc": "2026-07-17T14:04:28Z", "hwm": 0.42, "stop": 0.36, "limit": 0.32}
-      ]
-    }
-  ],
-  "exception_slot": "FREE as of 2026-07-17T13:52:53Z (IONQ closed; MARA entry 14:04 fit baseline and did not claim it); one position at a time may use 25% sizing until equity >= 1100",
-  "resting_stop_orders": [
-    {"order_id": "6a5a30a8-7dfd-477b-bf33-90fed33d5c62", "symbol": "SOFI", "type": "stop_limit", "stop": 0.97, "limit": 0.92, "gtc": true, "state": "confirmed, regular session"},
-    {"order_id": "6a5a366c-eb5c-4c78-a36a-4d82371f0b38", "symbol": "MARA", "type": "stop_limit", "stop": 0.36, "limit": 0.32, "gtc": true, "state": "unconfirmed (just placed, regular session)"}
-  ],
+  "open_positions": [],
+  "account_flat_since_utc": "2026-07-17T14:10:47Z (all positions closed; SOFI+MARA stopped out, IONQ deliberately closed)",
+  "exception_slot": "FREE (no open positions); one position at a time may use 25% sizing until equity >= 1100",
+  "resting_stop_orders": [],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
-    "2026-07-17": 57.92
+    "2026-07-17": 105.76
   },
   "session_stats": {
-    "trades_total": 14,
-    "system_trades": { "count": 6, "wins": 4, "losses": 1, "pnl": 78.60, "note": "IONQ counted as system entry; exit was user_confirmed_close (off-trigger, deliberate) not a trail fire" },
+    "trades_total": 16,
+    "system_trades": { "count": 8, "wins": 5, "losses": 2, "pnl": 130.44, "note": "SOFI +54.92 (broker stop), MARA -7.08 (broker stop), IONQ +57.92 (deliberate user close). All three 2026-07-17 exits now recorded." },
     "discretionary_trades": { "count": 2, "pnl_vs_plan": -25.0 },
-    "open_positions_count": 2
+    "open_positions_count": 0
   },
   "logged_signals": [
     {
@@ -150,6 +105,13 @@
       "signal": "MARA $10.50P 2026-07-24 ENTERED at $0.42 (vs $0.45 marketable limit, improvement). MARA -5.78%, QQQ -1.75%, delta -0.37, spread 4.7%, 7-DTE, crypto_beta cluster 0/2, cost $42 within 10% baseline -- exception slot untouched.",
       "status": "3rd trade of day (cap 5). Broker stop 0.36/0.32 GTC placed on fill. Open positions now 2/3: SOFI (idiosyncratic) + MARA (crypto_beta).",
       "note": "Caveats logged at entry, before outcome: (1) intraday-low gate verified only against observed spot prints (get_equity_historicals persistently erroring with approval failure -- flagged as tooling gap); (2) entry came ~30min after the first signal, after a small bounce off lows -- tape decelerating, not accelerating, at fill. If this one stops out, check whether late-entry-after-bounce is a pattern worth a rule."
+    },
+    {
+      "date": "2026-07-17T14:22Z",
+      "signal": "RECONCILIATION + AGENT ERROR. Both remaining positions had already stopped out via broker-resident GTC stops before this was detected. SOFI $17.50P: stop 0.97/0.92 FILLED at 0.96 at 13:50:42 (+54.92, MFE +181% at HWM 1.14) as the market bounce decayed the put. MARA $10.50P: stop 0.36/0.32 FILLED at 0.35 at 14:10:47 (-7.08) as the same bounce round-tripped it 6min after entry. Account now FLAT / all cash ~$610.",
+      "status": "AGENT TRACKING ERROR (self-reported): after ratcheting SOFI's stop (13:39) and entering MARA (14:04), the agent did NOT re-poll positions/orders and carried forward a stale assumption that both were open. Consequently it mis-reported to the user from ~13:53 to 14:21: called SOFI 'riding', showed SOFI +178% unrealized in a P&L table, described 'SOFI + MARA 2/3 slots', and in the 14:18 rescan warned MARA 'could round-trip toward its stop' when MARA had ALREADY stopped out at 14:10. Surfaced only when the user asked to 'ratchet SOFI' and the agent finally pulled a fresh quote/position and found the fills.",
+      "day_realized": "2026-07-17 total = +105.76 (SOFI +54.92, IONQ +57.92, MARA -7.08). Green day. FLYER_BUDGET today = 50% x 105.76 = $52.88 if requested.",
+      "lesson": "ROOT CAUSE: broker-resident stops fire silently server-side (by design -- same as DKNG session 1); the agent's polling model only detects fills when it actively re-queries. FIX for open_tuning_questions: after ANY stop is placed/ratcheted, and at the START of every check-in/scan, re-poll get_option_positions + get_option_orders BEFORE reporting position state -- never report an open position from memory. The broker stops did their job perfectly (both filled at/above limit, no slippage, protected the gains through the bounce); the failure was purely in the agent's situational awareness, not in execution or money."
     }
   ],
   "watchlist": {
@@ -178,6 +140,7 @@
     "DTE-window gap: on Wed-Fri, standard weeklies give only 2-DTE (this Fri) or 9-DTE (next Fri) — nothing lands in the exact 3-7 target. Frozen rule permits 9-DTE (clears MIN_DTE 3 floor) but it's above target. Decide next revision: widen target to 3-10, or accept nearest expiry above the 3-day floor.",
     "MARKET-BREADTH / REGIME FILTER: DKNG 07/15 was a failed breakout — it was the only green watchlist name on a broadly red tape (NVDA -2%, TQQQ -2.7%, IONQ -5.6%). A solo long breakout against a selling market reversed fast. Consider a regime gate: suppress LONG breakouts when the broad index (QQQ) is red >X% intraday, and mirror for shorts. Needs more samples before formalizing.",
     "PER-SYMBOL BREAKOUT/BREAKDOWN BAND: IONQ has missed the 1%-off-high/low breakdown gate 4 times across 2 sessions despite repeatedly qualifying on momentum (see 2026-07-16T14:24Z signal). A fixed 1% band may not suit a name with IONQ's volatility (52wk range $25.89-$84.64). Consider scaling the band by ATR or historical volatility per symbol instead of a flat 1% for all watchlist names.",
-    "STATE FILE VALIDATION: state.json went invalid for ~5.5 hours (2026-07-16 15:24 to 20:53 UTC) after a bad edit before anyone noticed. Add a json.load validation step to the state-write process (or a pre-commit hook) so this can't recur silently."
+    "STATE FILE VALIDATION: state.json went invalid for ~5.5 hours (2026-07-16 15:24 to 20:53 UTC) after a bad edit before anyone noticed. Add a json.load validation step to the state-write process (or a pre-commit hook) so this can't recur silently.",
+    "POSITION-STATE FRESHNESS (added 2026-07-17): the agent mis-reported SOFI as open for ~30min after its broker stop silently filled (see 2026-07-17T14:22Z signal). Broker-resident stops fire server-side without notifying the agent. RULE TO ADOPT: never report open-position state from memory; re-poll get_option_positions + get_option_orders at the start of every check-in/scan/PnL request and immediately after any stop placement, and reconcile before speaking. This is a monitoring-discipline fix, not a strategy change -- safe to adopt during the freeze."
   ]
 }
