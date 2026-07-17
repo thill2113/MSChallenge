@@ -5,11 +5,11 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-17T13:55:00Z",
+  "last_updated_utc": "2026-07-17T14:05:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 636.80,
-    "cash_approx": 521.38,
+    "cash_approx": 479.34,
     "sizing": {
       "baseline_10pct": 63.68,
       "exception_25pct": 159.20,
@@ -39,11 +39,32 @@
         {"utc": "2026-07-17T13:33:47Z", "hwm": 1.02, "stop": 0.86, "limit": 0.81, "note": "SOFI gapped down hard at Friday open, mark jumped 0.65->1.02"},
         {"utc": "2026-07-17T13:39:52Z", "hwm": 1.14, "stop": 0.97, "limit": 0.92, "note": "selloff still accelerating 6min into session, mark 1.02->1.14"}
       ]
+    },
+    {
+      "symbol": "MARA",
+      "contract": "MARA $10.50P 2026-07-24",
+      "qty": 1,
+      "entry_price": 0.42,
+      "entry_utc": "2026-07-17T14:04:13Z",
+      "hwm": 0.42,
+      "hwm_direction": "put (favorable = price rises as MARA falls)",
+      "trail_pct": 15,
+      "management": "trail-only (1-lot)",
+      "resting_stop_order_id": "6a5a366c-eb5c-4c78-a36a-4d82371f0b38",
+      "stop_trigger": 0.36,
+      "stop_limit": 0.32,
+      "stop_order_state": "unconfirmed (just placed, regular session)",
+      "unrealized_pct_at_last_check": 0,
+      "sizing_note": "fits 10% baseline ($42 vs $63.68); exception slot NOT used, remains free",
+      "ratchet_history": [
+        {"utc": "2026-07-17T14:04:28Z", "hwm": 0.42, "stop": 0.36, "limit": 0.32}
+      ]
     }
   ],
-  "exception_slot": "FREE as of 2026-07-17T13:52:53Z (IONQ closed); one position at a time may use 25% sizing until equity >= 1100",
+  "exception_slot": "FREE as of 2026-07-17T13:52:53Z (IONQ closed; MARA entry 14:04 fit baseline and did not claim it); one position at a time may use 25% sizing until equity >= 1100",
   "resting_stop_orders": [
-    {"order_id": "6a5a30a8-7dfd-477b-bf33-90fed33d5c62", "symbol": "SOFI", "type": "stop_limit", "stop": 0.97, "limit": 0.92, "gtc": true, "state": "confirmed, regular session"}
+    {"order_id": "6a5a30a8-7dfd-477b-bf33-90fed33d5c62", "symbol": "SOFI", "type": "stop_limit", "stop": 0.97, "limit": 0.92, "gtc": true, "state": "confirmed, regular session"},
+    {"order_id": "6a5a366c-eb5c-4c78-a36a-4d82371f0b38", "symbol": "MARA", "type": "stop_limit", "stop": 0.36, "limit": 0.32, "gtc": true, "state": "unconfirmed (just placed, regular session)"}
   ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
@@ -51,10 +72,10 @@
     "2026-07-17": 57.92
   },
   "session_stats": {
-    "trades_total": 13,
+    "trades_total": 14,
     "system_trades": { "count": 6, "wins": 4, "losses": 1, "pnl": 78.60, "note": "IONQ counted as system entry; exit was user_confirmed_close (off-trigger, deliberate) not a trail fire" },
     "discretionary_trades": { "count": 2, "pnl_vs_plan": -25.0 },
-    "open_positions_count": 1
+    "open_positions_count": 2
   },
   "logged_signals": [
     {
@@ -123,6 +144,12 @@
       "signal": "IONQ $34P CLOSED at $1.74 (+$57.92 realized, +50% on entry $1.16). User-confirmed deliberate close, not a trail fire.",
       "status": "Rationale: at-the-money max-gamma leg (delta -0.47) had started giving back (mark 2.04 -> 1.845 in 6 min) with spread widening to ~11% on thin volume; sold into remaining strength at marketable limit, filled with $0.04 improvement, $0.02 above where the trailing stop would have triggered (and without stop-limit fill risk). SOFI kept riding on its trail (deep ITM, delta -0.72, stop 0.97/0.92 locking ~+124% min). Exception slot now FREE. Day realized: +$57.92 -> FLYER_BUDGET today = $28.96 if requested.",
       "note": "Honest classification: this was an off-trigger exit sanctioned deliberately (options 1/2/3 discussed, user chose consolidation over impulse liquidation of both). Distinct from session-1 'human_impulse' NVDA exit: full analysis first, single leg only, thesis retained via SOFI. Watch for hindsight bias when reviewing: if IONQ keeps tanking this 'cost' money vs the trail; if it bounces the close beat the stop. Logged both possibilities before outcome known."
+    },
+    {
+      "date": "2026-07-17T14:04Z",
+      "signal": "MARA $10.50P 2026-07-24 ENTERED at $0.42 (vs $0.45 marketable limit, improvement). MARA -5.78%, QQQ -1.75%, delta -0.37, spread 4.7%, 7-DTE, crypto_beta cluster 0/2, cost $42 within 10% baseline -- exception slot untouched.",
+      "status": "3rd trade of day (cap 5). Broker stop 0.36/0.32 GTC placed on fill. Open positions now 2/3: SOFI (idiosyncratic) + MARA (crypto_beta).",
+      "note": "Caveats logged at entry, before outcome: (1) intraday-low gate verified only against observed spot prints (get_equity_historicals persistently erroring with approval failure -- flagged as tooling gap); (2) entry came ~30min after the first signal, after a small bounce off lows -- tape decelerating, not accelerating, at fill. If this one stops out, check whether late-entry-after-bounce is a pattern worth a rule."
     }
   ],
   "watchlist": {
