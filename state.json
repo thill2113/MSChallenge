@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-17T13:34:00Z",
+  "last_updated_utc": "2026-07-17T13:40:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 552.42,
@@ -23,20 +23,21 @@
       "qty": 1,
       "entry_price": 0.41,
       "entry_utc": "2026-07-15T18:54:06Z",
-      "hwm": 1.02,
+      "hwm": 1.14,
       "hwm_direction": "put (favorable = price rises as SOFI falls)",
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a5a2f3b-dc77-49e4-b784-1a37fb0d6f47",
-      "stop_trigger": 0.86,
-      "stop_limit": 0.81,
-      "stop_order_state": "confirmed, regular session",
-      "unrealized_pct_at_last_check": 148.8,
+      "resting_stop_order_id": "6a5a30a8-7dfd-477b-bf33-90fed33d5c62",
+      "stop_trigger": 0.97,
+      "stop_limit": 0.92,
+      "stop_order_state": "unconfirmed (just placed, regular session)",
+      "unrealized_pct_at_last_check": 178.0,
       "ratchet_history": [
         {"utc": "2026-07-15T18:54:28Z", "hwm": 0.41, "stop": 0.35, "limit": 0.31},
         {"utc": "2026-07-15T19:59:34Z", "hwm": 0.435, "stop": 0.37, "limit": 0.33},
         {"utc": "2026-07-16T20:53:03Z", "hwm": 0.65, "stop": 0.55, "limit": 0.50},
-        {"utc": "2026-07-17T13:33:47Z", "hwm": 1.02, "stop": 0.86, "limit": 0.81, "note": "SOFI gapped down hard at Friday open, mark jumped 0.65->1.02"}
+        {"utc": "2026-07-17T13:33:47Z", "hwm": 1.02, "stop": 0.86, "limit": 0.81, "note": "SOFI gapped down hard at Friday open, mark jumped 0.65->1.02"},
+        {"utc": "2026-07-17T13:39:52Z", "hwm": 1.14, "stop": 0.97, "limit": 0.92, "note": "selloff still accelerating 6min into session, mark 1.02->1.14"}
       ]
     },
     {
@@ -45,26 +46,27 @@
       "qty": 1,
       "entry_price": 1.16,
       "entry_utc": "2026-07-16T15:23:29Z",
-      "hwm": 1.655,
+      "hwm": 2.02,
       "hwm_direction": "put (favorable = price rises as IONQ falls)",
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a5a2f3c-b3d6-411c-be82-4a8e2c3d2596",
-      "stop_trigger": 1.41,
-      "stop_limit": 1.29,
-      "stop_order_state": "confirmed, regular session",
-      "unrealized_pct_at_last_check": 42.7,
+      "resting_stop_order_id": "6a5a30aa-92a6-44c0-800b-ebd607aab300",
+      "stop_trigger": 1.72,
+      "stop_limit": 1.60,
+      "stop_order_state": "unconfirmed (just placed, regular session)",
+      "unrealized_pct_at_last_check": 74.1,
       "sizing_note": "used the single 25% exception slot (23% of equity at entry); no other exception position may open until this closes",
       "ratchet_history": [
         {"utc": "2026-07-16T15:23:51Z", "hwm": 1.16, "stop": 0.99, "limit": 0.89},
         {"utc": "2026-07-16T20:53:04Z", "hwm": 1.395, "stop": 1.19, "limit": 1.09},
-        {"utc": "2026-07-17T13:33:48Z", "hwm": 1.655, "stop": 1.41, "limit": 1.29, "note": "IONQ gapped down hard at Friday open, mark jumped 1.395->1.655"}
+        {"utc": "2026-07-17T13:33:48Z", "hwm": 1.655, "stop": 1.41, "limit": 1.29, "note": "IONQ gapped down hard at Friday open, mark jumped 1.395->1.655"},
+        {"utc": "2026-07-17T13:39:54Z", "hwm": 2.02, "stop": 1.72, "limit": 1.60, "note": "selloff still accelerating, mark 1.655->2.02"}
       ]
     }
   ],
   "resting_stop_orders": [
-    {"order_id": "6a5a2f3b-dc77-49e4-b784-1a37fb0d6f47", "symbol": "SOFI", "type": "stop_limit", "stop": 0.86, "limit": 0.81, "gtc": true, "state": "unconfirmed (just placed, regular session)"},
-    {"order_id": "6a5a2f3c-b3d6-411c-be82-4a8e2c3d2596", "symbol": "IONQ", "type": "stop_limit", "stop": 1.41, "limit": 1.29, "gtc": true, "state": "unconfirmed (just placed, regular session)"}
+    {"order_id": "6a5a30a8-7dfd-477b-bf33-90fed33d5c62", "symbol": "SOFI", "type": "stop_limit", "stop": 0.97, "limit": 0.92, "gtc": true, "state": "unconfirmed (just placed, regular session)"},
+    {"order_id": "6a5a30aa-92a6-44c0-800b-ebd607aab300", "symbol": "IONQ", "type": "stop_limit", "stop": 1.72, "limit": 1.60, "gtc": true, "state": "unconfirmed (just placed, regular session)"}
   ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
