@@ -24,8 +24,35 @@ out loud before any confirmation is requested.
 - ONLY during regular market hours, with enough session time left that a move
   is still plausible (rule of thumb: not in the final 20 minutes — nothing
   useful can develop, it becomes a coin flip on already-fixed decay).
-- Underlyings: NDX (via NDXP, PM-settled weekly/daily chain) or SPX-family if
-  ever added. Confirmed reachable on Agentic account (••••4177), option_level_2.
+- Underlyings (verified live on Agentic account ••••4177, 2026-07-16):
+    NDX  (via NDXP, PM-settled) — original, broad tech-heavy exposure.
+    XSP  (S&P 500 Mini Index, via its own chain) — ADDED. 1/10th the size of
+      SPX, true daily 0DTE expirations, cash-settled, confirmed liquid
+      (0.36-delta 07-17 call: bid/ask 1.03/1.10, ~7% spread, OI 444, vol
+      2,851). At this account's size XSP is the one that actually fits —
+      the equivalent-delta SPXW contract quoted $11.00 (i.e. ~$1,100/lot),
+      10x the XSP price, for identical delta/POP. Complements NDX with
+      broad-market (vs. tech-concentrated) exposure.
+  NOT added, with reasons:
+    SPX / SPXW — same underlying as XSP but full-size; a single delta-0.20+
+      contract runs $600-1,000+, unaffordable at this account's equity.
+      XSP is SPX, sized correctly for this budget.
+    QQQ / SPY 0DTE — ETF-settled, not index-settled. On a CASH-type account
+      (this one), an ITM equity/ETF option at expiration carries assignment
+      risk (shares can be put/called into the account); a cash account isn't
+      guaranteed to cleanly absorb that. NDX/XSP/SPX-family are cash-settled
+      index options — no assignment risk, position just settles to cash.
+      This is the deciding factor, not liquidity.
+    RUT / RUTW — checked; full-size RUT is too expensive (index ~2,975,
+      same problem as SPX) and RUTW weeklies are the classic thin-book case
+      this account has already been burned avoiding (see CLSK spread
+      blowouts in state.json). MRUT (the mini, same idea as XSP) exists but
+      does NOT have a true daily/0DTE chain — its nearest expiration is
+      several days out, so it doesn't serve this sleeve's purpose. Skip.
+    VIX — mechanically not a same-day "index level" bet (settlement/roll
+      quirks are a different animal); excluded rather than mis-sold as
+      equivalent to NDX/XSP.
+  Confirmed reachable on Agentic account (••••4177), option_level_2.
 
 ## 2. BUDGET (hard cap, no exceptions)
   available_budget = 50% x (TODAY's total realized P&L, system trades AND

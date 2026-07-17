@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-16T20:53:04Z",
+  "last_updated_utc": "2026-07-17T14:15:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 552.42,
@@ -123,6 +123,12 @@
       "signal": "Close-of-day check: SOFI +58.5% unrealized ($0.41->$0.65), IONQ +20.3% unrealized ($1.16->$1.395). Both stops were stale (SOFI stop last ratcheted at HWM $0.435, two ratchets behind; IONQ stop never ratcheted since entry).",
       "status": "User asked to 'override positions if worth it' intending TQQQ (see 17:34Z entry) -- that window was already gone: market closed at 20:00 UTC and TQQQ's option chain has extended_hours_state=disabled, plus ENTRY_CUTOFF would have blocked it anyway. Redirected the override into the actually-valuable action: ratcheted both resting stops to lock in the session's gains. SOFI stop 0.37->0.55 (locks ~34% min gain vs prior ~-10% floor). IONQ stop 0.99->1.19 (locks ~2.6% min gain vs prior -15% floor). Both orders queued (GTC, market closed) -- will activate at next regular session open.",
       "note": "IMPORTANT BUG FOUND AND FIXED: state.json had been invalid JSON since the 2026-07-16T15:24Z edit that added the IONQ open_positions entry outside the array's closing bracket. Any automated process (e.g. the scheduled scan) attempting json.load on this file since then would have failed silently or fallen back to stale/no state. File structure rewritten and validated with python3 json.load this pass. Lesson: state.json edits need a validation step (json.load check) before commit, not just visual review."
+    },
+    {
+      "date": "2026-07-17T14:15Z",
+      "signal": "User asked what other tickers belong in the 0DTE flyer sleeve (flyer_sleeve.txt), beyond NDX. Verified live chains/quotes on the Agentic account rather than guessing.",
+      "status": "ADDED XSP (S&P 500 Mini Index) to flyer_sleeve.txt Section 1. Verified: true daily 0DTE chain, cash-settled, 0.36-delta 07-17 call quoted bid/ask 1.03/1.10 (~7% spread, OI 444, vol 2,851) -- genuinely liquid and affordable at $110/contract. Confirmed SPXW (full-size SPX) quotes the identical 0.36-delta strike at $11.00 ask (~$1,100/lot, 10x XSP) -- unaffordable at this account's equity, so XSP not SPX is the right instrument. Checked and rejected: QQQ/SPY 0DTE (equity/ETF-settled -> assignment risk on this CASH-type account, unlike index-settled XSP/NDX/SPX), RUT/RUTW (full-size too expensive like SPX; RUTW weeklies are the thin-book pattern already flagged for CLSK), MRUT (mini RUT exists but has no true daily/0DTE expiration, nearest is several days out -- doesn't serve this sleeve), VIX (mechanically not a same-day index-level bet; roll/settlement quirks make it a different trade, not included).",
+      "note": "This only edits which underlyings the FLYER sleeve is allowed to scan -- it does not touch the frozen core ruleset and does not place any trade. Every actual flyer trade still goes through live candidate selection + human confirmation per flyer_sleeve.txt Section 4."
     }
   ],
   "watchlist": {
