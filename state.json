@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-17T17:35:00Z",
+  "last_updated_utc": "2026-07-17T17:52:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 610.34,
@@ -118,6 +118,12 @@
       "signal": "Afternoon scan. Position poll FIRST (per new freshness rule) confirmed FLAT -- rule working as intended. Tape has fully V-reversed: QQQ -2.2% at open -> -0.58% now. IONQ +1.9% and SOFI +1.3% now GREEN on the day (both above prior close); CLSK +1.7% green. MARA -4.0% and NFLX -7.6% still red but +2.3%/+2.9% off their lows (breakdown position gate fails). Nothing hit +3% breakout either.",
       "status": "NO TRADE. Both sides empty on the reversal. Notably vindicates the day's exits: SOFI and IONQ puts would be near-worthless now that both underlyings are green -- the broker stop (SOFI) and discretionary close (IONQ) both got out well ahead of the reversal.",
       "profit_capture_decision": "User raised that realized +105.76 vs a peak-sum ~+162 unrealized felt like money left on the table, and proposed take-profit over trailing. Resolved: Option 1 (surface-on-spike + MFE-capture logging) ADOPTED now as freeze-safe monitoring behavior (dynamic_scanner_directive.txt 5d); Option 2 (mechanical profit-tier tightening the trail) QUEUED for freeze-lift, to be calibrated from the logged capture data. Honest framing given to user: a naive fixed take-profit would have done WORSE on SOFI today ($0.82 vs the $0.96 the trail actually captured) and nothing on IONQ; the real gap was the wide trail's give-back on a parabolic spike, addressable mechanically only post-freeze with data. User steer: prefer not to break the freeze; combine the two as a sequence."
+    },
+    {
+      "date": "2026-07-17T17:51Z",
+      "signal": "Rescan-for-trade (user requested a trade). Poll confirmed flat first. Afternoon chop after the V-bounce. MARA -4.60% is the ONLY momentum-passer; fails breakdown-position gate (1.6% off its observed low, drifting sideways). NFLX -7.48% fails position (3.1% off low). TQQQ -2.86% just misses momentum. QQQ -0.90% under index tier. Call side: CLSK/SOFI/IONQ green but far below +3%.",
+      "status": "NO TRADE -- declined to force one. Two reasons against the only candidate (MARA): (1) fails the position gate (chopping, not breaking down); (2) we already stopped out of MARA today at -7.08 on this exact late-entry-into-chop pattern, and the stock is now HIGHER ($10.90 vs $10.80 entry) so the same put is worse. Re-entering same name/same day/same setup would repeat today's one loss deliberately. Broader: entering breakdown puts into a market that just fully reverted up = fighting the tape, the low-probability spot the two-sided system exists to skip. Held to discipline over the request to find a trade.",
+      "tuning_flag": "This is a clean example FOR the queued market-breadth/regime-filter idea: post-V-reversal afternoon chop is a low-edge regime for both breakout and breakdown entries. Worth formalizing a 'no fresh entries when the broad index has round-tripped its intraday move' gate at freeze-lift."
     }
   ],
   "watchlist": {
