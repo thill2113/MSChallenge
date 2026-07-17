@@ -1,0 +1,90 @@
+0DTE INDEX FLYER SLEEVE — separate from the core trading system
+Added 2026-07-16 at user request, after seeing a real 13.2x NDXP 0DTE win.
+This file operationalizes the existing FLYER_BUDGET rule (scanner_instructions.txt)
+for same-day-expiration index options. It does NOT modify the frozen ruleset —
+FLYER_BUDGET already named "0DTE lottery plays" as the canonical example of a
+gate-bypassing trade. This is that rule, given an execution procedure.
+
+## 0. THE HONEST FRAME (read this before every use)
+The screenshot that prompted this was real: NDXP $29,000C, entry $1.50, exit
+mark $21.30, same day, +1320%. It is also survivorship bias in its purest form.
+The exact same trade shape — cheap, far-dated-in-moneyness, same-day-expiring —
+already exists ONCE in this account's own ledger: the QQQ $723C 0DTE flyer from
+session 1, which lost 89% in 43 minutes. Same structure, opposite outcome.
+Base rate for a same-day option with delta 0.05-0.15 landing profitable is
+genuinely low (see chance_of_profit_long in every quote — read it before
+buying, not after). This sleeve does not claim positive expected value. It
+exists because the user wants occasional bounded lottery exposure, not because
+it is "another strategy." Every run of this protocol should say the POP number
+out loud before any confirmation is requested.
+
+## 1. WHEN THIS RUNS
+- ONLY on explicit user request ("scan for a flyer," "hunt a 0DTE," etc.).
+  NEVER as part of the scheduled scan, NEVER automatically after a system win.
+- ONLY during regular market hours, with enough session time left that a move
+  is still plausible (rule of thumb: not in the final 20 minutes — nothing
+  useful can develop, it becomes a coin flip on already-fixed decay).
+- Underlyings: NDX (via NDXP, PM-settled weekly/daily chain) or SPX-family if
+  ever added. Confirmed reachable on Agentic account (••••4177), option_level_2.
+
+## 2. BUDGET (hard cap, no exceptions)
+  available_budget = 50% x (TODAY's total realized P&L, system trades AND
+  prior flyers combined, from trades.csv + flyer_trades.csv)
+  - Zero or negative realized P&L today => available_budget = $0 => no trade.
+    State this plainly and stop. Do not borrow against yesterday's gains or
+    tomorrow's hope.
+  - This is a HARD ceiling on premium paid (cost = ask x 1.02, same
+    marketable-limit convention as the core system). Never round up into it.
+  - Flyer positions do NOT count against MAX_OPEN_POSITIONS or the
+    correlation-cluster cap (they risk only banked profit, not fresh capital,
+    and are a structurally different bet) — but only ONE flyer position open
+    at a time, to keep monitoring simple and honest.
+
+## 3. CANDIDATE SELECTION
+  1. Pull the 0DTE (or nearest same-day) chain for the underlying.
+  2. Quote a spread of strikes around the current index level — both ITM-
+     leaning (cheaper delta floor violation, higher POP, lower multiple) and
+     further OTM (higher multiple potential, lower POP).
+  3. For each, surface: strike, mark, spread%, delta, chance_of_profit_long,
+     cost at marketable limit, and what multiple of the available_budget it
+     would use.
+  4. Reject anything where cost > available_budget outright — don't present
+     it as a "candidate" the user can't actually afford under the cap.
+  5. Present the full spread of options with their honest POP numbers side by
+     side. Do not silently default to the cheapest/most lottery-like strike —
+     let the user see the tradeoff (POP vs multiple) and choose.
+
+## 4. EXECUTION
+  - Standard broker review -> human confirmation -> place, identical process
+    to every other trade in this account. No exceptions for "it's just a
+    flyer."
+  - Marketable limit only (ask x 1.02), ORDER_TTL 15-30s same as core system.
+  - No broker-resident stop-loss is placed (a GTC stop on a nickel-tick, huge-
+    gamma same-day option is not meaningful protection — it will either not
+    trigger before expiration or trigger on noise). Instead:
+      TAKE-PROFIT: if mark reaches 3x entry, that's a standing invitation to
+      take the review-and-confirm exit — surface it proactively on the next
+      "check positions," don't wait to be asked.
+      TIME-STOP: with ~20 minutes left in the session, surface a close/hold-
+      to-expiration decision explicitly. Letting it ride into settlement
+      un-discussed is not acceptable — 0DTE can go to zero in the final
+      minutes on nothing at all.
+  - If it expires worthless: that is the expected outcome most of the time,
+    not a system failure. Log it plainly, no drama.
+
+## 5. LOGGING
+  - flyer_trades.csv (separate from trades.csv) — keeps this sleeve's outcomes
+    out of the MFE/MAE data used to tune the core system's trail width, since
+    0DTE decay dynamics are nothing like the multi-day trend trades that data
+    is for.
+  - Every scan (even ones that find nothing affordable) gets one line in
+    state.json's logged_signals, same transparency standard as everything
+    else in this account.
+
+## 6. WHAT THIS IS NOT
+  - Not a source of capital growth to plan around. Size the rest of your life
+    as if this sleeve's expected value is zero-to-negative, because it likely
+    is, screenshots notwithstanding.
+  - Not eligible for the account's ruleset-freeze debate — it doesn't touch
+    the frozen parameters at all, it's a bounded side door that was always
+    implicitly allowed by FLYER_BUDGET.
