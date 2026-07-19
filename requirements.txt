@@ -1,0 +1,6 @@
+requests>=2.31
+PyJWT[crypto]>=2.8        # ES256 JWTs for Coinbase Advanced Trade
+websocket-client>=1.7     # market-data streams
+robin_stocks>=3.1         # unofficial Robinhood API wrapper
+pyotp>=2.9                # TOTP codes for Robinhood 2FA
+python-dotenv>=1.0        # local development only; use a secrets manager in prod
