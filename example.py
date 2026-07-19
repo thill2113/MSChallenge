@@ -6,15 +6,13 @@ never trades by accident.
 """
 
 import logging
-from decimal import Decimal
 
-from trading import Orchestrator, Side
-from trading.base import ExchangeClient
+from trading import Orchestrator
 from trading.agents import AgentContext
-from trading.config import (BinanceUSCredentials, CoinbaseCredentials,
-                            RobinhoodCredentials)
-from trading.coinbase_client import CoinbaseClient
+from trading.base import ExchangeClient
 from trading.binanceus_client import BinanceUSClient
+from trading.coinbase_client import CoinbaseClient
+from trading.config import BinanceUSCredentials, CoinbaseCredentials, RobinhoodCredentials
 from trading.robinhood_client import RobinhoodClient
 
 logging.basicConfig(level=logging.INFO)
@@ -23,6 +21,8 @@ logging.basicConfig(level=logging.INFO)
 def report_balances(client: ExchangeClient, ctx: AgentContext) -> None:
     ctx.publish({"balances": client.get_balances()})
     # To place a real order, uncomment and adjust:
+    # from decimal import Decimal
+    # from trading import Side
     # result = client.place_limit_order(
     #     symbol="BTC-USD",           # venue-specific format — see each adapter
     #     side=Side.BUY,

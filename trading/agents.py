@@ -46,13 +46,14 @@ class TradingAgent(threading.Thread):
 
     def __init__(self, agent_id: str, client_factory: Callable[[], ExchangeClient],
                  strategy: Strategy, results: queue.Queue,
-                 max_restarts: int = 3):
+                 max_restarts: int = 3, backoff_base: float = 2.0):
         super().__init__(name=agent_id, daemon=True)
         self.agent_id = agent_id
         self._client_factory = client_factory
         self._strategy = strategy
         self._results = results
         self._max_restarts = max_restarts
+        self._backoff_base = backoff_base
         self.stop_event = threading.Event()
 
     def run(self) -> None:
@@ -71,8 +72,8 @@ class TradingAgent(threading.Thread):
                 if restarts > self._max_restarts:
                     ctx.publish({"error": "max restarts exceeded"})
                     return
-                # exponential backoff before restart
-                self.stop_event.wait(min(2 ** restarts, 60))
+                # exponential backoff before restart (stop() cancels the wait)
+                self.stop_event.wait(min(self._backoff_base * 2 ** (restarts - 1), 60))
 
     def stop(self) -> None:
         self.stop_event.set()
@@ -87,8 +88,9 @@ class Orchestrator:
 
     def add_agent(self, agent_id: str,
                   client_factory: Callable[[], ExchangeClient],
-                  strategy: Strategy) -> TradingAgent:
-        agent = TradingAgent(agent_id, client_factory, strategy, self.results)
+                  strategy: Strategy, **agent_kwargs) -> TradingAgent:
+        agent = TradingAgent(agent_id, client_factory, strategy, self.results,
+                             **agent_kwargs)
         self._agents.append(agent)
         return agent
 

@@ -15,7 +15,6 @@ import json
 import logging
 import random
 import threading
-import time
 from typing import Callable
 
 from websocket import WebSocketApp  # websocket-client

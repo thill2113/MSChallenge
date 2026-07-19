@@ -6,8 +6,8 @@ per agent. See docs/TECHNICAL_SETUP.md for the architecture walkthrough and
 docs/INTEGRATION_PROTOCOL.md for the security/operations protocol.
 """
 
-from .base import Balance, ExchangeClient, OrderResult, Side, TokenBucketRateLimiter
 from .agents import AgentContext, Orchestrator, TradingAgent
+from .base import Balance, ExchangeClient, OrderResult, Side, TokenBucketRateLimiter
 
 __all__ = [
     "Balance", "ExchangeClient", "OrderResult", "Side",
