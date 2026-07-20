@@ -37,7 +37,7 @@ the 25% small-account exception RETIRED 2026-07-20 at equity ≥$1,100):
   option liquidity, structurally the fix for CLSK's chronic spread problem).
 
 CORRELATION CLUSTERS (for the max-2-per-cluster rule in Discipline Rules):
-  crypto-beta:  MSTR, COIN, CLSK, MARA, IREN
+  crypto-beta:  MSTR, COIN, CLSK, MARA, IREN, CIFR, RIOT
   nasdaq-beta:  NVDA, QQQ, TQQQ, PLTR, GOOGL, AAPL, AMD-class megacaps
   idiosyncratic: NFLX, DKNG, IONQ, SOFI, ERAS, TSLA, SPCX, TEM, HOOD,
   dynamic-scan names
@@ -49,6 +49,12 @@ thin — wide spreads / low OI at every strike checked; signals evaluated and
 logged, never traded):
   ERAS | TEM (added 2026-07-20 — Tempus AI, $9.4B cap, real weekly chain,
   but every strike checked had 16-29% spreads and <150 OI).
+  CIFR (added 2026-07-20 — Cipher Mining, $7.18B cap, weekly chain, +17.2%
+  move, but 19.3% spread at every strike — thin book like TEM).
+  RIOT (added 2026-07-20 — Riot Platforms, weekly chain, +9.0% move, OI
+  2,781 — genuinely deep, NOT a thin-book case — but %-spread still runs
+  12.2%, a distinct near-miss pattern worth its own tuning question (see
+  state.json), not granted an exception).
 
 Log-only, priced out (delta-0.20 contracts exceed the $113 baseline;
 signals still evaluated and logged every scan, never traded):
