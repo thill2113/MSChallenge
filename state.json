@@ -5,21 +5,22 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-20T18:41:00Z",
+  "last_updated_utc": "2026-07-20T18:57:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 629.26,
-    "cash_approx": 629.26,
-    "note": "FLAT / all cash as of 2026-07-20T17:40:37Z (MARA call closed by user at 0.72). equity == cash.",
+    "equity_approx": 1129.10,
+    "cash_approx": 1129.10,
+    "buying_power": 1057.16,
+    "note": "FLAT / all cash. User deposited +$500 on 2026-07-20 (confirmed via get_portfolio: total 1129.10). equity == cash.",
     "sizing": {
-      "baseline_10pct": 62.93,
-      "exception_25pct": 157.32,
+      "baseline_10pct": 112.91,
+      "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
       "exception_retires_at_equity": 1100
     }
   },
   "open_positions": [],
   "account_flat_since_utc": "2026-07-20T17:40:37Z (MARA call closed by user at 0.72, +18.92)",
-  "exception_slot": "FREE (no open positions); one position at a time may use 25% sizing until equity >= 1100",
+  "exception_slot": "RETIRED 2026-07-20 (equity $1,129 > $1,100 threshold). No longer applicable; all sizing at 10% baseline (~$113).",
   "resting_stop_orders": [],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
@@ -143,6 +144,12 @@
       "signal": "MARA $11.50C CLOSED at 0.72 (+18.92, +36%). Exit was placed_agent=USER (manual app sale at 17:40:37, near the intraday high), which auto-cancelled the agent's resting 0.61/0.55 stop. Agent had just been instructed to close (matched recommendation) and attempted its own cancel+sell ~1hr later -- cancel bounced ('cannot be cancelled', already gone), position poll returned empty.",
       "status": "Reconciled. Account FLAT / all cash ~$629.26. Day 2026-07-20 realized = +18.92. Campaign realized now +129.68 lifetime (Fri +105.76, Mon +18.92, earlier +5.00). First long-side/call WIN of the campaign.",
       "lesson": "SECOND live save by the position-freshness rule (first was the Fri SOFI silent stop-fill). Rule confirmed load-bearing: broker stops AND user app-trades both change position state server-side with no agent notification; re-polling get_option_positions+get_option_orders before acting caught a phantom-position sell attempt. The recommendation analysis (book the +36% rather than passively ride a stalled, barely-ITM, high-IV 4-DTE call into theta) was validated by the user independently reaching the same action. Also a real MFE-capture datapoint for the queued profit-capture Option 2: captured +36% of a +36% MFE (exited at the high) -- clean, no give-back, because the exit was deliberate-on-strength not trail-fired."
+    },
+    {
+      "date": "2026-07-20T18:57Z",
+      "signal": "User deposited +$500 (equity 629 -> 1129) and asked to scan for NEW tickers beyond the standing watchlist. Ran the saved dynamic scan (131 matches) -- overwhelmingly micro-cap / sub-$2 meme / leveraged single-stock ETF (Corgi/Tradr 2X) / crypto noise, not optionable cleanly. Only genuinely liquid+optionable fresh mover: ACHR (Archer Aviation) +18.8%, 81M vol.",
+      "status": "ACHR $5.50C 07-24 VETTED and it PASSES gates: delta 0.39, spread 1c (penny-floor exception), cost $17, OI 3,348/vol 18,463, earnings clear. Notable as the rare fresh scan name that clears where CLSK repeatedly fails on spread. BUT flagged to user as B-grade / a chase: +18.8% is an extended single-day move (buying after the rip), IV 118%, gamma 0.59, never-vetted name, no cluster. Recommended -- IF taken -- a 1-2 contract probe ($17-34), NOT a full $113 baseline, precisely because cheap price tempts oversizing a volatile unvetted name. Awaiting user decision.",
+      "note": "Exception-slot retirement handled per frozen rule (equity > $1,100). Honest framing given: the real value of the deposit is that vetted priced-out names (NVDA/MSTR/etc.) now fit the $113 baseline for when THEY trigger -- none are triggering a clean breakout right now (flat/cooling tape). Did not force a trade to deploy the new cash."
     }
   ],
   "watchlist": {
