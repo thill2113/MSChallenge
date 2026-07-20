@@ -5,32 +5,56 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-17T17:57:00Z",
+  "last_updated_utc": "2026-07-20T13:49:30Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 610.34,
-    "cash_approx": 610.34,
-    "note": "FLAT / all cash as of 2026-07-17T14:10:47Z. equity == cash, no open positions.",
+    "cash_approx": 557.34,
+    "note": "1 open position (MARA $11.50C) as of 2026-07-20T13:48:51Z. cash reduced by $53 premium.",
     "sizing": {
       "baseline_10pct": 61.03,
       "exception_25pct": 152.59,
       "exception_retires_at_equity": 1100
     }
   },
-  "open_positions": [],
-  "account_flat_since_utc": "2026-07-17T14:10:47Z (all positions closed; SOFI+MARA stopped out, IONQ deliberately closed)",
-  "exception_slot": "FREE (no open positions); one position at a time may use 25% sizing until equity >= 1100",
-  "resting_stop_orders": [],
+  "open_positions": [
+    {
+      "symbol": "MARA",
+      "contract": "MARA $11.50C 2026-07-24",
+      "qty": 1,
+      "entry_price": 0.53,
+      "entry_utc": "2026-07-20T13:48:51Z",
+      "hwm": 0.53,
+      "hwm_direction": "call (favorable = price rises as MARA rises)",
+      "trail_pct": 15,
+      "management": "trail-only (1-lot)",
+      "resting_stop_order_id": "6a5e2752-d0d8-4b08-9631-756262fb5383",
+      "stop_trigger": 0.45,
+      "stop_limit": 0.41,
+      "stop_order_state": "unconfirmed (just placed, regular session)",
+      "unrealized_pct_at_last_check": 0,
+      "sizing_note": "fits 10% baseline ($53 vs $61); exception slot NOT used, remains free",
+      "iv_note": "entered at IV ~106% -- high, paying up on a parabolic BTC-miner spike; watch for IV crush if MARA consolidates",
+      "ratchet_history": [
+        {"utc": "2026-07-20T13:49:06Z", "hwm": 0.53, "stop": 0.45, "limit": 0.41}
+      ]
+    }
+  ],
+  "exception_slot": "FREE (MARA call fit baseline, did not claim it); one position at a time may use 25% sizing until equity >= 1100",
+  "resting_stop_orders": [
+    {"order_id": "6a5e2752-d0d8-4b08-9631-756262fb5383", "symbol": "MARA", "type": "stop_limit", "stop": 0.45, "limit": 0.41, "gtc": true, "state": "unconfirmed (just placed, regular session)"}
+  ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
-    "2026-07-17": 105.76
+    "2026-07-17": 105.76,
+    "2026-07-20": 0
   },
   "session_stats": {
-    "trades_total": 16,
-    "system_trades": { "count": 8, "wins": 5, "losses": 2, "pnl": 130.44, "note": "SOFI +54.92 (broker stop), MARA -7.08 (broker stop), IONQ +57.92 (deliberate user close). All three 2026-07-17 exits now recorded." },
+    "trades_total": 17,
+    "system_trades": { "count": 9, "wins": 5, "losses": 2, "pnl": 130.44, "note": "MARA $11.50C opened 2026-07-20 (breakout call, first long-side entry since session 1); still open." },
     "discretionary_trades": { "count": 2, "pnl_vs_plan": -25.0 },
-    "open_positions_count": 0
+    "open_positions_count": 1
   },
   "logged_signals": [
     {
@@ -130,6 +154,12 @@
       "signal": "FLYER scan (user requested). Budget available = 50% x today's realized 105.76 = $52.88. XSP at 747.4 (-0.8%), 0DTE ~2hr to close. Four candidates all within budget and surfaced with POP: 749C (POP 20.5%, $36.72), 750C (12.1%, $17.34), 745P (16.6%, $31.62), 744P (10.8%, $18.36). NDX/NDXP checked (NDX 28740) -- near-money too rich for this budget, XSP the correct vehicle.",
       "status": "NO FLYER TAKEN. User chose to keep the clean +105.76 day. Agent's honest read given before the decision: poor flyer backdrop -- no directional signal (XSP V-bounced then chopping), brutal theta with 2hr left, top POP only ~20% (=~80% loss odds). Budget was real but there was no view worth paying theta into. Disciplined pass.",
       "note": "Flyer sleeve honest-frame requirement satisfied: POP surfaced out loud before any confirmation was requested. flyer_trades.csv unchanged (no fill)."
+    },
+    {
+      "date": "2026-07-20T13:49Z",
+      "signal": "Monday open scan (regular session, poll-confirmed flat first). REGIME FLIP: Friday's selloff fully reversed, Monday opened green/risk-on. BTC ripping -> miners exploded. Breakout (call) side live: CLSK +8.5%, MARA +6.7%, TQQQ +3.8%, QQQ +1.3%. IONQ +2.9% just missed. Earnings gate clear on all.",
+      "status": "TRADED: MARA $11.50C 2026-07-24 at $0.53 (delta 0.53, spread 1.8-7.5%, POP 33%, cost $53 baseline fit, exception slot untouched). First long-side/call entry since session 1. CLSK REJECTED again on 11-17% spread despite the biggest move (+8.5%) -- third logged instance of CLSK's untradeable options liquidity. TQQQ 72C valid but would cost the full $153 exception slot on a 3x-levered ETF -- passed in favor of the cheaper, higher-momentum MARA. Broker stop 0.45/0.41 GTC on fill.",
+      "note": "Conviction stated as moderate not high: entered at IV ~106% (paying up on a parabolic spike, IV-crush risk if it stalls) -- defended by small baseline size and the stop, and by explicitly declining to stack a second correlated crypto-beta position. Intraday-high gate on observed prints only (historicals still erroring). Recorded MARA-Friday-put-vs-Monday-call distinction: opposite side, opposite regime, legitimately different trade not a re-do."
     }
   ],
   "watchlist": {
