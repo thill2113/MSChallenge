@@ -52,6 +52,23 @@ RISK / SIZING LIMITS
                                  Cheap contracts fail %-spread math on a
                                  single-tick book despite being maximally
                                  liquid in absolute terms.
+- MIN_UNDERLYING_PRICE  = $5.00 (added 2026-07-20, SAFETY FIX). Underlyings
+                                 priced below $5 are excluded from options
+                                 entries entirely — no scan, no contract
+                                 check, no exception. SEC's standard "penny
+                                 stock" threshold. Rationale (empirical, same
+                                 day): a breakdown-side scan for candidates
+                                 checked 7 sub-$15 movers (down to $0.15) and
+                                 ALL 7 failed on options — either no chain at
+                                 all, or monthly-only expirations far outside
+                                 MIN_DTE's 3-9 day window. Below this
+                                 structural line, options liquidity/weekly
+                                 listings essentially don't exist, and where
+                                 they do, penny-underlying options carry
+                                 outsized manipulation, halt, and spread risk
+                                 the other gates aren't built to catch. Applies
+                                 to BOTH sides (breakout calls and breakdown
+                                 puts) and to the flyer sleeve.
 - MAX_SLIPPAGE_PCT      = 2%    above the ask on a marketable limit.
 - MIN_DTE               = 3     minimum days to expiration on all option
                                  entries (target 3–7 DTE); avoids the
