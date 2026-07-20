@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-20T13:49:30Z",
+  "last_updated_utc": "2026-07-20T16:27:15Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 610.34,
@@ -24,25 +24,26 @@
       "qty": 1,
       "entry_price": 0.53,
       "entry_utc": "2026-07-20T13:48:51Z",
-      "hwm": 0.53,
+      "hwm": 0.715,
       "hwm_direction": "call (favorable = price rises as MARA rises)",
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a5e2752-d0d8-4b08-9631-756262fb5383",
-      "stop_trigger": 0.45,
-      "stop_limit": 0.41,
+      "resting_stop_order_id": "6a5e4c54-3d1c-4a16-afce-d09513019301",
+      "stop_trigger": 0.61,
+      "stop_limit": 0.55,
       "stop_order_state": "unconfirmed (just placed, regular session)",
-      "unrealized_pct_at_last_check": 0,
+      "unrealized_pct_at_last_check": 35.0,
       "sizing_note": "fits 10% baseline ($53 vs $61); exception slot NOT used, remains free",
-      "iv_note": "entered at IV ~106% -- high, paying up on a parabolic BTC-miner spike; watch for IV crush if MARA consolidates",
+      "iv_note": "entered at IV ~106%; MARA broke to new highs 16:26 UTC, option 0.53->0.715 (+35%), delta 0.53->0.63, IV holding ~106% (no crush -- move was real not vol-only). Chopped flat 13:49-14:16 then broke out.",
       "ratchet_history": [
-        {"utc": "2026-07-20T13:49:06Z", "hwm": 0.53, "stop": 0.45, "limit": 0.41}
+        {"utc": "2026-07-20T13:49:06Z", "hwm": 0.53, "stop": 0.45, "limit": 0.41},
+        {"utc": "2026-07-20T16:27:00Z", "hwm": 0.715, "stop": 0.61, "limit": 0.55, "note": "MARA broke to new highs +10.8% on day; option +35%; locks ~+15% min"}
       ]
     }
   ],
   "exception_slot": "FREE (MARA call fit baseline, did not claim it); one position at a time may use 25% sizing until equity >= 1100",
   "resting_stop_orders": [
-    {"order_id": "6a5e2752-d0d8-4b08-9631-756262fb5383", "symbol": "MARA", "type": "stop_limit", "stop": 0.45, "limit": 0.41, "gtc": true, "state": "unconfirmed (just placed, regular session)"}
+    {"order_id": "6a5e4c54-3d1c-4a16-afce-d09513019301", "symbol": "MARA", "type": "stop_limit", "stop": 0.61, "limit": 0.55, "gtc": true, "state": "unconfirmed (just placed, regular session)"}
   ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
