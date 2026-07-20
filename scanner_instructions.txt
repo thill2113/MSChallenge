@@ -42,8 +42,21 @@ RISK / SIZING LIMITS
                                  minimum exceeds it), the options budget may
                                  stretch to 25% of equity, ONE such position at
                                  a time. Prefer cheaper underlyings first.
-                                 Exception retires once equity ≥ ~$1,100 (10%
-                                 covers a delta-0.20 contract on large-caps).
+                                 Exception retired at equity ≥ ~$1,100 per this
+                                 rule's original wording. CORRECTION (2026-07-20,
+                                 same day retired): re-checked every mega-cap on
+                                 the priced-out list at the new $113 baseline —
+                                 NONE fit, not even the cheapest. NVDA came
+                                 closest at $119 (+5.7% over); PLTR/HOOD/SPCX/
+                                 MSTR/AAPL/COIN/GOOGL/TSLA needed $144–$581. The
+                                 "$113 covers a large-cap" assumption behind this
+                                 retirement was optimistic and did not hold
+                                 empirically. Retirement stands (still a safety-
+                                 motivated simplification, not reversed without
+                                 freeze-lift review) but mega-caps remain
+                                 practically priced-out regardless — see
+                                 state.json open_tuning_questions for the
+                                 near-miss-tolerance question this raises.
 - MIN_DELTA             = 0.20  minimum absolute delta for any options entry —
                                  blocks deep-OTM "lottery ticket" contracts the
                                  budget filter would otherwise nominate.

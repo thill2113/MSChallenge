@@ -28,31 +28,41 @@ watchlist of exactly 3 targets.
 * Save the 3 tickers to context to pass into Phase 2.
 
 ## 2a. STANDING WATCHLIST (in addition to dynamic scan output)
-Tradeable at current (~$515) equity:
+Tradeable at current (~$1,129) equity, baseline budget ~$113 (single-tier;
+the 25% small-account exception RETIRED 2026-07-20 at equity ≥$1,100):
   CLSK, ERAS (earned via scan, session 1; ERAS options illiquid — log-only
-  in practice) | NFLX (added session 2 — $74/share, delta-0.20 contracts fit
-  the 25% exception) | MARA (~$12), SOFI (~$19), DKNG (~$25) — baseline-budget
-  fits | IONQ (~$36) — exception fit (all added session 2, verified weekly
-  chains).
+  in practice) | NFLX, MARA, SOFI, DKNG, IONQ, TQQQ (session 2 adds,
+  verified weekly chains, baseline-budget fits) | IREN (added 2026-07-20 —
+  $12B bitcoin miner, verified $44C delta 0.28/spread 5.3%/cost $98; deep
+  option liquidity, structurally the fix for CLSK's chronic spread problem).
 
 CORRELATION CLUSTERS (for the max-2-per-cluster rule in Discipline Rules):
-  crypto-beta:  MSTR, COIN, CLSK, MARA
-  nasdaq-beta:  NVDA, QQQ, TQQQ, PLTR, GOOGL, AMD-class megacaps
-  idiosyncratic: NFLX, DKNG, IONQ, SOFI, ERAS, TSLA, dynamic-scan names
+  crypto-beta:  MSTR, COIN, CLSK, MARA, IREN
+  nasdaq-beta:  NVDA, QQQ, TQQQ, PLTR, GOOGL, AAPL, AMD-class megacaps
+  idiosyncratic: NFLX, DKNG, IONQ, SOFI, ERAS, TSLA, SPCX, TEM, HOOD,
+  dynamic-scan names
   (assign new names to a cluster when added; when unsure, cluster by what
   actually moves them, not by sector label)
 
-Log-only until equity grows or budget rules change (delta-0.20 contracts
-price out even the 25% exception; signals still evaluated and logged every
-scan, never traded):
-  HOOD (~$113), PLTR (~$134), GOOGL (~$360), TSLA (~$395), COIN (~$165) —
-  originals/session-2 adds, never fit.
-  MSTR (~$94), NVDA (~$207) — MOVED to log-only 2026-07-16 after the
-  15:17 UTC scan: both passed momentum+breakdown gates but every strike at
-  delta ≥0.20 costs $249-383, 2x+ over even the 25% exception cap ($128.92).
-  Confirms the same pricing wall NVDA calls and QQQ hit in session 1 — this
-  account cannot afford a delta-compliant contract on either name at any
-  reasonable strike. Re-evaluate once equity reaches roughly $1,500+.
+Log-only, illiquid options (weekly chain exists but the book itself is too
+thin — wide spreads / low OI at every strike checked; signals evaluated and
+logged, never traded):
+  ERAS | TEM (added 2026-07-20 — Tempus AI, $9.4B cap, real weekly chain,
+  but every strike checked had 16-29% spreads and <150 OI).
+
+Log-only, priced out (delta-0.20 contracts exceed the $113 baseline;
+signals still evaluated and logged every scan, never traded):
+  HOOD (~$173 needed), PLTR (~$144), GOOGL (~$566), TSLA (~$581),
+  COIN (~$300) — originals/session-2 adds, never fit.
+  MSTR (~$208), NVDA (~$119, closest miss at +5.7% over) — moved to
+  log-only 2026-07-16, re-verified still priced out 2026-07-20 even after
+  the $500 deposit tripled the account (see state.json
+  open_tuning_questions for the near-miss-tolerance question NVDA raises).
+  SPCX (~$199), AAPL (~$251) — added 2026-07-20, same wall. ALL of the
+  above were re-checked at the new $113 baseline on 2026-07-20 and every
+  one still failed on price alone (spreads/liquidity were fine across the
+  board) — this account structurally cannot afford mega-cap delta-
+  compliant contracts yet. Re-evaluate as equity keeps growing.
 
 ## 2b. INDEX-ETF MOMENTUM TIER (added)
 Broad-index ETFs rarely clear the +3% single-name gate; they get their own
