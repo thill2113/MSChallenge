@@ -5,57 +5,33 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-20T16:27:15Z",
+  "last_updated_utc": "2026-07-20T18:41:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 610.34,
-    "cash_approx": 557.34,
-    "note": "1 open position (MARA $11.50C) as of 2026-07-20T13:48:51Z. cash reduced by $53 premium.",
+    "equity_approx": 629.26,
+    "cash_approx": 629.26,
+    "note": "FLAT / all cash as of 2026-07-20T17:40:37Z (MARA call closed by user at 0.72). equity == cash.",
     "sizing": {
-      "baseline_10pct": 61.03,
-      "exception_25pct": 152.59,
+      "baseline_10pct": 62.93,
+      "exception_25pct": 157.32,
       "exception_retires_at_equity": 1100
     }
   },
-  "open_positions": [
-    {
-      "symbol": "MARA",
-      "contract": "MARA $11.50C 2026-07-24",
-      "qty": 1,
-      "entry_price": 0.53,
-      "entry_utc": "2026-07-20T13:48:51Z",
-      "hwm": 0.715,
-      "hwm_direction": "call (favorable = price rises as MARA rises)",
-      "trail_pct": 15,
-      "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a5e4c54-3d1c-4a16-afce-d09513019301",
-      "stop_trigger": 0.61,
-      "stop_limit": 0.55,
-      "stop_order_state": "unconfirmed (just placed, regular session)",
-      "unrealized_pct_at_last_check": 35.0,
-      "sizing_note": "fits 10% baseline ($53 vs $61); exception slot NOT used, remains free",
-      "iv_note": "entered at IV ~106%; MARA broke to new highs 16:26 UTC, option 0.53->0.715 (+35%), delta 0.53->0.63, IV holding ~106% (no crush -- move was real not vol-only). Chopped flat 13:49-14:16 then broke out.",
-      "ratchet_history": [
-        {"utc": "2026-07-20T13:49:06Z", "hwm": 0.53, "stop": 0.45, "limit": 0.41},
-        {"utc": "2026-07-20T16:27:00Z", "hwm": 0.715, "stop": 0.61, "limit": 0.55, "note": "MARA broke to new highs +10.8% on day; option +35%; locks ~+15% min"}
-      ]
-    }
-  ],
-  "exception_slot": "FREE (MARA call fit baseline, did not claim it); one position at a time may use 25% sizing until equity >= 1100",
-  "resting_stop_orders": [
-    {"order_id": "6a5e4c54-3d1c-4a16-afce-d09513019301", "symbol": "MARA", "type": "stop_limit", "stop": 0.61, "limit": 0.55, "gtc": true, "state": "unconfirmed (just placed, regular session)"}
-  ],
+  "open_positions": [],
+  "account_flat_since_utc": "2026-07-20T17:40:37Z (MARA call closed by user at 0.72, +18.92)",
+  "exception_slot": "FREE (no open positions); one position at a time may use 25% sizing until equity >= 1100",
+  "resting_stop_orders": [],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
     "2026-07-17": 105.76,
-    "2026-07-20": 0
+    "2026-07-20": 18.92
   },
   "session_stats": {
-    "trades_total": 17,
-    "system_trades": { "count": 9, "wins": 5, "losses": 2, "pnl": 130.44, "note": "MARA $11.50C opened 2026-07-20 (breakout call, first long-side entry since session 1); still open." },
+    "trades_total": 18,
+    "system_trades": { "count": 9, "wins": 6, "losses": 2, "pnl": 149.36, "note": "MARA $11.50C round-trip closed 2026-07-20 at +18.92 (entry system_entry, exit user_take_profit at 0.72). First long-side win of the campaign." },
     "discretionary_trades": { "count": 2, "pnl_vs_plan": -25.0 },
-    "open_positions_count": 1
+    "open_positions_count": 0
   },
   "logged_signals": [
     {
@@ -161,6 +137,12 @@
       "signal": "Monday open scan (regular session, poll-confirmed flat first). REGIME FLIP: Friday's selloff fully reversed, Monday opened green/risk-on. BTC ripping -> miners exploded. Breakout (call) side live: CLSK +8.5%, MARA +6.7%, TQQQ +3.8%, QQQ +1.3%. IONQ +2.9% just missed. Earnings gate clear on all.",
       "status": "TRADED: MARA $11.50C 2026-07-24 at $0.53 (delta 0.53, spread 1.8-7.5%, POP 33%, cost $53 baseline fit, exception slot untouched). First long-side/call entry since session 1. CLSK REJECTED again on 11-17% spread despite the biggest move (+8.5%) -- third logged instance of CLSK's untradeable options liquidity. TQQQ 72C valid but would cost the full $153 exception slot on a 3x-levered ETF -- passed in favor of the cheaper, higher-momentum MARA. Broker stop 0.45/0.41 GTC on fill.",
       "note": "Conviction stated as moderate not high: entered at IV ~106% (paying up on a parabolic spike, IV-crush risk if it stalls) -- defended by small baseline size and the stop, and by explicitly declining to stack a second correlated crypto-beta position. Intraday-high gate on observed prints only (historicals still erroring). Recorded MARA-Friday-put-vs-Monday-call distinction: opposite side, opposite regime, legitimately different trade not a re-do."
+    },
+    {
+      "date": "2026-07-20T18:41Z",
+      "signal": "MARA $11.50C CLOSED at 0.72 (+18.92, +36%). Exit was placed_agent=USER (manual app sale at 17:40:37, near the intraday high), which auto-cancelled the agent's resting 0.61/0.55 stop. Agent had just been instructed to close (matched recommendation) and attempted its own cancel+sell ~1hr later -- cancel bounced ('cannot be cancelled', already gone), position poll returned empty.",
+      "status": "Reconciled. Account FLAT / all cash ~$629.26. Day 2026-07-20 realized = +18.92. Campaign realized now +129.68 lifetime (Fri +105.76, Mon +18.92, earlier +5.00). First long-side/call WIN of the campaign.",
+      "lesson": "SECOND live save by the position-freshness rule (first was the Fri SOFI silent stop-fill). Rule confirmed load-bearing: broker stops AND user app-trades both change position state server-side with no agent notification; re-polling get_option_positions+get_option_orders before acting caught a phantom-position sell attempt. The recommendation analysis (book the +36% rather than passively ride a stalled, barely-ITM, high-IV 4-DTE call into theta) was validated by the user independently reaching the same action. Also a real MFE-capture datapoint for the queued profit-capture Option 2: captured +36% of a +36% MFE (exited at the high) -- clean, no give-back, because the exit was deliberate-on-strength not trail-fired."
     }
   ],
   "watchlist": {
