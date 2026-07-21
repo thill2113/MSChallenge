@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-21T17:16:10Z",
+  "last_updated_utc": "2026-07-21T17:19:15Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1129.1,
@@ -273,6 +273,11 @@
       "date": "2026-07-21T17:16Z",
       "signal": "User instruction 'Close Mara' (following the recommendation to let TQQQ ride but take/tighten MARA on its first stall signal of the session -- pulled back from 0.57 HWM to ~0.545-0.555, delta 0.56/IV~105%/theta -0.078 with only 3-DTE left). Re-polled get_option_positions + get_option_orders first per the position-freshness rule -- both MARA and TQQQ confirmed still open, stops unchanged (MARA 0.48/0.44, TQQQ 0.76/0.71, neither filled) across the several 'Recheck' interruptions between the instruction and execution.",
       "status": "CLOSED MARA. Cancelled resting stop (6a5fa1ab...), confirmed cancelled via get_option_orders, pulled fresh quote (bid 0.54-0.55/ask 0.56-0.57), placed marketable limit sell-to-close at 0.53, filled at 0.55 (price improvement). Realized +17.92 (+48.6% on premium). TQQQ left untouched, still open at stop 0.76/0.71 per the 'let it ride' half of the recommendation."
+    },
+    {
+      "date": "2026-07-21T17:19Z",
+      "signal": "Ratchet check-in (poll confirmed TQQQ still open, MARA closed per prior action). TQQQ mark 0.895 (bid 0.88/ask 0.91), just under the standing 0.90 HWM -- not a new high.",
+      "status": "NO ratchet fired. Stop unchanged at 0.76/0.71 (order 6a5fa518... confirmed still resting, unfilled)."
     }
   ],
   "watchlist": {
