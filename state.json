@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-21T14:54:30Z",
+  "last_updated_utc": "2026-07-21T15:02:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1129.1,
@@ -255,6 +255,12 @@
       "signal": "Scan+ratchet check. MARA continued higher (mark 0.37->0.44, +19%), ratcheted stop 0.31/0.28 -> 0.37/0.34 (old stop confirmed cancelled before replacement). TQQQ mark 0.625, below entry 0.66 -- no new high, stop unchanged at 0.56/0.51.",
       "status": "NO NEW TRADE. Re-checked CLSK (13.0% spread, still fails) and IONQ (11.5%, improved from 14.2% but still over 10% gate). CIFR/RIOT unchanged from morning rejects.",
       "note": "Combined unrealized +$3.50 (MARA +$7, TQQQ -$3.50). Nothing alarming on TQQQ, 3 DTE remaining, well clear of its stop."
+    },
+    {
+      "date": "2026-07-21T15:02Z",
+      "signal": "User caught a real gap: the 14:54Z scan+ratchet only checked the call/breakout side, never explicitly checked puts. Ran the full breakdown check: watchlist side (DKNG -1.07% is the only red name, nowhere near -3%), plus the broader market breakdown scan (a86b9a60) -- only 30 total matches today vs 177 on Friday's selloff, confirming a genuinely one-sided bullish tape, not an oversight artifact.",
+      "status": "NO PUT CANDIDATES. Two real names surfaced: DHR (Danaher) -13.6%, $142B cap -- reported earnings THIS MORNING (beat EPS 1.94 vs 1.84 est, stock cratering anyway, likely guidance) -- correctly EXCLUDED by EARNINGS_GATE, a post-earnings gap event not a momentum breakdown. AGIO -4.7%, $2.38B cap -- monthly-only options (~31 DTE), fails MIN_DTE. Everything else was penny/micro-cap (XXI at $4.58 correctly auto-excluded by the new $5 floor) or leveraged single-stock ETFs.",
+      "lesson": "Process gap, not a strategy gap: on a lopsided one-sided day it's easy to default to checking only the obviously-active side. Discipline going forward: EVERY scan+ratchet pass checks both sides explicitly, even when the tape looks one-directional -- the check itself is cheap, and 'obviously green day' is exactly when a real breakdown name would be most likely to go unnoticed."
     }
   ],
   "watchlist": {
