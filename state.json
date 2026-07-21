@@ -5,11 +5,11 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-21T14:37:00Z",
+  "last_updated_utc": "2026-07-21T14:54:30Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 1129.10,
-    "cash_approx": 1026.10,
+    "equity_approx": 1129.1,
+    "cash_approx": 1026.1,
     "buying_power": 954.16,
     "note": "2 open positions (MARA $12.50C, TQQQ $74.00C) as of 2026-07-21T14:36Z. cash reduced by $37+$66 premium.",
     "sizing": {
@@ -25,19 +25,31 @@
       "qty": 1,
       "entry_price": 0.37,
       "entry_utc": "2026-07-21T14:36:33Z",
-      "hwm": 0.37,
+      "hwm": 0.44,
       "hwm_direction": "call (favorable = price rises as MARA rises)",
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a5f8405-c693-4ad1-84d6-e07f7daf32fc",
-      "stop_trigger": 0.31,
-      "stop_limit": 0.28,
+      "resting_stop_order_id": "6a5f8814-4434-48b6-8375-c719843bc50c",
+      "stop_trigger": 0.37,
+      "stop_limit": 0.34,
       "stop_order_state": "unconfirmed (just placed, regular session)",
-      "unrealized_pct_at_last_check": 0,
+      "unrealized_pct_at_last_check": 19.0,
       "sizing_note": "fits 10% baseline ($37 vs $113); no exception needed",
       "cluster_note": "crypto_beta -- deliberately paired with TQQQ (nasdaq_beta) instead of IREN for real diversification, not two crypto_beta bets",
       "ratchet_history": [
-        {"utc": "2026-07-21T14:36:53Z", "hwm": 0.37, "stop": 0.31, "limit": 0.28}
+        {
+          "utc": "2026-07-21T14:36:53Z",
+          "hwm": 0.37,
+          "stop": 0.31,
+          "limit": 0.28
+        },
+        {
+          "utc": "2026-07-21T14:54:12Z",
+          "hwm": 0.44,
+          "stop": 0.37,
+          "limit": 0.34,
+          "note": "MARA continued higher post-entry, first ratchet"
+        }
       ]
     },
     {
@@ -54,18 +66,39 @@
       "stop_trigger": 0.56,
       "stop_limit": 0.51,
       "stop_order_state": "unconfirmed (just placed, regular session)",
-      "unrealized_pct_at_last_check": 0,
+      "unrealized_pct_at_last_check": -5.3,
       "sizing_note": "fits 10% baseline ($66 vs $113); no exception needed; first-ever affordable TQQQ entry without the 25% exception",
       "cluster_note": "nasdaq_beta -- the real diversification leg alongside MARA",
       "ratchet_history": [
-        {"utc": "2026-07-21T14:36:54Z", "hwm": 0.66, "stop": 0.56, "limit": 0.51}
+        {
+          "utc": "2026-07-21T14:36:54Z",
+          "hwm": 0.66,
+          "stop": 0.56,
+          "limit": 0.51
+        }
       ]
     }
   ],
   "exception_slot": "FREE (both new positions fit the 10% baseline; not used)",
   "resting_stop_orders": [
-    {"order_id": "6a5f8405-c693-4ad1-84d6-e07f7daf32fc", "symbol": "MARA", "type": "stop_limit", "stop": 0.31, "limit": 0.28, "gtc": true, "state": "unconfirmed (just placed, regular session)"},
-    {"order_id": "6a5f8406-97e3-4d1a-b7e7-87d6dbb95de2", "symbol": "TQQQ", "type": "stop_limit", "stop": 0.56, "limit": 0.51, "gtc": true, "state": "unconfirmed (just placed, regular session)"}
+    {
+      "order_id": "6a5f8814-4434-48b6-8375-c719843bc50c",
+      "symbol": "MARA",
+      "type": "stop_limit",
+      "stop": 0.37,
+      "limit": 0.34,
+      "gtc": true,
+      "state": "unconfirmed (just placed, regular session)"
+    },
+    {
+      "order_id": "6a5f8406-97e3-4d1a-b7e7-87d6dbb95de2",
+      "symbol": "TQQQ",
+      "type": "stop_limit",
+      "stop": 0.56,
+      "limit": 0.51,
+      "gtc": true,
+      "state": "unconfirmed (just placed, regular session)"
+    }
   ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
@@ -75,8 +108,17 @@
   },
   "session_stats": {
     "trades_total": 20,
-    "system_trades": { "count": 11, "wins": 6, "losses": 2, "pnl": 149.36, "note": "MARA $11.50C round-trip closed 2026-07-20 at +18.92 (entry system_entry, exit user_take_profit at 0.72). First long-side win of the campaign. Plus 2 new opens 2026-07-21 (MARA $12.50C, TQQQ $74.00C), not yet resolved." },
-    "discretionary_trades": { "count": 2, "pnl_vs_plan": -25.0 },
+    "system_trades": {
+      "count": 11,
+      "wins": 6,
+      "losses": 2,
+      "pnl": 149.36,
+      "note": "MARA $11.50C round-trip closed 2026-07-20 at +18.92 (entry system_entry, exit user_take_profit at 0.72). First long-side win of the campaign. Plus 2 new opens 2026-07-21 (MARA $12.50C, TQQQ $74.00C), not yet resolved."
+    },
+    "discretionary_trades": {
+      "count": 2,
+      "pnl_vs_plan": -25.0
+    },
     "open_positions_count": 2
   },
   "logged_signals": [
@@ -95,15 +137,15 @@
     },
     {
       "date": "2026-07-15T16:13Z",
-      "signal": "DKNG $27C 2026-07-24 — first LIVE session-2 trade",
-      "status": "CLOSED / stopped out: bought $0.49, broker stop-limit filled $0.38 at 16:36 (−$11.08). Failed breakout / bull trap — DKNG was lone green name on a broadly red tape, reversed in ~25 min. Broker-resident stop fired while agent was disconnected; saved ~$16 vs later $0.215 mark.",
+      "signal": "DKNG $27C 2026-07-24 \u2014 first LIVE session-2 trade",
+      "status": "CLOSED / stopped out: bought $0.49, broker stop-limit filled $0.38 at 16:36 (\u2212$11.08). Failed breakout / bull trap \u2014 DKNG was lone green name on a broadly red tape, reversed in ~25 min. Broker-resident stop fired while agent was disconnected; saved ~$16 vs later $0.215 mark.",
       "lesson": "broker-resident stop validated (first live fire). Signal-quality note: a solo breakout against a red broad tape is lower-probability."
     },
     {
       "date": "2026-07-15T19:25Z",
       "signal": "IONQ $34P 2026-07-24 re-fired: IONQ $37.01, -5.80%, 0.41% off intraday low (tighter than the 14:30 attempt). Would pass ALL gates (momentum, breakdown, cluster 0/2 idio-slot-free since SOFI already counted, position cap 2/3).",
       "blocked_by": "ENTRY_CUTOFF (scan ran 19:25 UTC, past 19:15 cutoff)",
-      "status": "LOGGED, not traded. Third time IONQ has qualified on momentum today; second time on full breakdown position. Re-check at next open — do not auto-chase overnight gap."
+      "status": "LOGGED, not traded. Third time IONQ has qualified on momentum today; second time on full breakdown position. Re-check at next open \u2014 do not auto-chase overnight gap."
     },
     {
       "date": "2026-07-16T14:24Z",
@@ -207,12 +249,43 @@
       "signal": "Tuesday open scan (poll confirmed flat first). Broad crypto-beta breakout day: CLSK +3.5%, MARA +4.5%, IONQ +4.3%, IREN +4.6%, TQQQ +4.4%, QQQ +1.5%, and even log-only CIFR +9.9%/RIOT +3.9% ripping. No earnings conflicts anywhere.",
       "status": "TRADED both recommended: MARA $12.50C @ $0.37 (delta 0.45, spread ~5%, cost $37) and TQQQ $74.00C @ $0.66 (delta 0.25, spread 7.5%, cost $66). CLSK failed spread again (chronic), IONQ failed spread (14.2%), CIFR improved to 10.6% but still just over, RIOT worsened to 16.5%. Both fills better than limit. Broker stops placed immediately: MARA 0.31/0.28, TQQQ 0.56/0.51.",
       "note": "Deliberate pairing: MARA (crypto_beta) + TQQQ (nasdaq_beta) chosen over MARA+IREN specifically for real cluster diversification, per the recommendation given before entry -- declined to double up on the same bitcoin-beta bet even though the correlation cap would have allowed it. TQQQ is notable as the first-ever TQQQ entry that fit the plain 10% baseline without needing the (now-retired) 25% exception, closing a gap flagged repeatedly in session 1/2 logs."
+    },
+    {
+      "date": "2026-07-21T14:54Z",
+      "signal": "Scan+ratchet check. MARA continued higher (mark 0.37->0.44, +19%), ratcheted stop 0.31/0.28 -> 0.37/0.34 (old stop confirmed cancelled before replacement). TQQQ mark 0.625, below entry 0.66 -- no new high, stop unchanged at 0.56/0.51.",
+      "status": "NO NEW TRADE. Re-checked CLSK (13.0% spread, still fails) and IONQ (11.5%, improved from 14.2% but still over 10% gate). CIFR/RIOT unchanged from morning rejects.",
+      "note": "Combined unrealized +$3.50 (MARA +$7, TQQQ -$3.50). Nothing alarming on TQQQ, 3 DTE remaining, well clear of its stop."
     }
   ],
   "watchlist": {
-    "tradeable": ["CLSK", "NFLX", "MARA", "SOFI", "DKNG", "IONQ", "TQQQ", "IREN"],
-    "log_only_priced_out": ["TSLA", "COIN", "HOOD", "PLTR", "GOOGL", "QQQ", "MSTR", "NVDA", "SPCX", "AAPL"],
-    "log_only_illiquid_options": ["ERAS", "TEM", "CIFR", "RIOT"]
+    "tradeable": [
+      "CLSK",
+      "NFLX",
+      "MARA",
+      "SOFI",
+      "DKNG",
+      "IONQ",
+      "TQQQ",
+      "IREN"
+    ],
+    "log_only_priced_out": [
+      "TSLA",
+      "COIN",
+      "HOOD",
+      "PLTR",
+      "GOOGL",
+      "QQQ",
+      "MSTR",
+      "NVDA",
+      "SPCX",
+      "AAPL"
+    ],
+    "log_only_illiquid_options": [
+      "ERAS",
+      "TEM",
+      "CIFR",
+      "RIOT"
+    ]
   },
   "watchlist_change_log": [
     {
@@ -232,9 +305,34 @@
     }
   ],
   "correlation_clusters": {
-    "crypto_beta": ["MSTR", "COIN", "CLSK", "MARA", "IREN", "CIFR", "RIOT"],
-    "nasdaq_beta": ["NVDA", "QQQ", "TQQQ", "PLTR", "GOOGL", "AAPL"],
-    "idiosyncratic": ["NFLX", "DKNG", "IONQ", "SOFI", "ERAS", "TSLA", "SPCX", "TEM", "HOOD"]
+    "crypto_beta": [
+      "MSTR",
+      "COIN",
+      "CLSK",
+      "MARA",
+      "IREN",
+      "CIFR",
+      "RIOT"
+    ],
+    "nasdaq_beta": [
+      "NVDA",
+      "QQQ",
+      "TQQQ",
+      "PLTR",
+      "GOOGL",
+      "AAPL"
+    ],
+    "idiosyncratic": [
+      "NFLX",
+      "DKNG",
+      "IONQ",
+      "SOFI",
+      "ERAS",
+      "TSLA",
+      "SPCX",
+      "TEM",
+      "HOOD"
+    ]
   },
   "saved_scan_id": "5ef6974d-5db9-4469-8448-932e92159315",
   "open_tuning_questions": [
@@ -242,8 +340,8 @@
     "PROFIT-CAPTURE / trail width (updated 2026-07-17): Option 1 ADOPTED now (freeze-safe) -- profit-take surfacing on parabolic spikes + MFE-capture logging, see dynamic_scanner_directive.txt 5d. Option 2 (mechanical profit-tier that tightens trail 15%->~8% once up +80%) is QUEUED for freeze-lift, to be calibrated FROM the logged capture-ratio data, not guessed. Motivating datapoint: SOFI 2026-07-17 peak $1.14 -> trail fired $0.96 (~$18 give-back on 1-lot); same day IONQ discretionary close beat the trail. n=8 completed trades so far, too few to set the tier width.",
     "IV sanity check threshold",
     "cash-account T+1 settlement / GFV tracking",
-    "DTE-window gap: on Wed-Fri, standard weeklies give only 2-DTE (this Fri) or 9-DTE (next Fri) — nothing lands in the exact 3-7 target. Frozen rule permits 9-DTE (clears MIN_DTE 3 floor) but it's above target. Decide next revision: widen target to 3-10, or accept nearest expiry above the 3-day floor.",
-    "MARKET-BREADTH / REGIME FILTER: DKNG 07/15 was a failed breakout — it was the only green watchlist name on a broadly red tape (NVDA -2%, TQQQ -2.7%, IONQ -5.6%). A solo long breakout against a selling market reversed fast. Consider a regime gate: suppress LONG breakouts when the broad index (QQQ) is red >X% intraday, and mirror for shorts. Needs more samples before formalizing.",
+    "DTE-window gap: on Wed-Fri, standard weeklies give only 2-DTE (this Fri) or 9-DTE (next Fri) \u2014 nothing lands in the exact 3-7 target. Frozen rule permits 9-DTE (clears MIN_DTE 3 floor) but it's above target. Decide next revision: widen target to 3-10, or accept nearest expiry above the 3-day floor.",
+    "MARKET-BREADTH / REGIME FILTER: DKNG 07/15 was a failed breakout \u2014 it was the only green watchlist name on a broadly red tape (NVDA -2%, TQQQ -2.7%, IONQ -5.6%). A solo long breakout against a selling market reversed fast. Consider a regime gate: suppress LONG breakouts when the broad index (QQQ) is red >X% intraday, and mirror for shorts. Needs more samples before formalizing.",
     "PER-SYMBOL BREAKOUT/BREAKDOWN BAND: IONQ has missed the 1%-off-high/low breakdown gate 4 times across 2 sessions despite repeatedly qualifying on momentum (see 2026-07-16T14:24Z signal). A fixed 1% band may not suit a name with IONQ's volatility (52wk range $25.89-$84.64). Consider scaling the band by ATR or historical volatility per symbol instead of a flat 1% for all watchlist names.",
     "STATE FILE VALIDATION: state.json went invalid for ~5.5 hours (2026-07-16 15:24 to 20:53 UTC) after a bad edit before anyone noticed. Add a json.load validation step to the state-write process (or a pre-commit hook) so this can't recur silently.",
     "POSITION-STATE FRESHNESS (added 2026-07-17): the agent mis-reported SOFI as open for ~30min after its broker stop silently filled (see 2026-07-17T14:22Z signal). Broker-resident stops fire server-side without notifying the agent. RULE TO ADOPT: never report open-position state from memory; re-poll get_option_positions + get_option_orders at the start of every check-in/scan/PnL request and immediately after any stop placement, and reconcile before speaking. This is a monitoring-discipline fix, not a strategy change -- safe to adopt during the freeze.",
