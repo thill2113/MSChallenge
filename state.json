@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-21T17:19:15Z",
+  "last_updated_utc": "2026-07-21T17:20:25Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1129.1,
@@ -18,95 +18,30 @@
       "exception_retires_at_equity": 1100
     }
   },
-  "open_positions": [
-    {
-      "symbol": "TQQQ",
-      "contract": "TQQQ $74.00C 2026-07-24",
-      "qty": 1,
-      "entry_price": 0.66,
-      "entry_utc": "2026-07-21T14:36:35Z",
-      "hwm": 0.9,
-      "hwm_direction": "call (favorable = price rises as TQQQ rises)",
-      "trail_pct": 15,
-      "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a5fa518-0c51-4072-942d-5b98e2a36f06",
-      "stop_trigger": 0.76,
-      "stop_limit": 0.71,
-      "stop_order_state": "unconfirmed (just placed, regular session)",
-      "unrealized_pct_at_last_check": 36.4,
-      "sizing_note": "fits 10% baseline ($66 vs $113); no exception needed; first-ever affordable TQQQ entry without the 25% exception",
-      "cluster_note": "nasdaq_beta -- the real diversification leg alongside MARA",
-      "ratchet_history": [
-        {
-          "utc": "2026-07-21T14:36:54Z",
-          "hwm": 0.66,
-          "stop": 0.56,
-          "limit": 0.51
-        },
-        {
-          "utc": "2026-07-21T15:36:14Z",
-          "hwm": 0.775,
-          "stop": 0.66,
-          "limit": 0.61,
-          "note": "TQQQ ripped well past entry (0.66->0.775, +17.4%), first ratchet, locks in breakeven-plus"
-        },
-        {
-          "utc": "2026-07-21T16:17:00Z",
-          "hwm": 0.805,
-          "stop": 0.68,
-          "limit": 0.63,
-          "note": "second ratchet, +22.0% unrealized"
-        },
-        {
-          "utc": "2026-07-21T16:43:25Z",
-          "hwm": 0.84,
-          "stop": 0.71,
-          "limit": 0.66,
-          "note": "third ratchet, +27.3% unrealized"
-        },
-        {
-          "utc": "2026-07-21T16:58:00Z",
-          "hwm": 0.9,
-          "stop": 0.76,
-          "limit": 0.71,
-          "note": "fourth ratchet, +36.4% unrealized"
-        }
-      ]
-    }
-  ],
+  "open_positions": [],
   "exception_slot": "FREE (both new positions fit the 10% baseline; not used)",
-  "resting_stop_orders": [
-    {
-      "order_id": "6a5fa518-0c51-4072-942d-5b98e2a36f06",
-      "symbol": "TQQQ",
-      "type": "stop_limit",
-      "stop": 0.76,
-      "limit": 0.71,
-      "gtc": true,
-      "state": "unconfirmed (just placed, regular session)"
-    }
-  ],
+  "resting_stop_orders": [],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
     "2026-07-17": 105.76,
     "2026-07-20": 18.92,
-    "2026-07-21": 17.92
+    "2026-07-21": 36.84
   },
   "session_stats": {
-    "trades_total": 21,
+    "trades_total": 22,
     "system_trades": {
-      "count": 12,
-      "wins": 7,
+      "count": 13,
+      "wins": 8,
       "losses": 2,
-      "pnl": 167.28,
-      "note": "MARA $12.50C round-trip closed 2026-07-21 at +17.92 (entry system_entry, exit user_confirmed_close at 0.55 vs 0.37 entry, 90% MFE capture off the 0.57 HWM). TQQQ $74.00C remains open/riding (still making fresh highs at last check, momentum intact) with broker stop at 0.76/0.71."
+      "pnl": 186.2,
+      "note": "MARA $12.50C and TQQQ $74.00C both closed 2026-07-21 -- MARA +17.92 (user_confirmed_close at 0.55 vs 0.37, 90% MFE capture), TQQQ +18.92 (user_confirmed_close at 0.85 vs 0.66, 79% MFE capture). Account now fully flat, 0 open positions."
     },
     "discretionary_trades": {
       "count": 2,
       "pnl_vs_plan": -25.0
     },
-    "open_positions_count": 1
+    "open_positions_count": 0
   },
   "logged_signals": [
     {
@@ -278,6 +213,11 @@
       "date": "2026-07-21T17:19Z",
       "signal": "Ratchet check-in (poll confirmed TQQQ still open, MARA closed per prior action). TQQQ mark 0.895 (bid 0.88/ask 0.91), just under the standing 0.90 HWM -- not a new high.",
       "status": "NO ratchet fired. Stop unchanged at 0.76/0.71 (order 6a5fa518... confirmed still resting, unfilled)."
+    },
+    {
+      "date": "2026-07-21T17:20Z",
+      "signal": "User instruction 'Close' (TQQQ, the only remaining open position, following the MARA close moments earlier). Re-polled get_option_positions + get_option_orders first per the position-freshness rule -- TQQQ confirmed still open, stop unchanged at 0.76/0.71.",
+      "status": "CLOSED TQQQ. Cancelled resting stop (6a5fa518...), confirmed cancelled via get_option_orders, pulled fresh quote (bid 0.85/ask 0.88, mark 0.865, pulled back slightly from 0.90 HWM), placed marketable limit sell-to-close at 0.83, filled at 0.85 (price improvement). Realized +18.92 (+28.8% on premium). Account now fully flat -- 0 open positions, day's total realized P&L +36.84 (MARA +17.92 + TQQQ +18.92)."
     }
   ],
   "watchlist": {
