@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-21T16:43:40Z",
+  "last_updated_utc": "2026-07-21T16:58:15Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1129.1,
@@ -33,7 +33,7 @@
       "stop_trigger": 0.48,
       "stop_limit": 0.44,
       "stop_order_state": "unconfirmed (just placed, regular session)",
-      "unrealized_pct_at_last_check": 54.1,
+      "unrealized_pct_at_last_check": 47.3,
       "sizing_note": "fits 10% baseline ($37 vs $113); no exception needed",
       "cluster_note": "crypto_beta -- deliberately paired with TQQQ (nasdaq_beta) instead of IREN for real diversification, not two crypto_beta bets",
       "ratchet_history": [
@@ -79,15 +79,15 @@
       "qty": 1,
       "entry_price": 0.66,
       "entry_utc": "2026-07-21T14:36:35Z",
-      "hwm": 0.84,
+      "hwm": 0.9,
       "hwm_direction": "call (favorable = price rises as TQQQ rises)",
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a5fa1ad-919d-4d43-ae87-c1bd1bae4fa9",
-      "stop_trigger": 0.71,
-      "stop_limit": 0.66,
+      "resting_stop_order_id": "6a5fa518-0c51-4072-942d-5b98e2a36f06",
+      "stop_trigger": 0.76,
+      "stop_limit": 0.71,
       "stop_order_state": "unconfirmed (just placed, regular session)",
-      "unrealized_pct_at_last_check": 27.3,
+      "unrealized_pct_at_last_check": 36.4,
       "sizing_note": "fits 10% baseline ($66 vs $113); no exception needed; first-ever affordable TQQQ entry without the 25% exception",
       "cluster_note": "nasdaq_beta -- the real diversification leg alongside MARA",
       "ratchet_history": [
@@ -117,6 +117,13 @@
           "stop": 0.71,
           "limit": 0.66,
           "note": "third ratchet, +27.3% unrealized"
+        },
+        {
+          "utc": "2026-07-21T16:58:00Z",
+          "hwm": 0.9,
+          "stop": 0.76,
+          "limit": 0.71,
+          "note": "fourth ratchet, +36.4% unrealized"
         }
       ]
     }
@@ -133,11 +140,11 @@
       "state": "unconfirmed (just placed, regular session)"
     },
     {
-      "order_id": "6a5fa1ad-919d-4d43-ae87-c1bd1bae4fa9",
+      "order_id": "6a5fa518-0c51-4072-942d-5b98e2a36f06",
       "symbol": "TQQQ",
       "type": "stop_limit",
-      "stop": 0.71,
-      "limit": 0.66,
+      "stop": 0.76,
+      "limit": 0.71,
       "gtc": true,
       "state": "unconfirmed (just placed, regular session)"
     }
@@ -318,6 +325,11 @@
       "date": "2026-07-21T16:43Z",
       "signal": "Check-in (poll confirmed both still open first). Both extended yet again: MARA 0.54->0.57 (+54.1% unrealized), TQQQ 0.805->0.84 (+27.3% unrealized). CLSK/CIFR both passed gates on the last scan (CLSK $16.5C delta 0.32/spread 6.1%/$35; CIFR $25C delta 0.40/spread 6.2%/$85) but user has not yet decided on the third slot -- no action taken pending user choice.",
       "status": "RATCHETED both. MARA stop 0.46/0.42 -> 0.48/0.44. TQQQ stop 0.68/0.63 -> 0.71/0.66. Both cancels confirmed before replacement."
+    },
+    {
+      "date": "2026-07-21T16:58Z",
+      "signal": "Check-in (poll confirmed both still open first). MARA pulled back slightly (mark 0.57->0.545), still below its HWM -- NO ratchet, stop stays 0.48/0.44. TQQQ made a fresh high (0.84->0.90, +36.4% unrealized) -- ratcheted.",
+      "status": "TQQQ stop 0.71/0.66 -> 0.76/0.71. Old order confirmed cancelled before replacement. MARA unchanged this pass."
     }
   ],
   "watchlist": {
