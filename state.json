@@ -5,23 +5,68 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-20T20:01:00Z",
+  "last_updated_utc": "2026-07-21T14:37:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1129.10,
-    "cash_approx": 1129.10,
-    "buying_power": 1057.16,
-    "note": "FLAT / all cash. User deposited +$500 on 2026-07-20 (confirmed via get_portfolio: total 1129.10). equity == cash.",
+    "cash_approx": 1026.10,
+    "buying_power": 954.16,
+    "note": "2 open positions (MARA $12.50C, TQQQ $74.00C) as of 2026-07-21T14:36Z. cash reduced by $37+$66 premium.",
     "sizing": {
       "baseline_10pct": 112.91,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
       "exception_retires_at_equity": 1100
     }
   },
-  "open_positions": [],
-  "account_flat_since_utc": "2026-07-20T17:40:37Z (MARA call closed by user at 0.72, +18.92)",
-  "exception_slot": "RETIRED 2026-07-20 (equity $1,129 > $1,100 threshold). No longer applicable; all sizing at 10% baseline (~$113).",
-  "resting_stop_orders": [],
+  "open_positions": [
+    {
+      "symbol": "MARA",
+      "contract": "MARA $12.50C 2026-07-24",
+      "qty": 1,
+      "entry_price": 0.37,
+      "entry_utc": "2026-07-21T14:36:33Z",
+      "hwm": 0.37,
+      "hwm_direction": "call (favorable = price rises as MARA rises)",
+      "trail_pct": 15,
+      "management": "trail-only (1-lot)",
+      "resting_stop_order_id": "6a5f8405-c693-4ad1-84d6-e07f7daf32fc",
+      "stop_trigger": 0.31,
+      "stop_limit": 0.28,
+      "stop_order_state": "unconfirmed (just placed, regular session)",
+      "unrealized_pct_at_last_check": 0,
+      "sizing_note": "fits 10% baseline ($37 vs $113); no exception needed",
+      "cluster_note": "crypto_beta -- deliberately paired with TQQQ (nasdaq_beta) instead of IREN for real diversification, not two crypto_beta bets",
+      "ratchet_history": [
+        {"utc": "2026-07-21T14:36:53Z", "hwm": 0.37, "stop": 0.31, "limit": 0.28}
+      ]
+    },
+    {
+      "symbol": "TQQQ",
+      "contract": "TQQQ $74.00C 2026-07-24",
+      "qty": 1,
+      "entry_price": 0.66,
+      "entry_utc": "2026-07-21T14:36:35Z",
+      "hwm": 0.66,
+      "hwm_direction": "call (favorable = price rises as TQQQ rises)",
+      "trail_pct": 15,
+      "management": "trail-only (1-lot)",
+      "resting_stop_order_id": "6a5f8406-97e3-4d1a-b7e7-87d6dbb95de2",
+      "stop_trigger": 0.56,
+      "stop_limit": 0.51,
+      "stop_order_state": "unconfirmed (just placed, regular session)",
+      "unrealized_pct_at_last_check": 0,
+      "sizing_note": "fits 10% baseline ($66 vs $113); no exception needed; first-ever affordable TQQQ entry without the 25% exception",
+      "cluster_note": "nasdaq_beta -- the real diversification leg alongside MARA",
+      "ratchet_history": [
+        {"utc": "2026-07-21T14:36:54Z", "hwm": 0.66, "stop": 0.56, "limit": 0.51}
+      ]
+    }
+  ],
+  "exception_slot": "FREE (both new positions fit the 10% baseline; not used)",
+  "resting_stop_orders": [
+    {"order_id": "6a5f8405-c693-4ad1-84d6-e07f7daf32fc", "symbol": "MARA", "type": "stop_limit", "stop": 0.31, "limit": 0.28, "gtc": true, "state": "unconfirmed (just placed, regular session)"},
+    {"order_id": "6a5f8406-97e3-4d1a-b7e7-87d6dbb95de2", "symbol": "TQQQ", "type": "stop_limit", "stop": 0.56, "limit": 0.51, "gtc": true, "state": "unconfirmed (just placed, regular session)"}
+  ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
@@ -29,10 +74,10 @@
     "2026-07-20": 18.92
   },
   "session_stats": {
-    "trades_total": 18,
-    "system_trades": { "count": 9, "wins": 6, "losses": 2, "pnl": 149.36, "note": "MARA $11.50C round-trip closed 2026-07-20 at +18.92 (entry system_entry, exit user_take_profit at 0.72). First long-side win of the campaign." },
+    "trades_total": 20,
+    "system_trades": { "count": 11, "wins": 6, "losses": 2, "pnl": 149.36, "note": "MARA $11.50C round-trip closed 2026-07-20 at +18.92 (entry system_entry, exit user_take_profit at 0.72). First long-side win of the campaign. Plus 2 new opens 2026-07-21 (MARA $12.50C, TQQQ $74.00C), not yet resolved." },
     "discretionary_trades": { "count": 2, "pnl_vs_plan": -25.0 },
-    "open_positions_count": 0
+    "open_positions_count": 2
   },
   "logged_signals": [
     {
@@ -156,6 +201,12 @@
       "signal": "User asked to also check PUTS and widen ticker search to include pennies. Realized prior scans this session were gainers-only (saved scan 5ef6974d filters %change > 0.03 only) -- built and ran a new breakdown-side scan (created scan a86b9a60, %change < -0.03, RVOL > 1.5, no price/cap floor) to close the gap. Found large real moves: KPTI -23.2% (RVOL 9.4x), GLSI -15.5%, IMMX -12.5%, TSSI -8.2%, CLNE -8.0%, SPIR -9.6%, UXIN -9.8%, GOSS -14.3% (true penny, $0.15). None earnings-related per calendar check.",
       "status": "NO PUT CANDIDATES. Checked option chains on all 8: GLSI and UXIN have NO options chain at all; KPTI/IMMX/TSSI/CLNE/SPIR/GOSS all monthly-only, nearest expiration 2026-08-21 (~32 DTE), nothing near the 3-9 day target window. 7-for-7 DTE-gate failures. Standing watchlist breakdown side also re-checked and clear: NFLX -2.1%, DKNG -1.8%, SOFI -1.4%, IONQ -0.7%, none near -3%.",
       "tuning_flag": "STRUCTURAL FINDING, not a fluke: big single-day breakdowns cluster in small-cap/biotech names whose options (where they exist) are monthly-only -- weekly listings require a liquidity baseline these names don't clear. Contrast: ACHR (call-side candidate) DID have weeklies specifically because it's large-volume/liquid despite a low share price. Implication for future scans: a raw %-move screen on the down side will keep surfacing structurally untradeable names under this system's DTE rule; worth pre-filtering by 'has a <=9-day expiration' before spending time on contract-level checks, or accepting that breakdown candidates will be rarer than breakout ones by construction. Penny-inclusive search performed honestly (down to $0.15) -- conclusion holds: no penny name was tradeable, not because of the price screen but because of the missing weekly chain."
+    },
+    {
+      "date": "2026-07-21T14:37Z",
+      "signal": "Tuesday open scan (poll confirmed flat first). Broad crypto-beta breakout day: CLSK +3.5%, MARA +4.5%, IONQ +4.3%, IREN +4.6%, TQQQ +4.4%, QQQ +1.5%, and even log-only CIFR +9.9%/RIOT +3.9% ripping. No earnings conflicts anywhere.",
+      "status": "TRADED both recommended: MARA $12.50C @ $0.37 (delta 0.45, spread ~5%, cost $37) and TQQQ $74.00C @ $0.66 (delta 0.25, spread 7.5%, cost $66). CLSK failed spread again (chronic), IONQ failed spread (14.2%), CIFR improved to 10.6% but still just over, RIOT worsened to 16.5%. Both fills better than limit. Broker stops placed immediately: MARA 0.31/0.28, TQQQ 0.56/0.51.",
+      "note": "Deliberate pairing: MARA (crypto_beta) + TQQQ (nasdaq_beta) chosen over MARA+IREN specifically for real cluster diversification, per the recommendation given before entry -- declined to double up on the same bitcoin-beta bet even though the correlation cap would have allowed it. TQQQ is notable as the first-ever TQQQ entry that fit the plain 10% baseline without needing the (now-retired) 25% exception, closing a gap flagged repeatedly in session 1/2 logs."
     }
   ],
   "watchlist": {
