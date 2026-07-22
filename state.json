@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-22T16:26:35Z",
+  "last_updated_utc": "2026-07-22T16:29:55Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
@@ -273,6 +273,11 @@
       "date": "2026-07-22T16:26Z",
       "signal": "Check-in (polled positions+orders first). MARA $13C x2 mark 0.555 vs 0.61 entry = -9.0% unrealized; delta 0.42, IV ~100%. MARA underlying faded from its +3.67% open. No new high since entry (0.63 HWM).",
       "status": "NO ratchet (below entry/HWM). Broker stop unchanged at 0.52/0.47, confirmed resting (order 6a60cef7...). Mark 0.555 sits ~6% above the 0.52 trigger -- not imminent. Hold to stop; +50% scale-out still the upside plan."
+    },
+    {
+      "date": "2026-07-22T16:29Z",
+      "signal": "User scan (calls+puts), 1 open (MARA $13C x2, -9%). Standing watchlist quiet: IREN faded to +2.52% (off gate), DKNG -3.77% (put trigger but book still 20-41% spreads), TQQQ -0.08%/QQQ -0.03% flat, SOFI -2.66% near-miss. Big new movers: SMCI +25% ($16.5B), ARWR +20.9% ($10.5B), RDDT -9.1% ($35.8B put side), PAG +10.5%. Earnings gate: SMCI/RDDT/PAG all clear (moves are news/sympathy, not earnings); ARWR monthly-only (excluded). RDDT priced out (delta-0.23 $150P ~$515, 4x budget). PAG $215 underlying over budget.",
+      "status": "ONE clean qualifier found: SMCI $35C 07-31 -- delta 0.30, spread 5.7%, cost ~$92 (fits $116.59 baseline), OI 1282/vol 3378 (deep), earnings-clear, IV ~98%. Diversifies from MARA (idiosyncratic vs crypto_beta). CAVEAT flagged to user: chasing a +25% gap at ~98% IV, cannot verify within-1%-of-high momentum sub-trigger (historicals tool needs approval) -- DKNG-bull-trap-shaped risk. Presented as size-small-1-lot-if-wanted, not pressed. Awaiting user decision -- NOT yet entered."
     }
   ],
   "watchlist": {
