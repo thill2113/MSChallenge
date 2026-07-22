@@ -34,10 +34,14 @@ the 25% small-account exception RETIRED 2026-07-20 at equity ≥$1,100):
   chains, baseline-budget fits) | IREN (added 2026-07-20 — $12B bitcoin
   miner, verified $44C delta 0.28/spread 5.3%/cost $98; deep option
   liquidity, structurally the fix for CLSK's chronic spread problem) |
-  RGTI, RIVN (added 2026-07-22 — Rigetti $15/quantum, Rivian $17/EV; both
-  verified weekly chains + cheap underlyings well within the ~$116 baseline.
-  RGTI deepens quantum exposure alongside IONQ; RIVN adds a genuinely new
-  sector, EV, to the book).
+  RGTI, RIVN, QBTS (added 2026-07-22 — Rigetti $15/quantum, Rivian $17/EV,
+  D-Wave $17/quantum; all verified weekly chains + cheap underlyings well
+  within the ~$116 baseline. RGTI+QBTS deepen quantum exposure alongside
+  IONQ; RIVN adds a genuinely new sector, EV, to the book) | HIMS (added
+  2026-07-22 — Hims & Hers $32, high-vol health, verified weekly chain, BUT
+  a delta-0.30 weekly runs ~$130-180 = borderline over the $116 baseline;
+  tradeable only at lower delta (~0.20-0.25) where a contract fits, else it
+  falls back to log-only-priced-out on a given day. Size it at signal time).
   REMOVED 2026-07-22 (no weekly options): ERAS — nearest expiry is monthly
   (08-21), zero weeklies, so it fails MIN_DTE's 3-9 day window structurally
   every time. It had been mis-filed under log-only-illiquid, a tier that
@@ -46,8 +50,8 @@ the 25% small-account exception RETIRED 2026-07-20 at equity ≥$1,100):
 CORRELATION CLUSTERS (for the max-2-per-cluster rule in Discipline Rules):
   crypto-beta:  MSTR, COIN, CLSK, MARA, IREN, CIFR, RIOT
   nasdaq-beta:  NVDA, QQQ, TQQQ, PLTR, GOOGL, AAPL, AMD-class megacaps
-  idiosyncratic: NFLX, DKNG, IONQ, SOFI, RGTI, RIVN, TSLA, SPCX, TEM, HOOD,
-  dynamic-scan names
+  idiosyncratic: NFLX, DKNG, IONQ, SOFI, RGTI, RIVN, QBTS, HIMS, TSLA, SPCX,
+  TEM, HOOD, dynamic-scan names
   (assign new names to a cluster when added; when unsure, cluster by what
   actually moves them, not by sector label)
 

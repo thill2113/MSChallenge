@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-22T18:52:00Z",
+  "last_updated_utc": "2026-07-22T18:53:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
@@ -323,7 +323,9 @@
       "TQQQ",
       "IREN",
       "RGTI",
-      "RIVN"
+      "RIVN",
+      "QBTS",
+      "HIMS"
     ],
     "log_only_priced_out": [
       "TSLA",
@@ -382,6 +384,15 @@
         "AFRM": "$74.36 -- delta-compliant weekly ~$200-300, priced out",
         "AMD": "$555.85 -- mega-cap, priced out like NVDA"
       }
+    },
+    {
+      "date": "2026-07-22",
+      "added": [
+        "QBTS",
+        "HIMS"
+      ],
+      "added_reason": "Per user approval. QBTS (D-Wave $17.41, quantum) -- verified weekly chain (07-24/07-31), cheap underlying, delta-compliant weekly well within ~$116 baseline; deepens quantum alongside IONQ/RGTI. HIMS (Hims & Hers $31.77, high-vol health) -- verified weekly chain, BUT delta-0.30 weekly ~$130-180 = borderline over baseline; tradeable only at lower delta (~0.20-0.25) where a contract fits the budget, else falls back to log-only on a given day. Both -> idiosyncratic cluster. Full contract-level gates applied at signal time.",
+      "note": "Watchlist tradeable tier now: CLSK, NFLX, MARA, SOFI, DKNG, IONQ, TQQQ, IREN, RGTI, RIVN, QBTS, HIMS (12 names). HIMS carries the budget caveat above."
     }
   ],
   "correlation_clusters": {
@@ -412,7 +423,9 @@
       "TEM",
       "HOOD",
       "RGTI",
-      "RIVN"
+      "RIVN",
+      "QBTS",
+      "HIMS"
     ]
   },
   "saved_scan_id": "5ef6974d-5db9-4469-8448-932e92159315",
