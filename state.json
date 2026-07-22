@@ -5,13 +5,13 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-22T16:55:45Z",
+  "last_updated_utc": "2026-07-22T17:54:55Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
-    "cash_approx": 963.78,
-    "buying_power": 963.78,
-    "note": "2 open positions (MARA $13C x2, SMCI $35C x1) as of 2026-07-22T16:55Z. Portfolio $1165.90 pre-buys; cash reduced by $122.08 (MARA) + $80.04 (SMCI).",
+    "cash_approx": 1030.74,
+    "buying_power": 1030.74,
+    "note": "1 open position (MARA $13C x2) as of 2026-07-22T17:54Z. SMCI $35C x1 stopped out -13.08.",
     "sizing": {
       "baseline_10pct": 116.59,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
@@ -34,7 +34,7 @@
       "stop_limit": 0.47,
       "stop_qty": 2,
       "stop_order_state": "confirmed (GTC, resting at broker)",
-      "unrealized_pct_at_last_check": -9.0,
+      "unrealized_pct_at_last_check": -11.5,
       "sizing_note": "USER OVERRODE MAX_POSITION_PCT -- 2 lots ~$122 = ~10.5% of $1165.90 vs $116.59 (10%) baseline; deliberate to regain the scale-out protocol a 1-lot cannot use; 25% exception is retired so this is a plain user override, logged as such",
       "cluster_note": "crypto_beta -- only open position, no correlation-cap issue",
       "ratchet_history": [
@@ -44,35 +44,6 @@
           "stop": 0.52,
           "limit": 0.47,
           "note": "initial broker stop on fill (~15% below 0.61 entry)"
-        }
-      ]
-    },
-    {
-      "symbol": "SMCI",
-      "contract": "SMCI $35.00C 2026-07-31",
-      "qty": 1,
-      "entry_price": 0.8,
-      "entry_utc": "2026-07-22T16:55:24Z",
-      "hwm": 0.8,
-      "hwm_direction": "call (favorable = price rises as SMCI rises)",
-      "trail_pct": 15,
-      "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a60f609-ab65-4437-b6d3-b918a21bcf48",
-      "stop_trigger": 0.68,
-      "stop_limit": 0.62,
-      "stop_qty": 1,
-      "stop_order_state": "confirmed (GTC, resting at broker)",
-      "unrealized_pct_at_last_check": 0.0,
-      "sizing_note": "1 lot ~$80 = ~6.9% of $1165.90, within 10% baseline",
-      "cluster_note": "idiosyncratic (AI-server) -- diversifies from MARA (crypto_beta); 2nd open position, MAX_OPEN 3",
-      "entry_caveat": "chased a +25% intraday gap at IV ~98%; could not verify within-1%-of-intraday-high (historicals tool needs approval); user-approved 1 lot after chase-risk flag; DKNG-bull-trap-shaped risk acknowledged",
-      "ratchet_history": [
-        {
-          "utc": "2026-07-22T16:55:24Z",
-          "hwm": 0.8,
-          "stop": 0.68,
-          "limit": 0.62,
-          "note": "initial broker stop on fill (~15% below 0.80 entry)"
         }
       ]
     }
@@ -88,16 +59,6 @@
       "qty": 2,
       "gtc": true,
       "state": "confirmed (resting at broker)"
-    },
-    {
-      "order_id": "6a60f609-ab65-4437-b6d3-b918a21bcf48",
-      "symbol": "SMCI",
-      "type": "stop_limit",
-      "stop": 0.68,
-      "limit": 0.62,
-      "qty": 1,
-      "gtc": true,
-      "state": "confirmed (resting at broker)"
     }
   ],
   "realized_pnl_by_day": {
@@ -105,22 +66,23 @@
     "2026-07-15": -11.08,
     "2026-07-17": 105.76,
     "2026-07-20": 18.92,
-    "2026-07-21": 36.84
+    "2026-07-21": 36.84,
+    "2026-07-22": -13.08
   },
   "session_stats": {
-    "trades_total": 24,
+    "trades_total": 25,
     "system_trades": {
-      "count": 15,
+      "count": 16,
       "wins": 8,
-      "losses": 2,
-      "pnl": 186.2,
-      "note": "2 open 2026-07-22: MARA $13C x2 @ 0.61 and SMCI $35C x1 @ 0.80 (both system_entry breakouts). SMCI chased a +25% gap, user-approved 1 lot after chase-risk flag. Neither resolved yet."
+      "losses": 3,
+      "pnl": 173.12,
+      "note": "SMCI $35C x1 stopped out 2026-07-22 at 0.67 vs 0.80 = -13.08 (broker_stop, ~19min hold, +25%-gap chase that faded -- chase-risk caveat validated). MARA $13C x2 remains open, -11.5%, bid sitting on the 0.52 stop trigger."
     },
     "discretionary_trades": {
       "count": 2,
       "pnl_vs_plan": -25.0
     },
-    "open_positions_count": 2
+    "open_positions_count": 1
   },
   "logged_signals": [
     {
@@ -322,6 +284,11 @@
       "date": "2026-07-22T16:55Z",
       "signal": "User: 'Take smci 1 lot' after the chase-risk caveat. SMCI $35C re-quoted: option faded with the underlying to ask 0.80 (from 0.90), delta 0.28, spread 6.5%.",
       "status": "ENTERED SMCI $35C 07-31 x1 @ 0.80 (filled vs 0.82 limit, improvement; cost $80.04). Broker stop 0.68/0.62 GTC placed and confirmed resting (order 6a60f609...). 2nd open position alongside MARA -- different clusters (idiosyncratic vs crypto_beta), no correlation-cap issue. Trail-only (1-lot). Chase-risk entry acknowledged and logged."
+    },
+    {
+      "date": "2026-07-22T17:54Z",
+      "signal": "Check-in (polled positions+orders first -- caught a silent change). SMCI $35C NO LONGER open: broker stop (0.68/0.62) FIRED at 17:14:42, filled 0.67, ~19min after the 0.80 entry. SMCI faded from its +25% gap and never went green. MARA $13C x2 mark 0.54 (bid 0.52/ask 0.56) = -11.5%, faded further; bid sitting exactly on the 0.52 stop trigger.",
+      "status": "SMCI closed -13.08 (-16.3%), MFE ~0 -- validates the chase-risk caveat (25% gap + ~98% IV = bull-trap, same shape as DKNG 07-15). Stop worked cleanly, no slippage past limit. Position-freshness re-poll caught the fill immediately this time (unlike the 07-17 SOFI 30-min tracking error). MARA: NO ratchet (below entry/HWM), stop holds 0.52/0.47 -- one tick from firing, holding per trigger-only discipline. Day realized 2026-07-22 = -13.08. 1 open position remains."
     }
   ],
   "watchlist": {
