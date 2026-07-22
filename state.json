@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-22T14:13:30Z",
+  "last_updated_utc": "2026-07-22T16:26:35Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
@@ -34,7 +34,7 @@
       "stop_limit": 0.47,
       "stop_qty": 2,
       "stop_order_state": "confirmed (GTC, resting at broker)",
-      "unrealized_pct_at_last_check": 0.0,
+      "unrealized_pct_at_last_check": -9.0,
       "sizing_note": "USER OVERRODE MAX_POSITION_PCT -- 2 lots ~$122 = ~10.5% of $1165.90 vs $116.59 (10%) baseline; deliberate to regain the scale-out protocol a 1-lot cannot use; 25% exception is retired so this is a plain user override, logged as such",
       "cluster_note": "crypto_beta -- only open position, no correlation-cap issue",
       "ratchet_history": [
@@ -268,6 +268,11 @@
       "date": "2026-07-22T14:13Z",
       "signal": "User scan request (TQQQ + others, call or put), 1 open (MARA $13C x2). TQQQ -0.73% and QQQ -0.25% -- both well inside the index-tier +-3%/+-1% gates, NO setup. DKNG re-broke to -3.44% (had bounced to -2.49% an hour ago) = valid breakdown/put price trigger. IREN +4.96% (call trigger, still priced out ~135% IV). SOFI -2.69% near-miss (not rounded in). MARA +2.78% faded below its own gate.",
       "status": "NO new entry. DKNG put book still too thin: 07-31 puts $22P/$22.50P/$23P/$23.50P quoted 28.6%/41.4%/22.5%/20.1% spreads -- ALL fail the 10% gate, none qualify for the penny-floor exception (ask-bid gaps $0.10-0.24, not a single tick). Genuine thin-book, unchanged from the earlier check same session. Logged, not traded. MARA $13C x2 remains the only open position, stop 0.52/0.47 resting."
+    },
+    {
+      "date": "2026-07-22T16:26Z",
+      "signal": "Check-in (polled positions+orders first). MARA $13C x2 mark 0.555 vs 0.61 entry = -9.0% unrealized; delta 0.42, IV ~100%. MARA underlying faded from its +3.67% open. No new high since entry (0.63 HWM).",
+      "status": "NO ratchet (below entry/HWM). Broker stop unchanged at 0.52/0.47, confirmed resting (order 6a60cef7...). Mark 0.555 sits ~6% above the 0.52 trigger -- not imminent. Hold to stop; +50% scale-out still the upside plan."
     }
   ],
   "watchlist": {
