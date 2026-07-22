@@ -5,13 +5,13 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-22T17:59:25Z",
+  "last_updated_utc": "2026-07-22T18:44:35Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
-    "cash_approx": 902.66,
-    "buying_power": 902.66,
-    "note": "2 open positions (MARA $13C x2 call, SOFI $16.50P x2 put) as of 2026-07-22T17:59Z. Two-sided book.",
+    "cash_approx": 1004.62,
+    "buying_power": 1004.62,
+    "note": "1 open position (SOFI $16.50P x2 put) as of 2026-07-22T18:44Z. MARA $13C x2 and SMCI $35C x1 both stopped out today.",
     "sizing": {
       "baseline_10pct": 116.59,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
@@ -19,34 +19,6 @@
     }
   },
   "open_positions": [
-    {
-      "symbol": "MARA",
-      "contract": "MARA $13.00C 2026-07-31",
-      "qty": 2,
-      "entry_price": 0.61,
-      "entry_utc": "2026-07-22T14:08:34Z",
-      "hwm": 0.63,
-      "hwm_direction": "call (favorable = price rises as MARA rises)",
-      "trail_pct": 15,
-      "management": "qty>1 -- SCALE-OUT protocol re-enabled: at +50% unrealized, sell 1 lot to bank capital, trail the remaining lot at 15%",
-      "resting_stop_order_id": "6a60cef7-e468-46f7-a8a9-2fb0229d429b",
-      "stop_trigger": 0.52,
-      "stop_limit": 0.47,
-      "stop_qty": 2,
-      "stop_order_state": "confirmed (GTC, resting at broker)",
-      "unrealized_pct_at_last_check": -11.5,
-      "sizing_note": "USER OVERRODE MAX_POSITION_PCT -- 2 lots ~$122 = ~10.5% of $1165.90 vs $116.59 (10%) baseline; deliberate to regain the scale-out protocol a 1-lot cannot use; 25% exception is retired so this is a plain user override, logged as such",
-      "cluster_note": "crypto_beta -- only open position, no correlation-cap issue",
-      "ratchet_history": [
-        {
-          "utc": "2026-07-22T14:08:34Z",
-          "hwm": 0.63,
-          "stop": 0.52,
-          "limit": 0.47,
-          "note": "initial broker stop on fill (~15% below 0.61 entry)"
-        }
-      ]
-    },
     {
       "symbol": "SOFI",
       "contract": "SOFI $16.50P 2026-07-31",
@@ -62,7 +34,7 @@
       "stop_limit": 0.49,
       "stop_qty": 2,
       "stop_order_state": "confirmed (GTC, resting at broker)",
-      "unrealized_pct_at_last_check": 0.0,
+      "unrealized_pct_at_last_check": -1.6,
       "sizing_note": "USER OVERRODE MAX_POSITION_PCT -- 2 lots ~$128 = ~11% vs $116.59 baseline; deliberate to regain scale-out protocol; plain user override (25% exception retired)",
       "cluster_note": "idiosyncratic -- diversifies from MARA (crypto_beta); natural hedge (bearish SOFI put vs bullish MARA call); 2nd open position, MAX_OPEN 3",
       "entry_note": "higher-quality entry than the SMCI chase: spread 1.6%, IV ~85% (moderate), known-liquid watchlist name (+181% on 07-17), modest -3.25% breakdown not a gap-chase",
@@ -80,16 +52,6 @@
   "exception_slot": "FREE (both new positions fit the 10% baseline; not used)",
   "resting_stop_orders": [
     {
-      "order_id": "6a60cef7-e468-46f7-a8a9-2fb0229d429b",
-      "symbol": "MARA",
-      "type": "stop_limit",
-      "stop": 0.52,
-      "limit": 0.47,
-      "qty": 2,
-      "gtc": true,
-      "state": "confirmed (resting at broker)"
-    },
-    {
       "order_id": "6a6104f6-cdcb-496c-ad2c-339951fb6f44",
       "symbol": "SOFI",
       "type": "stop_limit",
@@ -106,22 +68,22 @@
     "2026-07-17": 105.76,
     "2026-07-20": 18.92,
     "2026-07-21": 36.84,
-    "2026-07-22": -13.08
+    "2026-07-22": -33.2
   },
   "session_stats": {
-    "trades_total": 26,
+    "trades_total": 27,
     "system_trades": {
-      "count": 17,
+      "count": 18,
       "wins": 8,
-      "losses": 3,
-      "pnl": 173.12,
-      "note": "2 open 2026-07-22: MARA $13C x2 (call) and SOFI $16.50P x2 (put) -- two-sided book. SOFI is a higher-quality breakdown entry than the earlier SMCI chase (which stopped out -13.08). Neither open position resolved yet."
+      "losses": 4,
+      "pnl": 153.0,
+      "note": "2026-07-22 both call-side breakouts stopped out: SMCI $35C -13.08 (gap-chase) and MARA $13C x2 -20.12 (crypto-beta breakout faded all session). Only SOFI $16.50P x2 (the higher-quality put entry) remains open, -1.6%. Day realized -33.20."
     },
     "discretionary_trades": {
       "count": 2,
       "pnl_vs_plan": -25.0
     },
-    "open_positions_count": 2
+    "open_positions_count": 1
   },
   "logged_signals": [
     {
@@ -338,6 +300,11 @@
       "date": "2026-07-22T17:59Z",
       "signal": "User: 'Take sofi 16.5p 2 lot'. SOFI $16.50P re-quoted steady at ask 0.64, delta -0.37, spread 1.6%.",
       "status": "ENTERED SOFI $16.50P 07-31 x2 @ 0.64 (filled vs 0.66 limit, improvement; cost $128.08). USER overrode MAX_POSITION_PCT (2 lots ~11% vs 10%) to regain scale-out protocol -- flagged before placing. Broker stop 0.54/0.49 GTC qty-2 placed and confirmed resting (order 6a6104f6...). Two-sided book now: bullish MARA call + bearish SOFI put, uncorrelated clusters. Cash ~$903."
+    },
+    {
+      "date": "2026-07-22T18:44Z",
+      "signal": "Check-in (polled positions+orders first -- caught a silent change). MARA $13C x2 NO LONGER open: broker stop (0.52/0.47) FIRED at 18:32:06, filled 0.51 both lots. MARA faded all session (12.70->~12.43) and rolled through the trigger; never meaningfully green post-entry. SOFI $16.50P x2 mark 0.63 vs 0.64 = -1.6%, SOFI hasn't broken further, no new high.",
+      "status": "MARA closed -20.12 (-16.4%), MFE ~+3%. The user-oversized 2-lot breakout failed -- same crypto-beta-breakout-fades shape. Both of today's call-side entries (MARA + SMCI) stopped out; only SOFI put remains. Day realized 2026-07-22 = -33.20 (SMCI -13.08 + MARA -20.12). SOFI: NO ratchet (no new high), stop holds 0.54/0.49. Position-freshness re-poll caught the fill immediately. 1 open position, cash ~$1005."
     }
   ],
   "watchlist": {
