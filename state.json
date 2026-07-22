@@ -5,22 +5,62 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-21T17:20:25Z",
+  "last_updated_utc": "2026-07-22T14:09:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 1129.1,
-    "cash_approx": 1026.1,
-    "buying_power": 954.16,
-    "note": "2 open positions (MARA $12.50C, TQQQ $74.00C) as of 2026-07-21T14:36Z. cash reduced by $37+$66 premium.",
+    "equity_approx": 1165.9,
+    "cash_approx": 1043.82,
+    "buying_power": 1043.82,
+    "note": "1 open position (MARA $13.00C x2) as of 2026-07-22T14:08Z. Portfolio was $1165.90 all-cash pre-buy (grown from prior sessions); cash reduced by $122.08 premium+fees for the 2-lot.",
     "sizing": {
-      "baseline_10pct": 112.91,
+      "baseline_10pct": 116.59,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
       "exception_retires_at_equity": 1100
     }
   },
-  "open_positions": [],
+  "open_positions": [
+    {
+      "symbol": "MARA",
+      "contract": "MARA $13.00C 2026-07-31",
+      "qty": 2,
+      "entry_price": 0.61,
+      "entry_utc": "2026-07-22T14:08:34Z",
+      "hwm": 0.63,
+      "hwm_direction": "call (favorable = price rises as MARA rises)",
+      "trail_pct": 15,
+      "management": "qty>1 -- SCALE-OUT protocol re-enabled: at +50% unrealized, sell 1 lot to bank capital, trail the remaining lot at 15%",
+      "resting_stop_order_id": "6a60cef7-e468-46f7-a8a9-2fb0229d429b",
+      "stop_trigger": 0.52,
+      "stop_limit": 0.47,
+      "stop_qty": 2,
+      "stop_order_state": "confirmed (GTC, resting at broker)",
+      "unrealized_pct_at_last_check": 0.0,
+      "sizing_note": "USER OVERRODE MAX_POSITION_PCT -- 2 lots ~$122 = ~10.5% of $1165.90 vs $116.59 (10%) baseline; deliberate to regain the scale-out protocol a 1-lot cannot use; 25% exception is retired so this is a plain user override, logged as such",
+      "cluster_note": "crypto_beta -- only open position, no correlation-cap issue",
+      "ratchet_history": [
+        {
+          "utc": "2026-07-22T14:08:34Z",
+          "hwm": 0.63,
+          "stop": 0.52,
+          "limit": 0.47,
+          "note": "initial broker stop on fill (~15% below 0.61 entry)"
+        }
+      ]
+    }
+  ],
   "exception_slot": "FREE (both new positions fit the 10% baseline; not used)",
-  "resting_stop_orders": [],
+  "resting_stop_orders": [
+    {
+      "order_id": "6a60cef7-e468-46f7-a8a9-2fb0229d429b",
+      "symbol": "MARA",
+      "type": "stop_limit",
+      "stop": 0.52,
+      "limit": 0.47,
+      "qty": 2,
+      "gtc": true,
+      "state": "confirmed (resting at broker)"
+    }
+  ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
@@ -29,19 +69,19 @@
     "2026-07-21": 36.84
   },
   "session_stats": {
-    "trades_total": 22,
+    "trades_total": 23,
     "system_trades": {
-      "count": 13,
+      "count": 14,
       "wins": 8,
       "losses": 2,
       "pnl": 186.2,
-      "note": "MARA $12.50C and TQQQ $74.00C both closed 2026-07-21 -- MARA +17.92 (user_confirmed_close at 0.55 vs 0.37, 90% MFE capture), TQQQ +18.92 (user_confirmed_close at 0.85 vs 0.66, 79% MFE capture). Account now fully flat, 0 open positions."
+      "note": "New entry 2026-07-22: MARA $13.00C x2 @ 0.61 (system_entry, breakout +3.67%). USER overrode MAX_POSITION_PCT to size 2 lots (~10.5% vs 10% cap) to regain the scale-out protocol. Not yet resolved. Prior: MARA $12.50C +17.92 and TQQQ $74.00C +18.92 both closed 2026-07-21."
     },
     "discretionary_trades": {
       "count": 2,
       "pnl_vs_plan": -25.0
     },
-    "open_positions_count": 0
+    "open_positions_count": 1
   },
   "logged_signals": [
     {
@@ -218,6 +258,11 @@
       "date": "2026-07-21T17:20Z",
       "signal": "User instruction 'Close' (TQQQ, the only remaining open position, following the MARA close moments earlier). Re-polled get_option_positions + get_option_orders first per the position-freshness rule -- TQQQ confirmed still open, stop unchanged at 0.76/0.71.",
       "status": "CLOSED TQQQ. Cancelled resting stop (6a5fa518...), confirmed cancelled via get_option_orders, pulled fresh quote (bid 0.85/ask 0.88, mark 0.865, pulled back slightly from 0.90 HWM), placed marketable limit sell-to-close at 0.83, filled at 0.85 (price improvement). Realized +18.92 (+28.8% on premium). Account now fully flat -- 0 open positions, day's total realized P&L +36.84 (MARA +17.92 + TQQQ +18.92)."
+    },
+    {
+      "date": "2026-07-22T14:08Z",
+      "signal": "Two-sided scan (calls+puts), account flat. Standing watchlist triggers: MARA +3.67% (call), IREN +5.38% (call), DKNG initially -3.23% then bounced to -2.49% off the breakdown gate. New scan candidates BLFS +6.7% ($1.43B) and DYN -6.1% ($3.94B) both MONTHLY-only options (nearest 08-21 ~30-DTE), structurally excluded by MIN_DTE -> log-only. IREN priced out: every delta-compliant 07-31 strike ran $150-370 at ~130-140% IV, over the $116.59 budget ($52C was a double near-miss, delta 0.196 + spread 10.3%, not rounded into). DKNG put book blown out (30-59% spreads). NOTE: market clock rolled to 2026-07-22 during an MCP reconnect/container re-clone; local git had rolled back to c05baec but origin retained all closes -- fast-forwarded local to 71c290f to restore the correct ledger before acting.",
+      "status": "ENTERED MARA $13.00C 2026-07-31 x2 @ 0.61 (filled vs 0.66 limit, improvement; delta 0.45, spread 3.3%, cost $122+$0.08). USER explicitly chose 2 contracts, overriding MAX_POSITION_PCT (~10.5% vs 10% baseline) to regain the qty>1 scale-out protocol -- flagged the breach before placing. Broker stop 0.52/0.47 GTC qty-2 placed and confirmed resting."
     }
   ],
   "watchlist": {
