@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-22T17:54:55Z",
+  "last_updated_utc": "2026-07-22T17:57:30Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
@@ -289,6 +289,11 @@
       "date": "2026-07-22T17:54Z",
       "signal": "Check-in (polled positions+orders first -- caught a silent change). SMCI $35C NO LONGER open: broker stop (0.68/0.62) FIRED at 17:14:42, filled 0.67, ~19min after the 0.80 entry. SMCI faded from its +25% gap and never went green. MARA $13C x2 mark 0.54 (bid 0.52/ask 0.56) = -11.5%, faded further; bid sitting exactly on the 0.52 stop trigger.",
       "status": "SMCI closed -13.08 (-16.3%), MFE ~0 -- validates the chase-risk caveat (25% gap + ~98% IV = bull-trap, same shape as DKNG 07-15). Stop worked cleanly, no slippage past limit. Position-freshness re-poll caught the fill immediately this time (unlike the 07-17 SOFI 30-min tracking error). MARA: NO ratchet (below entry/HWM), stop holds 0.52/0.47 -- one tick from firing, holding per trigger-only discipline. Day realized 2026-07-22 = -13.08. 1 open position remains."
+    },
+    {
+      "date": "2026-07-22T17:57Z",
+      "signal": "User rescan, 1 open (MARA $13C x2). New breakdown triggers: SOFI -3.25% (put), DKNG -3.92% (put, book still thin). Big movers earnings-gated/excluded: WAB +9.6%/TEL -8.7%/BKU -5.5% all reported earnings today (skip); ARWR +23% monthly-only; RDDT -9.3% still priced out (~$515); SMCI +21.6% is the name that just stopped us out. SOFI is the clean qualifier -- watchlist name, earnings ~July 29 (outside 2-day gate).",
+      "status": "Presented SOFI $16.50P 07-31 as recommendation: delta -0.37, spread 1.6%, cost ~$65, OI 6082, IV ~85% -- materially higher quality than the SMCI chase (tight spread vs 6.5%, moderate IV vs 98%, no gap-chase, known-liquid name we made +181% on 07-17). Alt: $17P (delta -0.46, 2.3%, ~$90). Natural hedge vs the bullish MARA call (uncorrelated clusters). Caveats flagged: only just over -3% gate, can't verify within-1%-of-low. Awaiting user decision -- NOT yet entered. DKNG passed on again (thin book)."
     }
   ],
   "watchlist": {
