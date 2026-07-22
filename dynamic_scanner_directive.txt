@@ -30,16 +30,23 @@ watchlist of exactly 3 targets.
 ## 2a. STANDING WATCHLIST (in addition to dynamic scan output)
 Tradeable at current (~$1,129) equity, baseline budget ~$113 (single-tier;
 the 25% small-account exception RETIRED 2026-07-20 at equity ≥$1,100):
-  CLSK, ERAS (earned via scan, session 1; ERAS options illiquid — log-only
-  in practice) | NFLX, MARA, SOFI, DKNG, IONQ, TQQQ (session 2 adds,
-  verified weekly chains, baseline-budget fits) | IREN (added 2026-07-20 —
-  $12B bitcoin miner, verified $44C delta 0.28/spread 5.3%/cost $98; deep
-  option liquidity, structurally the fix for CLSK's chronic spread problem).
+  CLSK | NFLX, MARA, SOFI, DKNG, IONQ, TQQQ (session 2 adds, verified weekly
+  chains, baseline-budget fits) | IREN (added 2026-07-20 — $12B bitcoin
+  miner, verified $44C delta 0.28/spread 5.3%/cost $98; deep option
+  liquidity, structurally the fix for CLSK's chronic spread problem) |
+  RGTI, RIVN (added 2026-07-22 — Rigetti $15/quantum, Rivian $17/EV; both
+  verified weekly chains + cheap underlyings well within the ~$116 baseline.
+  RGTI deepens quantum exposure alongside IONQ; RIVN adds a genuinely new
+  sector, EV, to the book).
+  REMOVED 2026-07-22 (no weekly options): ERAS — nearest expiry is monthly
+  (08-21), zero weeklies, so it fails MIN_DTE's 3-9 day window structurally
+  every time. It had been mis-filed under log-only-illiquid, a tier that
+  presumes a weekly chain exists; it never did.
 
 CORRELATION CLUSTERS (for the max-2-per-cluster rule in Discipline Rules):
   crypto-beta:  MSTR, COIN, CLSK, MARA, IREN, CIFR, RIOT
   nasdaq-beta:  NVDA, QQQ, TQQQ, PLTR, GOOGL, AAPL, AMD-class megacaps
-  idiosyncratic: NFLX, DKNG, IONQ, SOFI, ERAS, TSLA, SPCX, TEM, HOOD,
+  idiosyncratic: NFLX, DKNG, IONQ, SOFI, RGTI, RIVN, TSLA, SPCX, TEM, HOOD,
   dynamic-scan names
   (assign new names to a cluster when added; when unsure, cluster by what
   actually moves them, not by sector label)
@@ -47,7 +54,7 @@ CORRELATION CLUSTERS (for the max-2-per-cluster rule in Discipline Rules):
 Log-only, illiquid options (weekly chain exists but the book itself is too
 thin — wide spreads / low OI at every strike checked; signals evaluated and
 logged, never traded):
-  ERAS | TEM (added 2026-07-20 — Tempus AI, $9.4B cap, real weekly chain,
+  TEM (added 2026-07-20 — Tempus AI, $9.4B cap, real weekly chain,
   but every strike checked had 16-29% spreads and <150 OI).
   CIFR (added 2026-07-20 — Cipher Mining, $7.18B cap, weekly chain, +17.2%
   move, but 19.3% spread at every strike — thin book like TEM).

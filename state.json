@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-22T18:47:30Z",
+  "last_updated_utc": "2026-07-22T18:52:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
@@ -321,7 +321,9 @@
       "DKNG",
       "IONQ",
       "TQQQ",
-      "IREN"
+      "IREN",
+      "RGTI",
+      "RIVN"
     ],
     "log_only_priced_out": [
       "TSLA",
@@ -336,7 +338,6 @@
       "AAPL"
     ],
     "log_only_illiquid_options": [
-      "ERAS",
       "TEM",
       "CIFR",
       "RIOT"
@@ -357,6 +358,30 @@
       "utc": "2026-07-20T20:00:00Z",
       "change": "Added CIFR and RIOT to log_only_illiquid_options and crypto_beta cluster.",
       "reason": "User said the watchlist feels thin, asked for a fresh scan. Checked CIFR (+17.2%, $7.18B cap, weekly chain) and RIOT (+9.0%, weekly chain, OI 2,781) -- both real moves, both blocked purely on spread (CIFR 19.3% at every strike checked -- thin book like TEM; RIOT 12.2% -- genuinely deep OI but %-spread runs high on ~$20 stocks, a near-miss distinct from CIFR's thin-book failure, logged separately in open_tuning_questions). Also checked and rejected as monthly-only: LXP (REIT), PSNL, BETA, SGHC, NUVB, VSXY. SNAP ($4.57) auto-excluded by the new $5 floor -- confirms the rule working live. No new tradeable-tier name found this pass; IREN remains the only clean addition today."
+    },
+    {
+      "date": "2026-07-22",
+      "removed": [
+        "ERAS"
+      ],
+      "removed_reason": "No weekly options -- nearest expiry monthly (08-21), fails MIN_DTE's 3-9 day window structurally. Was mis-filed under log-only-illiquid (a tier that presumes a weekly chain exists); it never had one. Removed per user directive to drop all watchlist names lacking weeklies.",
+      "added": [
+        "RGTI",
+        "RIVN"
+      ],
+      "added_reason": "RGTI (Rigetti $15.24, quantum) and RIVN (Rivian $17.12, EV) -- both verified weekly chains (07-24/07-31 present) and cheap underlyings whose delta-0.20-0.35 weeklies sit well within the ~$116 baseline. RGTI deepens quantum exposure alongside IONQ; RIVN adds a genuinely new sector (EV) to an otherwise crypto/AI/index-heavy book. Both -> idiosyncratic cluster. Contract-level gates (delta/spread/earnings) still applied at signal time like every other name.",
+      "verified_have_weeklies_kept": [
+        "TEM",
+        "CIFR",
+        "RIOT",
+        "SPCX"
+      ],
+      "candidates_not_added": {
+        "QBTS": "D-Wave $17.41 quantum, cheap/likely-fits, but chain not yet pulled; can add on request",
+        "HIMS": "$31.77, high-vol, weeklies confirmed, but delta-0.30 weekly ~$130-180 = borderline over $116 baseline; add only if willing to size at lower delta",
+        "AFRM": "$74.36 -- delta-compliant weekly ~$200-300, priced out",
+        "AMD": "$555.85 -- mega-cap, priced out like NVDA"
+      }
     }
   ],
   "correlation_clusters": {
@@ -382,11 +407,12 @@
       "DKNG",
       "IONQ",
       "SOFI",
-      "ERAS",
       "TSLA",
       "SPCX",
       "TEM",
-      "HOOD"
+      "HOOD",
+      "RGTI",
+      "RIVN"
     ]
   },
   "saved_scan_id": "5ef6974d-5db9-4469-8448-932e92159315",
