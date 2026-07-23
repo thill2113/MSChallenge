@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-22T18:53:00Z",
+  "last_updated_utc": "2026-07-23T13:39:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
@@ -25,16 +25,16 @@
       "qty": 2,
       "entry_price": 0.64,
       "entry_utc": "2026-07-22T17:59:07Z",
-      "hwm": 0.64,
+      "hwm": 0.76,
       "hwm_direction": "put (favorable = price rises as SOFI falls)",
       "trail_pct": 15,
       "management": "qty>1 -- SCALE-OUT protocol re-enabled: at +50% unrealized, sell 1 lot to bank capital, trail the remaining lot at 15%",
-      "resting_stop_order_id": "6a6104f6-cdcb-496c-ad2c-339951fb6f44",
-      "stop_trigger": 0.54,
-      "stop_limit": 0.49,
+      "resting_stop_order_id": "6a621966-55d6-4bd6-a4c9-be2f6d585d61",
+      "stop_trigger": 0.65,
+      "stop_limit": 0.6,
       "stop_qty": 2,
       "stop_order_state": "confirmed (GTC, resting at broker)",
-      "unrealized_pct_at_last_check": -1.6,
+      "unrealized_pct_at_last_check": 18.75,
       "sizing_note": "USER OVERRODE MAX_POSITION_PCT -- 2 lots ~$128 = ~11% vs $116.59 baseline; deliberate to regain scale-out protocol; plain user override (25% exception retired)",
       "cluster_note": "idiosyncratic -- diversifies from MARA (crypto_beta); natural hedge (bearish SOFI put vs bullish MARA call); 2nd open position, MAX_OPEN 3",
       "entry_note": "higher-quality entry than the SMCI chase: spread 1.6%, IV ~85% (moderate), known-liquid watchlist name (+181% on 07-17), modest -3.25% breakdown not a gap-chase",
@@ -45,6 +45,13 @@
           "stop": 0.54,
           "limit": 0.49,
           "note": "initial broker stop on fill (~15% below 0.64 entry)"
+        },
+        {
+          "utc": "2026-07-23T13:38:46Z",
+          "hwm": 0.76,
+          "stop": 0.65,
+          "limit": 0.6,
+          "note": "new trading day 2026-07-23 red tech open (TQQQ -4.1%, QQQ -1.4%); SOFI fell 17.07->16.84, put 0.63->0.76 (+18.75% vs 0.64 entry, new high); ratcheted from 0.54/0.49 loss-stop to 0.65/0.60 -- now locks in ~breakeven-plus"
         }
       ]
     }
@@ -52,11 +59,11 @@
   "exception_slot": "FREE (both new positions fit the 10% baseline; not used)",
   "resting_stop_orders": [
     {
-      "order_id": "6a6104f6-cdcb-496c-ad2c-339951fb6f44",
+      "order_id": "6a621966-55d6-4bd6-a4c9-be2f6d585d61",
       "symbol": "SOFI",
       "type": "stop_limit",
-      "stop": 0.54,
-      "limit": 0.49,
+      "stop": 0.65,
+      "limit": 0.6,
       "qty": 2,
       "gtc": true,
       "state": "confirmed (resting at broker)"
@@ -310,6 +317,11 @@
       "date": "2026-07-22T18:47Z",
       "signal": "User rescan (5th of the session), 1 open (SOFI $16.50P x2). NO new tradeable trigger. Watchlist: SOFI -3.0% (already hold put), DKNG -4.0% (book still thin), rest inside gates. Movers all gated/excluded: WAB/EQT/TEL/BKU/NTRS reported earnings today (skip); SMCI +21.8% is the chase that stopped us out; RDDT -8.8%/PAG $215/LQDA $87 priced out; ARWR + APPN monthly-only (APPN -11.8% checked: nearest 08-21, no weekly).",
       "status": "NO new entry -- recommended RESTRAINT. Only clean/affordable/in-window signal today is the SOFI put we already own; APPN would stack another idiosyncratic put anyway. Context: two forced call-side breakouts (SMCI + MARA) already stopped out today for -33.20 on a choppy directionless tape; SOFI put already expresses the only theme with edge (soft tape->downside). Holding, preserving ~$1005 cash for a cleaner setup rather than overtrading a chop day. This is a discipline call, not a data gap."
+    },
+    {
+      "date": "2026-07-23T13:38Z",
+      "signal": "User scan on NEW trading day 2026-07-23, RED TECH OPEN (6 min in): TQQQ -4.14% and QQQ -1.38% both breaking down hard (index-tier put triggers). Single-names all inside gates (RIVN -2.62% closest, not there). Saved scans returned only micro-caps/leveraged ETFs -- RVOL not built 6 min after open. Position-freshness poll surfaced SOFI put now +18.75% (mark 0.76 vs 0.64 entry) on the red tape -- new high.",
+      "status": "NO new entry: TQQQ 07-31 puts all PRICED OUT (cheapest delta-compliant $62P delta -0.25 ~$173, even $65P delta -0.35 ~$247; 3x-leverage + ~90-97% IV inflates all past $116.59 budget); QQQ ($695) priced out too. The SOFI put I already hold is the affordable expression of this exact nasdaq-down theme and is working. RATCHETED SOFI stop 0.54/0.49 -> 0.65/0.60 (HWM 0.76, 15% trail) -- old stop cancelled+confirmed before replacement, now locks in ~breakeven-plus vs a prior loss-stop. Holding, letting the put run on the red tape."
     }
   ],
   "watchlist": {
