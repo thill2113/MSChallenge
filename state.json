@@ -5,92 +5,45 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-23T13:45:00Z",
+  "last_updated_utc": "2026-07-23T13:43:30Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
-    "cash_approx": 1004.62,
-    "buying_power": 1004.62,
-    "note": "1 open position (SOFI $16.50P x2 put) as of 2026-07-22T18:44Z. MARA $13C x2 and SMCI $35C x1 both stopped out today.",
+    "cash_approx": 1132.58,
+    "buying_power": 1132.58,
+    "note": "FLAT -- 0 open positions as of 2026-07-23T13:43Z. SOFI $16.50P x2 stopped out at breakeven after +18.75% round-trip.",
     "sizing": {
       "baseline_10pct": 116.59,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
       "exception_retires_at_equity": 1100
     }
   },
-  "open_positions": [
-    {
-      "symbol": "SOFI",
-      "contract": "SOFI $16.50P 2026-07-31",
-      "qty": 2,
-      "entry_price": 0.64,
-      "entry_utc": "2026-07-22T17:59:07Z",
-      "hwm": 0.76,
-      "hwm_direction": "put (favorable = price rises as SOFI falls)",
-      "trail_pct": 15,
-      "management": "qty>1 -- SCALE-OUT protocol re-enabled: at +50% unrealized, sell 1 lot to bank capital, trail the remaining lot at 15%",
-      "resting_stop_order_id": "6a621966-55d6-4bd6-a4c9-be2f6d585d61",
-      "stop_trigger": 0.65,
-      "stop_limit": 0.6,
-      "stop_qty": 2,
-      "stop_order_state": "confirmed (GTC, resting at broker)",
-      "unrealized_pct_at_last_check": 18.75,
-      "sizing_note": "USER OVERRODE MAX_POSITION_PCT -- 2 lots ~$128 = ~11% vs $116.59 baseline; deliberate to regain scale-out protocol; plain user override (25% exception retired)",
-      "cluster_note": "idiosyncratic -- diversifies from MARA (crypto_beta); natural hedge (bearish SOFI put vs bullish MARA call); 2nd open position, MAX_OPEN 3",
-      "entry_note": "higher-quality entry than the SMCI chase: spread 1.6%, IV ~85% (moderate), known-liquid watchlist name (+181% on 07-17), modest -3.25% breakdown not a gap-chase",
-      "ratchet_history": [
-        {
-          "utc": "2026-07-22T17:59:07Z",
-          "hwm": 0.64,
-          "stop": 0.54,
-          "limit": 0.49,
-          "note": "initial broker stop on fill (~15% below 0.64 entry)"
-        },
-        {
-          "utc": "2026-07-23T13:38:46Z",
-          "hwm": 0.76,
-          "stop": 0.65,
-          "limit": 0.6,
-          "note": "new trading day 2026-07-23 red tech open (TQQQ -4.1%, QQQ -1.4%); SOFI fell 17.07->16.84, put 0.63->0.76 (+18.75% vs 0.64 entry, new high); ratcheted from 0.54/0.49 loss-stop to 0.65/0.60 -- now locks in ~breakeven-plus"
-        }
-      ]
-    }
-  ],
+  "open_positions": [],
   "exception_slot": "FREE (both new positions fit the 10% baseline; not used)",
-  "resting_stop_orders": [
-    {
-      "order_id": "6a621966-55d6-4bd6-a4c9-be2f6d585d61",
-      "symbol": "SOFI",
-      "type": "stop_limit",
-      "stop": 0.65,
-      "limit": 0.6,
-      "qty": 2,
-      "gtc": true,
-      "state": "confirmed (resting at broker)"
-    }
-  ],
+  "resting_stop_orders": [],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
     "2026-07-17": 105.76,
     "2026-07-20": 18.92,
     "2026-07-21": 36.84,
-    "2026-07-22": -33.2
+    "2026-07-22": -33.2,
+    "2026-07-23": -0.12
   },
   "session_stats": {
-    "trades_total": 27,
+    "trades_total": 28,
     "system_trades": {
-      "count": 18,
+      "count": 19,
       "wins": 8,
       "losses": 4,
-      "pnl": 153.0,
-      "note": "2026-07-22 both call-side breakouts stopped out: SMCI $35C -13.08 (gap-chase) and MARA $13C x2 -20.12 (crypto-beta breakout faded all session). Only SOFI $16.50P x2 (the higher-quality put entry) remains open, -1.6%. Day realized -33.20."
+      "pnl": 152.88,
+      "note": "SOFI $16.50P x2 closed 2026-07-23 at breakeven (-0.12, broker_stop) after spiking +18.75% on the red open then round-tripping through the ratcheted 0.65 trigger. Account now FLAT. Lesson: 15% trail off a +19% HWM sits at entry = can only lock breakeven; connects to the 5d profit-capture give-back item."
     },
     "discretionary_trades": {
       "count": 2,
       "pnl_vs_plan": -25.0
     },
-    "open_positions_count": 1
+    "open_positions_count": 0
   },
   "logged_signals": [
     {
@@ -327,6 +280,11 @@
       "date": "2026-07-23T13:45Z",
       "signal": "User: broader-market scan for any call/put entries. Re-ran both dynamic scans ~15min into the red open. Breakdown scan (15 matches): only >$1B name is FSBC (-4.3%, Five Star Bank) -- earnings-gated (reported 07-22 pm) + thin regional-bank options; rest micro-caps (<$100M biotech/China) or leveraged/inverse ETF wrappers (TESC/TSLI/XRPT/AALG). Breakout scan (23 matches): top is DOMO +30% ($142M micro-cap); rest micro-caps + leveraged ETFs (LMTL/MTUL/RTXG/HONG).",
       "status": "NO tradeable broader-market entry. On a broad-market-down day the move is index-level (QQQ/TQQQ/nasdaq), not single-name -- few names clear the -3%+RVOL gate, and the index expression (TQQQ/QQQ puts) is priced out. Every scan-qualifying mover fails our rules (no weeklies / not a real underlying / micro-cap illiquidity / earnings-gated). SOFI put already IS the affordable expression of this tape (+18.75%, stop 0.65/0.60). Held, no new position -- disciplined pass, not a data gap."
+    },
+    {
+      "date": "2026-07-23T13:43Z",
+      "signal": "Check-in (polled orders+positions -- caught a silent change). SOFI $16.50P x2 NO LONGER open: ratcheted stop (0.65/0.60) FIRED at 0.64 both lots at 13:42:55, ~4min after being set at 13:38. The put spiked 0.63->0.76 (+18.75%) on the red tech open then pulled straight back through the 0.65 trigger. Account now FLAT.",
+      "status": "SOFI closed BREAKEVEN (-0.12 w/ fees), MFE +18.75% capture ~0%. LESSON logged: at HWM only ~19% above entry, a 15% trail (0.76*0.85=0.646) sits essentially AT the 0.64 entry, so it can only lock breakeven -- the +18.75% was never lockable at 15% trail width; trail can't clear entry until HWM>~18% over. Smaller instance of the 5d profit-capture give-back (SOFI 07-17 shape), a queued freeze-lift item. Position-freshness re-poll caught the fill immediately. Day 07-23 realized -0.12 (flat); lifetime realized +132.80. Account flat, cash ~$1030, all 3 slots free."
     }
   ],
   "watchlist": {
