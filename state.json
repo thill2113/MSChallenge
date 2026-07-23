@@ -5,13 +5,13 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-23T18:49:35Z",
+  "last_updated_utc": "2026-07-23T18:57:40Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
-    "cash_approx": 1001.5,
-    "buying_power": 1001.5,
-    "note": "2 open positions (RIVN $16P put + MARA $13.50C call) as of 2026-07-23T18:49Z -- two-sided book on a risk-off day.",
+    "cash_approx": 1049.46,
+    "buying_power": 1049.46,
+    "note": "1 open position (RIVN $16P put) as of 2026-07-23T18:57Z. MARA $13.50C call stopped out -8.08 (counter-tape leg failed as flagged).",
     "sizing": {
       "baseline_10pct": 116.59,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
@@ -34,7 +34,7 @@
       "stop_limit": 0.59,
       "stop_qty": 1,
       "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": 0.0,
+      "unrealized_pct_at_last_check": -3.3,
       "sizing_note": "1 lot ~$75, within $116 baseline",
       "cluster_note": "idiosyncratic/EV -- tape-aligned put (risk-off selloff); paired with MARA call (crypto_beta) as two-sided book",
       "ratchet_history": [
@@ -44,34 +44,6 @@
           "stop": 0.64,
           "limit": 0.59,
           "note": "initial broker stop ~15% below 0.75 entry"
-        }
-      ]
-    },
-    {
-      "symbol": "MARA",
-      "contract": "MARA $13.50C 2026-07-31",
-      "qty": 1,
-      "entry_price": 0.56,
-      "entry_utc": "2026-07-23T18:49:08Z",
-      "hwm": 0.56,
-      "hwm_direction": "call (favorable = price rises as MARA rises)",
-      "trail_pct": 15,
-      "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a626237-f170-4003-a014-a5b00d26d935",
-      "stop_trigger": 0.48,
-      "stop_limit": 0.43,
-      "stop_qty": 1,
-      "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": 0.0,
-      "sizing_note": "1 lot ~$56, within baseline",
-      "cluster_note": "crypto_beta -- counter-tape breakout; CAVEAT: IREN was -1.3% so crypto strength not broadly confirmed; 3rd MARA-breakout-call attempt (prior 2 stopped out); paired with RIVN put",
-      "ratchet_history": [
-        {
-          "utc": "2026-07-23T18:49:08Z",
-          "hwm": 0.56,
-          "stop": 0.48,
-          "limit": 0.43,
-          "note": "initial broker stop ~15% below 0.56 entry"
         }
       ]
     }
@@ -87,16 +59,6 @@
       "qty": 1,
       "gtc": true,
       "state": "confirmed (resting)"
-    },
-    {
-      "order_id": "6a626237-f170-4003-a014-a5b00d26d935",
-      "symbol": "MARA",
-      "type": "stop_limit",
-      "stop": 0.48,
-      "limit": 0.43,
-      "qty": 1,
-      "gtc": true,
-      "state": "confirmed (resting)"
     }
   ],
   "realized_pnl_by_day": {
@@ -106,22 +68,22 @@
     "2026-07-20": 18.92,
     "2026-07-21": 36.84,
     "2026-07-22": -33.2,
-    "2026-07-23": -0.12
+    "2026-07-23": -8.2
   },
   "session_stats": {
-    "trades_total": 30,
+    "trades_total": 31,
     "system_trades": {
-      "count": 21,
+      "count": 22,
       "wins": 8,
-      "losses": 4,
-      "pnl": 152.88,
-      "note": "2026-07-23 pm two-sided book opened: RIVN $16P put @0.75 (tape-aligned risk-off) + MARA $13.50C call @0.56 (counter-tape crypto breakout, user chose both). Both 1-lot, stops resting. Earlier: SOFI put breakeven, SMCI/MARA calls stopped 07-22."
+      "losses": 5,
+      "pnl": 144.8,
+      "note": "MARA $13.50C stopped out 2026-07-23 -8.08 (~6min, counter-tape breakout faded -- 3rd MARA-breakout-call stop-out, caveat validated). RIVN $16P put (tape-aligned leg) still open, -3.3%. Day 07-23 realized -8.20."
     },
     "discretionary_trades": {
       "count": 2,
       "pnl_vs_plan": -25.0
     },
-    "open_positions_count": 2
+    "open_positions_count": 1
   },
   "logged_signals": [
     {
@@ -368,6 +330,11 @@
       "date": "2026-07-23T18:49Z",
       "signal": "User: 'Let's go both' -- take RIVN $16P put AND MARA $13.50C call. Afternoon of red risk-off day (TQQQ -6.2%, QQQ -2.1%); RIVN -4.2% (tape-aligned breakdown), MARA +4.6% (crypto breakout but IREN -1.3% = not broadly confirmed). HIMS +4.7% rejected on spread (14.5-20.9% on budget-fitting strikes). TQQQ/QQQ index puts still priced out.",
       "status": "ENTERED BOTH: RIVN $16P @0.75 (vs 0.77, improvement; delta -0.39, spread 5.5%, $75; stop 0.64/0.59) + MARA $13.50C @0.56 (delta 0.43, spread 5.6%, $56; stop 0.48/0.43). Both GTC stops confirmed resting. Two-sided book: bearish RIVN (idiosyncratic/EV, tape-aligned) + bullish MARA (crypto_beta, counter-tape). Flagged: MARA is the riskier leg (3rd breakout-call attempt, prior 2 faded; IREN divergence) and it's a late-day entry (~26min to 19:15 cutoff). Cash ~$926, 1 slot free. Human-confirm entry per user 'go both'."
+    },
+    {
+      "date": "2026-07-23T18:57Z",
+      "signal": "Check-in (polled positions+orders first). MARA $13.50C NO LONGER open: broker stop (0.48/0.43) FIRED at 18:55:29, filled 0.48, ~6min after 0.56 entry. Counter-tape crypto breakout faded immediately -- never green. RIVN $16P put mark 0.725 vs 0.75 = -3.3% (RIVN bounced slightly), no new high.",
+      "status": "MARA closed -8.08 (-14.3%), MFE ~0 -- CAVEAT VALIDATED (3rd MARA-breakout-call stop-out; counter-tape + IREN divergence + late-day = exactly the fade risk flagged at entry). Whipsaw: MARA call already bounced to ~0.495 post-stop, but mechanical stop was correct. The two-sided book behaved as designed: tape-aligned RIVN put HELD (stop 0.64/0.59), counter-tape MARA call cut. Position-freshness poll caught the fill immediately. Day 07-23 realized -8.20 (SOFI -0.12 + MARA -8.08); lifetime +124.72. 1 open (RIVN put), cash ~$1049."
     }
   ],
   "watchlist": {
@@ -502,7 +469,7 @@
     "SPREAD NEAR-MISS TOLERANCE (added 2026-07-20): a second, distinct near-miss pattern -- RIOT $21C: delta 0.34, cost $53 (well within budget), OI 2,781 (genuinely deep), but spread 12.2% vs the 10% gate. Not a thin-book problem like CIFR/TEM (19-29% spreads, OI <400) -- RIOT's absolute liquidity is real, the %-spread just runs structurally high on ~$20 stocks with $0.05 tick width, similar mechanism to why the penny-floor exception exists for sub-$3 options but RIOT doesn't qualify for that exception (tick is $0.05 not $0.01). Not granted an exception (same discipline as NVDA). For freeze-lift: consider whether the penny-floor exception's LOGIC (tick-width-relative-to-price, not just absolute tick size) should extend to a wider tick-width band, since RIOT is exactly the kind of real-liquidity/high-%-spread case that exception was designed to rescue, just outside its literal $0.01 wording."
   ],
   "watch_state": {
-    "status": "POSITIONED (2 open: RIVN put + MARA call); monitoring/ratcheting",
+    "status": "POSITIONED (1 open: RIVN put); MARA call leg stopped out",
     "since_utc": "2026-07-23T13:45Z",
     "account": "flat (0 positions, 0 orders), cash ~$1133, all 3 slots free",
     "context": "2026-07-23 red tech open (QQQ/TQQQ/nasdaq selling off); SOFI put round-tripped to breakeven",
