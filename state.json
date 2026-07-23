@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-23T13:43:30Z",
+  "last_updated_utc": "2026-07-23T13:46:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
@@ -417,5 +417,18 @@
     "BREAKDOWN-SIDE DTE FILTER (added 2026-07-20): raw %-move breakdown scans keep surfacing small-cap/biotech names with monthly-only or no option chains (7-for-7 failures on 2026-07-20, see 19:35Z signal) -- structurally different from the breakout side, which tends to surface large-volume names (MARA, ACHR) that do have weeklies. Consider pre-filtering scan candidates by chain availability before running full contract-economics checks, to save time. Also consider whether breakdown candidates being systematically rarer than breakout ones under this system is worth noting as an asymmetry in the two-sided strategy, not just a scan artifact.",
     "MEGA-CAP NEAR-MISS TOLERANCE (added 2026-07-20): full re-check of the priced-out tier at the new $113 baseline (post $500 deposit) found NVDA is the closest miss at $119 needed (+5.7% over) -- every other mega-cap checked (PLTR/HOOD/SPCX/MSTR/AAPL/COIN/GOOGL/TSLA) needed $144-$581. Deliberately did NOT grant an exception for the $6 NVDA gap -- consistent with not rounding in favor of a trade on close calls (same standard as the QQQ delta-0.197 flag). For freeze-lift consideration: should a modest tolerance band (e.g. accept up to +10% over baseline for a delta/spread-compliant contract on an already-vetted large-cap) be added as a real rule, evidence-based rather than a one-off judgment call? Also corrects the retirement rationale written into scanner_instructions.txt on 2026-07-20 ('$113 baseline covers a delta-0.20 contract on large-caps') -- that claim was optimistic and did not hold empirically for ANY mega-cap tested, not even the cheapest one.",
     "SPREAD NEAR-MISS TOLERANCE (added 2026-07-20): a second, distinct near-miss pattern -- RIOT $21C: delta 0.34, cost $53 (well within budget), OI 2,781 (genuinely deep), but spread 12.2% vs the 10% gate. Not a thin-book problem like CIFR/TEM (19-29% spreads, OI <400) -- RIOT's absolute liquidity is real, the %-spread just runs structurally high on ~$20 stocks with $0.05 tick width, similar mechanism to why the penny-floor exception exists for sub-$3 options but RIOT doesn't qualify for that exception (tick is $0.05 not $0.01). Not granted an exception (same discipline as NVDA). For freeze-lift: consider whether the penny-floor exception's LOGIC (tick-width-relative-to-price, not just absolute tick size) should extend to a wider tick-width band, since RIOT is exactly the kind of real-liquidity/high-%-spread case that exception was designed to rescue, just outside its literal $0.01 wording."
-  ]
+  ],
+  "watch_state": {
+    "status": "WATCHING",
+    "since_utc": "2026-07-23T13:45Z",
+    "account": "flat (0 positions, 0 orders), cash ~$1133, all 3 slots free",
+    "context": "2026-07-23 red tech open (QQQ/TQQQ/nasdaq selling off); SOFI put round-tripped to breakeven",
+    "watching_for": [
+      "PUT side (aligned with red tape): any watchlist or broad-market name breaking down >=3% (index tier QQQ -1%/TQQQ -3%) with a delta>=0.20 weekly that FITS the ~$116 baseline, spread<=10%, no earnings within 2 days, 3-9 DTE. Note TQQQ/QQQ puts are currently priced out on IV -- need a cheaper underlying (SOFI-like $15-35 range).",
+      "CALL side (if tape reverses green): same gates, breakout >=3% within 1% of intraday high.",
+      "Re-entry discipline after today: on a fast spike, surface a MANUAL take-profit into strength (ruleset 5d) or use a tighter-than-15% trail -- do NOT assume the 15% ratchet locks the gain (today's SOFI +18.75%->breakeven lesson)."
+    ],
+    "how": "Re-scan on each user prompt (scan/check). Automated timed re-scan (send_later) was attempted but requires user approval to fire on a timer -- offered to the user.",
+    "hard_rules": "No autonomous entries -- every candidate surfaced for human confirmation (HUMAN_CONFIRM). Daily loss kill-switch and entry-cutoff (19:15 UTC) still apply."
+  }
 }
