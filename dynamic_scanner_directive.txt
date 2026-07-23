@@ -89,15 +89,24 @@ thresholds, all other rules (liquidity, delta floor, sizing) unchanged:
 Both are permanent watchlist members alongside the dynamic scan output.
 
 ## 3. PHASE 2: THE VOLATILITY BREAKOUT STRATEGY (two-sided)
-For each active asset:
+0. REGIME GATE FIRST (added 2026-07-23, see scanner_instructions.txt
+   REGIME_ALIGNMENT_FILTER): before evaluating any single-name trigger, read
+   QQQ % change on the day. QQQ <= -0.5% => only the SHORT/PUT side is live
+   this pass; QQQ >= +0.5% => only the LONG/CALL side; within +-0.5% => chop,
+   be selective and prefer to pass. Do NOT nominate a candidate whose side
+   fights the regime, no matter how clean the single-name trigger looks.
+   Also enforce NO_SAME_NAME_REENTRY and LOSS_STREAK_CIRCUIT_BREAKER here.
+For each active asset (that passed the regime gate):
 1. Liquidity Filter: (Ask - Bid) / Mid-Price ≤ 10% OR ask−bid == $0.01;
    otherwise ABORT the asset.
 2. LONG side — Breakout Trigger: underlying up ≥ +3% on day AND trading
-   within 1% of its intraday High → candidate CALL entry.
+   within 1% of its intraday High → candidate CALL entry. (Only when the
+   regime gate has the LONG side live.)
 3. SHORT side (added session 2) — Breakdown Trigger: underlying down ≤ −3%
    on day AND trading within 1% of its intraday Low → candidate PUT entry.
    Identical delta floor (|delta| ≥ 0.20), DTE, sizing, spread, earnings,
    and correlation rules apply. Index tier mirrors too (QQQ ∓1.0%, TQQQ ∓3.0%).
+   (Only when the regime gate has the SHORT side live.)
 4. EARNINGS_GATE: skip any candidate whose underlying reports earnings
    within 2 calendar days (get_earnings_calendar).
 5. Candidates passing all gates → broker review → human confirmation.

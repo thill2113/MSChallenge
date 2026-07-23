@@ -166,6 +166,51 @@ DISCIPLINE RULES  (added 2026-07-14 after first live session)
   (Session 1 evidence: the one off-plan exit cost ~$9 vs plan; every
   rule-driven exit was well-timed.)
 
+DISCIPLINE RULES  (added 2026-07-23 — DEMONSTRABLE-LIVE-HARM FIX, freeze-legal)
+  Context: a 4-trade skid (-$41.40) on 2026-07-22/23. Every loser was a
+  breakout CALL; three were bought INTO a choppy/red tape (SMCI +25% gap
+  chase, MARA breakout x2, MARA breakout again). The puts — the trades
+  aligned with the tape — were the winners. Root cause: fighting the
+  dominant tape with counter-trend momentum entries. These four rules
+  respond to that specific, repeated failure mode (not emotional tuning).
+
+- REGIME_ALIGNMENT_FILTER: gate the SIDE of every new entry by the broad-tape
+  regime, measured by QQQ % change on the day:
+    * QQQ <= -0.5%  (risk-off / red)  -> PUT side only. NO new breakout calls.
+    * QQQ >= +0.5%  (risk-on / green) -> CALL side only. NO new breakdown puts.
+    * QQQ within +-0.5% (chop)        -> either side allowed, but this is the
+      whipsaw zone: require a cleaner-than-usual setup and prefer to pass.
+  The single-name signal must ALIGN with the regime, never fight it. The
+  strategy's edge is momentum; buying counter-tape momentum in a market
+  trending the other way gets chopped (see the 4-trade skid). Crypto-beta
+  "decoupling" is NOT an exception unless CONFIRMED by >=2 names in the
+  cluster moving together (MARA popped while IREN was red on 2026-07-23 =
+  unconfirmed, and it faded).
+
+- NO_SAME_NAME_REENTRY: if a name's option was stopped out
+  (broker_stop_triggered) during the current session, do NOT re-enter that
+  name on the SAME side for the remainder of that session (and not while the
+  same regime persists). Re-attempting a setup the market just invalidated,
+  in the same conditions, is repeating a losing bet. (Evidence: MARA breakout
+  CALL stopped out THREE times across 2026-07-22/23.)
+
+- LOSS_STREAK_CIRCUIT_BREAKER: after 2 consecutive losing closes / stop-outs
+  in a single session, HALT new entries for the remainder of that session.
+  Manage open positions only; resume next session. This is a behavioral brake
+  distinct from the dollar-based 6% daily kill switch: consecutive stops
+  usually mean the setup TYPE is mismatched to the current regime, and forcing
+  more entries compounds the mismatch rather than diversifying it.
+
+- SPIKE_PROFIT_CAPTURE (freeze-safe activation of section 5d-a in the
+  directive; the mechanical trail-tightening stays QUEUED for freeze-lift):
+  when an OPEN 1-lot position reaches >= +40% intraday unrealized, the agent
+  MUST proactively surface a take-profit-into-strength review-and-confirm on
+  the very next check — not wait to be asked. Rationale: the 15% trail cannot
+  lock a PROFIT until the high-water mark is > ~18% above entry (15% below a
+  +18% HWM sits back at entry), so a fast spike that pulls back scratches to
+  breakeven (SOFI 2026-07-23: +18.75% -> breakeven). Until the mechanical
+  fix is unfrozen, the human take-profit is the protection against give-back.
+
 AUDIT
 - Log every asset scanned, the metrics computed, the pass/fail of each gate, and
   every order payload (submitted, reviewed, or blocked) with a timestamp.
