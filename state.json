@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-23T13:39:00Z",
+  "last_updated_utc": "2026-07-23T13:45:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
@@ -322,6 +322,11 @@
       "date": "2026-07-23T13:38Z",
       "signal": "User scan on NEW trading day 2026-07-23, RED TECH OPEN (6 min in): TQQQ -4.14% and QQQ -1.38% both breaking down hard (index-tier put triggers). Single-names all inside gates (RIVN -2.62% closest, not there). Saved scans returned only micro-caps/leveraged ETFs -- RVOL not built 6 min after open. Position-freshness poll surfaced SOFI put now +18.75% (mark 0.76 vs 0.64 entry) on the red tape -- new high.",
       "status": "NO new entry: TQQQ 07-31 puts all PRICED OUT (cheapest delta-compliant $62P delta -0.25 ~$173, even $65P delta -0.35 ~$247; 3x-leverage + ~90-97% IV inflates all past $116.59 budget); QQQ ($695) priced out too. The SOFI put I already hold is the affordable expression of this exact nasdaq-down theme and is working. RATCHETED SOFI stop 0.54/0.49 -> 0.65/0.60 (HWM 0.76, 15% trail) -- old stop cancelled+confirmed before replacement, now locks in ~breakeven-plus vs a prior loss-stop. Holding, letting the put run on the red tape."
+    },
+    {
+      "date": "2026-07-23T13:45Z",
+      "signal": "User: broader-market scan for any call/put entries. Re-ran both dynamic scans ~15min into the red open. Breakdown scan (15 matches): only >$1B name is FSBC (-4.3%, Five Star Bank) -- earnings-gated (reported 07-22 pm) + thin regional-bank options; rest micro-caps (<$100M biotech/China) or leveraged/inverse ETF wrappers (TESC/TSLI/XRPT/AALG). Breakout scan (23 matches): top is DOMO +30% ($142M micro-cap); rest micro-caps + leveraged ETFs (LMTL/MTUL/RTXG/HONG).",
+      "status": "NO tradeable broader-market entry. On a broad-market-down day the move is index-level (QQQ/TQQQ/nasdaq), not single-name -- few names clear the -3%+RVOL gate, and the index expression (TQQQ/QQQ puts) is priced out. Every scan-qualifying mover fails our rules (no weeklies / not a real underlying / micro-cap illiquidity / earnings-gated). SOFI put already IS the affordable expression of this tape (+18.75%, stop 0.65/0.60). Held, no new position -- disciplined pass, not a data gap."
     }
   ],
   "watchlist": {
