@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-24T14:20:00Z",
+  "last_updated_utc": "2026-07-24T14:23:30Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1568.3,
@@ -25,16 +25,16 @@
       "qty": 1,
       "entry_price": 0.75,
       "entry_utc": "2026-07-23T18:49:05Z",
-      "hwm": 0.75,
+      "hwm": 0.805,
       "hwm_direction": "put (favorable = price rises as RIVN falls)",
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a626234-a812-403a-bdf6-566c7d38a7f9",
-      "stop_trigger": 0.64,
-      "stop_limit": 0.59,
+      "resting_stop_order_id": "6a637550-6b9b-4ada-b46a-36b714a4e05f",
+      "stop_trigger": 0.68,
+      "stop_limit": 0.63,
       "stop_qty": 1,
       "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": -3.3,
+      "unrealized_pct_at_last_check": 7.3,
       "sizing_note": "1 lot ~$75, within $116 baseline",
       "cluster_note": "idiosyncratic/EV -- tape-aligned put (risk-off selloff); paired with MARA call (crypto_beta) as two-sided book",
       "ratchet_history": [
@@ -44,6 +44,13 @@
           "stop": 0.64,
           "limit": 0.59,
           "note": "initial broker stop ~15% below 0.75 entry"
+        },
+        {
+          "utc": "2026-07-24T14:23:12Z",
+          "hwm": 0.805,
+          "stop": 0.68,
+          "limit": 0.63,
+          "note": "new high 0.805 (+7.3%); 15% trail off HWM. Tightens downside from -14.7% to -9.3%. Still below 0.75 entry -- cannot lock profit until HWM>~0.88 (0.75/0.85) per the SOFI trail-math lesson. Old order 6a626234 cancelled+confirmed before placing 6a637550."
         }
       ]
     }
@@ -51,11 +58,11 @@
   "exception_slot": "FREE (both new positions fit the 10% baseline; not used)",
   "resting_stop_orders": [
     {
-      "order_id": "6a626234-a812-403a-bdf6-566c7d38a7f9",
+      "order_id": "6a637550-6b9b-4ada-b46a-36b714a4e05f",
       "symbol": "RIVN",
       "type": "stop_limit",
-      "stop": 0.64,
-      "limit": 0.59,
+      "stop": 0.68,
+      "limit": 0.63,
       "qty": 1,
       "gtc": true,
       "state": "confirmed (resting)"
