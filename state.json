@@ -5,20 +5,21 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-24T15:11:15Z",
+  "last_updated_utc": "2026-07-24T15:39:22Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 1568.3,
-    "cash_approx": 1491.3,
+    "equity_approx": 1550.14,
+    "cash_approx": 1550.14,
     "buying_power": 1491.3,
-    "note": "Capital added 2026-07-24: cash 1049.46 -> 1491.30 (~$490 deposit, cash-only, no position change). Total value $1568.30 (cash 1491.30 + RIVN put ~$77). New 10% baseline budget = $156.83 (was ~$116.59). 1 open position (RIVN $16P put).",
+    "note": "Capital added 2026-07-24: cash 1049.46 -> 1491.30 (~$490 deposit). New 10% baseline budget = $156.83. Account went FLAT 2026-07-24T15:39Z (IREN stopped -29.02, RIVN user-closed +13.00, day net -16.02) -- 0 open positions, cash/total $1550.14. New entries HALTED for rest of 2026-07-24 after a 5-losing-close stretch (07-22 through 07-24); user considering whether to continue the system at all.",
     "sizing": {
       "baseline_10pct": 156.83,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
       "exception_retires_at_equity": 1100
     }
   },
-  "open_positions": [
+  "open_positions": [],
+  "open_positions_ARCHIVE_2026-07-24": [
     {
       "symbol": "RIVN",
       "contract": "RIVN $16.00P 2026-07-31",
@@ -91,29 +92,8 @@
       ]
     }
   ],
-  "exception_slot": "FREE (both new positions fit the 10% baseline; not used)",
-  "resting_stop_orders": [
-    {
-      "order_id": "6a63808b-d858-4282-833e-70361f8b18ed",
-      "symbol": "RIVN",
-      "type": "stop_limit",
-      "stop": 0.82,
-      "limit": 0.77,
-      "qty": 1,
-      "gtc": true,
-      "state": "confirmed (resting)"
-    },
-    {
-      "order_id": "6a6376a6-2eb5-4614-b668-66d10cc893f5",
-      "symbol": "IREN",
-      "type": "stop_limit",
-      "stop": 1.19,
-      "limit": 1.10,
-      "qty": 1,
-      "gtc": true,
-      "state": "confirmed (resting)"
-    }
-  ],
+  "exception_slot": "FREE (account flat, not used)",
+  "resting_stop_orders": [],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
@@ -121,22 +101,23 @@
     "2026-07-20": 18.92,
     "2026-07-21": 36.84,
     "2026-07-22": -33.2,
-    "2026-07-23": -8.2
+    "2026-07-23": -8.2,
+    "2026-07-24": -16.02
   },
   "session_stats": {
-    "trades_total": 31,
+    "trades_total": 33,
     "system_trades": {
-      "count": 22,
-      "wins": 8,
-      "losses": 5,
-      "pnl": 144.8,
-      "note": "MARA $13.50C stopped out 2026-07-23 -8.08 (~6min, counter-tape breakout faded -- 3rd MARA-breakout-call stop-out, caveat validated). RIVN $16P put (tape-aligned leg) still open, -3.3%. Day 07-23 realized -8.20."
+      "count": 23,
+      "wins": 9,
+      "losses": 6,
+      "pnl": 128.78,
+      "note": "IREN $35P stopped out 2026-07-24 -29.02 (~46min, regime-aligned put still lost to a bounce -- 5th losing close in a row across 07-22/07-23/07-24 with no interspersed win). User then manually closed RIVN $16P +13.00 (+17.3%, filled 0.88 vs 0.75 entry), breaking the streak. Day 07-24 net -16.02. Account now FLAT, 0 open positions. User raised serious concern about the loss streak, cost, and lack of continuous/live monitoring -- new entries halted for rest of 2026-07-24 pending user decision."
     },
     "discretionary_trades": {
-      "count": 2,
-      "pnl_vs_plan": -25.0
+      "count": 3,
+      "pnl_vs_plan": -12.0
     },
-    "open_positions_count": 2
+    "open_positions_count": 0
   },
   "logged_signals": [
     {
@@ -403,6 +384,21 @@
       "date": "2026-07-24T14:20Z",
       "signal": "User FYI: added capital. get_portfolio confirms cash 1491.30, total value 1568.30 (up ~$490 from the ~$1078 pre-deposit total; cash-only add).",
       "status": "Updated sizing baseline: 10%% budget now ~$156.83 (was ~$116.59). Unlocks previously-priced-out names -- NVDA (~$119) and PLTR (~$144) now fit and should be promoted to tradeable after a live contract re-check; IONQ tighter strikes now within budget (still gated on spread today). Still priced out: HOOD/MSTR/COIN/GOOGL/TSLA/AAPL/SPCX. Freeze-safe (MAX_POSITION_PCT stays 10%%, only the dollar amount moved). RIVN put unaffected. Directive \u00a72a equity/budget line updated."
+    },
+    {
+      "date": "2026-07-24T14:28Z",
+      "signal": "User approved IREN $35P after sizing down from a 2-lot request to 1 lot. Entered 1 lot @1.40 (delta -0.28, spread 5.7%, regime-aligned put on a red QQQ tape). Broker stop 1.19/1.10 GTC on fill. NOTE: review_option_order was blocked by a persistent session approval-gate error on every attempt; placed directly via place_option_order after a full manual review (fresh quote, all gates) per repeated explicit user confirmation.",
+      "status": "OPENED. See ratchet_history / trades.csv for the outcome."
+    },
+    {
+      "date": "2026-07-24T15:15Z",
+      "signal": "IREN $35P broker stop (1.19/1.10) FIRED at 1.11, ~46min after entry. IREN bounced back against the put despite the broad tape staying red -- a regime-aligned, gate-clean entry still lost.",
+      "status": "CLOSED -29.02 (-20.7%). 5th losing close in a row across 07-22/07-23/07-24 with no interspersed win (SMCI -13.08, MARA -20.12, SOFI -0.12, MARA -8.08, IREN -29.02). Halted new entries for the rest of 2026-07-24 (circuit breaker). User expressed serious concern about the streak, about session-based (non-continuous) monitoring, and about cost, and said a valid reason was needed to continue using this system rather than replacing it."
+    },
+    {
+      "date": "2026-07-24T15:39Z",
+      "signal": "User manually closed RIVN $16P via the Robinhood app (placed_agent=user) while the agent's resting profit-locked stop (0.82/0.77) was still live and unfilled. Broker auto-cancelled the resting stop on the manual fill.",
+      "status": "CLOSED +13.00 (+17.3%, filled 0.88 vs 0.75 entry). Breaks the losing streak -- first win since 07-21. Day 07-24 net realized -29.02+13.00 = -16.02. Account FLAT (0 positions), cash/total $1550.14. Corrected the record when the user cited 'IREN -29, 5 in a row' -- the -29 figure was accurate but the RIVN close (a win) happened around the same time and was not yet reflected; gave the user the corrected, complete picture rather than a convenient one."
     }
   ],
   "watchlist": {
