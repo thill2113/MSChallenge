@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-23T19:05:00Z",
+  "last_updated_utc": "2026-07-24T14:07:30Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1165.9,
@@ -340,6 +340,11 @@
       "date": "2026-07-23T19:05Z",
       "signal": "User: 'Do all and hold Rivn' -- in response to the 4-trade skid (-41.40). Approved all four fixes I proposed.",
       "status": "IMPLEMENTED 4 discipline rules (demonstrable-live-harm fix, freeze-legal): REGIME_ALIGNMENT_FILTER, NO_SAME_NAME_REENTRY, LOSS_STREAK_CIRCUIT_BREAKER, SPIKE_PROFIT_CAPTURE -- written into scanner_instructions.txt + dynamic_scanner_directive.txt \u00a73. COOLDOWN active rest of 2026-07-23: manage RIVN $16P only, no new entries; lifts next session. DRY_RUN_AFTER_REVISION means first scan 07-24 is REVIEW_ONLY. Held RIVN (tape-aligned put, the one working leg). Diagnosis: every recent loss was a breakout call fighting a red/choppy tape; the fix makes the book trade WITH the dominant flow."
+    },
+    {
+      "date": "2026-07-24T14:07Z",
+      "signal": "New session 2026-07-24 (cooldown lifted). FIRST scan under the new REGIME_ALIGNMENT_FILTER. Red tape: QQQ -0.83%, TQQQ -2.64% => PUTS ONLY. Filter worked -- 6 watchlist names broke down (HIMS -6.4%, IREN -5.65%, QBTS -3.98%, CLSK -3.97%, RGTI -3.5%, IONQ -3.26%); no counter-tape calls nominated. Earnings-clear (IONQ/IREN/QBTS not in window). RIVN put (open) mark 0.73 vs 0.75, no new high, stop 0.64/0.59 holds.",
+      "status": "NO clean fresh entry -- all aligned put candidates FAIL the 10% spread gate on the volatile open: IONQ 07-31 puts 11-16%, QBTS $16P 12.0% (closest, delta -0.38 ~$63 but 2pts over gate), HIMS 14-20%, CLSK/IREN wide/high-IV. Declined to stretch the spread rule (esp. right after installing anti-overtrading rules). System working as designed: regime filter keeps us off counter-tape calls, liquidity gate keeps us off wide-spread puts; RIVN already holds the aligned theme (entered yesterday at tight 5.5%). Also: DRY_RUN_AFTER_REVISION makes this first post-change scan review-only; FRIDAY_THETA_RULE (no entries after 16:00 UTC). Plan: hold RIVN, re-scan in ~30-60min when opening vol settles and books tighten -- a clean put should appear."
     }
   ],
   "watchlist": {
@@ -474,7 +479,7 @@
     "SPREAD NEAR-MISS TOLERANCE (added 2026-07-20): a second, distinct near-miss pattern -- RIOT $21C: delta 0.34, cost $53 (well within budget), OI 2,781 (genuinely deep), but spread 12.2% vs the 10% gate. Not a thin-book problem like CIFR/TEM (19-29% spreads, OI <400) -- RIOT's absolute liquidity is real, the %-spread just runs structurally high on ~$20 stocks with $0.05 tick width, similar mechanism to why the penny-floor exception exists for sub-$3 options but RIOT doesn't qualify for that exception (tick is $0.05 not $0.01). Not granted an exception (same discipline as NVDA). For freeze-lift: consider whether the penny-floor exception's LOGIC (tick-width-relative-to-price, not just absolute tick size) should extend to a wider tick-width band, since RIOT is exactly the kind of real-liquidity/high-%-spread case that exception was designed to rescue, just outside its literal $0.01 wording."
   ],
   "watch_state": {
-    "status": "COOLDOWN (2026-07-23): 1 open (RIVN put), NO new entries rest of session; manage RIVN only",
+    "status": "POSITIONED (1 open: RIVN put) + WATCHING for a clean aligned put as spreads tighten",
     "since_utc": "2026-07-23T13:45Z",
     "account": "flat (0 positions, 0 orders), cash ~$1133, all 3 slots free",
     "context": "2026-07-23 red tech open (QQQ/TQQQ/nasdaq selling off); SOFI put round-tripped to breakeven",
@@ -487,13 +492,14 @@
     "hard_rules": "No autonomous entries -- every candidate surfaced for human confirmation (HUMAN_CONFIRM). Daily loss kill-switch and entry-cutoff (19:15 UTC) still apply."
   },
   "cooldown": {
-    "active": true,
+    "active": false,
     "session": "2026-07-23",
     "reason": "LOSS_STREAK_CIRCUIT_BREAKER + user directive: 2+ consecutive stop-outs today (SOFI breakeven, MARA call -8.08; plus SMCI -13.08 and MARA -20.12 on 07-22) = 4-trade skid -41.40. HALT new entries for the rest of 2026-07-23. Manage RIVN only. Resume next session under the new REGIME_ALIGNMENT_FILTER.",
     "manage_only": [
       "RIVN $16.00P 2026-07-31"
     ],
-    "lifts": "next session (2026-07-24)"
+    "lifts": "next session (2026-07-24)",
+    "lifted": "2026-07-24 (new session)"
   },
   "ruleset_changes": [
     {
