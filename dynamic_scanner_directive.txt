@@ -28,8 +28,12 @@ watchlist of exactly 3 targets.
 * Save the 3 tickers to context to pass into Phase 2.
 
 ## 2a. STANDING WATCHLIST (in addition to dynamic scan output)
-Tradeable at current (~$1,129) equity, baseline budget ~$113 (single-tier;
-the 25% small-account exception RETIRED 2026-07-20 at equity ≥$1,100):
+Tradeable at current (~$1,568) equity, baseline budget ~$157 (single-tier;
+the 25% small-account exception RETIRED 2026-07-20 at equity ≥$1,100).
+CAPITAL ADDED 2026-07-24 (~$490 deposit): 10% budget rose ~$117 -> ~$157.
+This now clears NVDA (~$119) and PLTR (~$144) off the priced-out wall —
+promote them to tradeable after a live contract re-check (delta/spread/
+earnings). HOOD/MSTR/COIN/GOOGL/TSLA/AAPL/SPCX still priced out.
   CLSK | NFLX, MARA, SOFI, DKNG, IONQ, TQQQ (session 2 adds, verified weekly
   chains, baseline-budget fits) | IREN (added 2026-07-20 — $12B bitcoin
   miner, verified $44C delta 0.28/spread 5.3%/cost $98; deep option

@@ -5,15 +5,15 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-24T14:07:30Z",
+  "last_updated_utc": "2026-07-24T14:20:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 1165.9,
-    "cash_approx": 1049.46,
-    "buying_power": 1049.46,
-    "note": "1 open position (RIVN $16P put) as of 2026-07-23T18:57Z. MARA $13.50C call stopped out -8.08 (counter-tape leg failed as flagged).",
+    "equity_approx": 1568.3,
+    "cash_approx": 1491.3,
+    "buying_power": 1491.3,
+    "note": "Capital added 2026-07-24: cash 1049.46 -> 1491.30 (~$490 deposit, cash-only, no position change). Total value $1568.30 (cash 1491.30 + RIVN put ~$77). New 10% baseline budget = $156.83 (was ~$116.59). 1 open position (RIVN $16P put).",
     "sizing": {
-      "baseline_10pct": 116.59,
+      "baseline_10pct": 156.83,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
       "exception_retires_at_equity": 1100
     }
@@ -345,6 +345,11 @@
       "date": "2026-07-24T14:07Z",
       "signal": "New session 2026-07-24 (cooldown lifted). FIRST scan under the new REGIME_ALIGNMENT_FILTER. Red tape: QQQ -0.83%, TQQQ -2.64% => PUTS ONLY. Filter worked -- 6 watchlist names broke down (HIMS -6.4%, IREN -5.65%, QBTS -3.98%, CLSK -3.97%, RGTI -3.5%, IONQ -3.26%); no counter-tape calls nominated. Earnings-clear (IONQ/IREN/QBTS not in window). RIVN put (open) mark 0.73 vs 0.75, no new high, stop 0.64/0.59 holds.",
       "status": "NO clean fresh entry -- all aligned put candidates FAIL the 10% spread gate on the volatile open: IONQ 07-31 puts 11-16%, QBTS $16P 12.0% (closest, delta -0.38 ~$63 but 2pts over gate), HIMS 14-20%, CLSK/IREN wide/high-IV. Declined to stretch the spread rule (esp. right after installing anti-overtrading rules). System working as designed: regime filter keeps us off counter-tape calls, liquidity gate keeps us off wide-spread puts; RIVN already holds the aligned theme (entered yesterday at tight 5.5%). Also: DRY_RUN_AFTER_REVISION makes this first post-change scan review-only; FRIDAY_THETA_RULE (no entries after 16:00 UTC). Plan: hold RIVN, re-scan in ~30-60min when opening vol settles and books tighten -- a clean put should appear."
+    },
+    {
+      "date": "2026-07-24T14:20Z",
+      "signal": "User FYI: added capital. get_portfolio confirms cash 1491.30, total value 1568.30 (up ~$490 from the ~$1078 pre-deposit total; cash-only add).",
+      "status": "Updated sizing baseline: 10%% budget now ~$156.83 (was ~$116.59). Unlocks previously-priced-out names -- NVDA (~$119) and PLTR (~$144) now fit and should be promoted to tradeable after a live contract re-check; IONQ tighter strikes now within budget (still gated on spread today). Still priced out: HOOD/MSTR/COIN/GOOGL/TSLA/AAPL/SPCX. Freeze-safe (MAX_POSITION_PCT stays 10%%, only the dollar amount moved). RIVN put unaffected. Directive \u00a72a equity/budget line updated."
     }
   ],
   "watchlist": {
@@ -518,5 +523,25 @@
       ],
       "note": "DRY_RUN_AFTER_REVISION applies: the first scan next session runs REVIEW_ONLY (nominate + review, no placement) since these are rule changes -- never first-test a rule change with real money."
     }
-  ]
+  ],
+  "sizing_reeval": {
+    "date": "2026-07-24",
+    "new_baseline_10pct": 156.83,
+    "now_within_budget_verify_before_trading": {
+      "NVDA": "~$119 needed (old miss at +5.7% over $113) -- now well under $156.83; promote to tradeable after a live contract re-check (delta>=0.20, spread<=10%, earnings-clear).",
+      "PLTR": "~$144 needed -- now under $156.83; same re-verify.",
+      "IONQ": "$32P delta-0.38 was ~$133 (over old budget) -- now within budget, but still failed the 11.4%% spread gate on the volatile open; re-check when spreads tighten.",
+      "HIMS": "delta-0.30 weekly ~$130-180 -- some strikes now fit budget, but the spread problem (14-20%%) remains the real blocker, not price."
+    },
+    "still_priced_out": {
+      "HOOD": "~$173",
+      "MSTR": "~$208",
+      "COIN": "~$300",
+      "GOOGL": "~$566",
+      "TSLA": "~$581",
+      "AAPL": "~$251",
+      "SPCX": "~$199"
+    },
+    "note": "MAX_POSITION_PCT stays 10%% (formula unchanged); only the dollar figure it produces moved with equity -- freeze-safe, not a rule change. Promote NVDA/PLTR from log-only-priced-out to tradeable only after a real contract check passes all gates."
+  }
 }
