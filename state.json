@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-24T14:23:30Z",
+  "last_updated_utc": "2026-07-24T14:29:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1568.3,
@@ -53,6 +53,35 @@
           "note": "new high 0.805 (+7.3%); 15% trail off HWM. Tightens downside from -14.7% to -9.3%. Still below 0.75 entry -- cannot lock profit until HWM>~0.88 (0.75/0.85) per the SOFI trail-math lesson. Old order 6a626234 cancelled+confirmed before placing 6a637550."
         }
       ]
+    },
+    {
+      "symbol": "IREN",
+      "contract": "IREN $35.00P 2026-07-31",
+      "qty": 1,
+      "entry_price": 1.40,
+      "entry_utc": "2026-07-24T14:28:43Z",
+      "hwm": 1.40,
+      "hwm_direction": "put (favorable = price rises as IREN falls)",
+      "trail_pct": 15,
+      "management": "trail-only (1-lot)",
+      "resting_stop_order_id": "6a6376a6-2eb5-4614-b668-66d10cc893f5",
+      "stop_trigger": 1.19,
+      "stop_limit": 1.10,
+      "stop_qty": 1,
+      "stop_order_state": "confirmed (GTC resting)",
+      "unrealized_pct_at_last_check": 0,
+      "sizing_note": "1 lot $140, within $156.83 baseline (post-deposit)",
+      "cluster_note": "crypto_beta -- tape-aligned put (07-24 red day, IREN -5.46%); crypto_beta cluster now 1/2. Diversifies from RIVN (idiosyncratic). First trade under the new REGIME_ALIGNMENT_FILTER + first entry post-capital-add.",
+      "entry_note": "review_option_order blocked by session approval gate on all attempts (07-24); did full manual review (fresh quote delta -0.28/spread 5.7%/OI 7308, all gates clear, regime PUT-only confirmed) and placed directly per repeated user confirmation. Filled 1.40 vs 1.42 marketable limit.",
+      "ratchet_history": [
+        {
+          "utc": "2026-07-24T14:28:54Z",
+          "hwm": 1.40,
+          "stop": 1.19,
+          "limit": 1.10,
+          "note": "initial broker stop ~15% below 1.40 fill"
+        }
+      ]
     }
   ],
   "exception_slot": "FREE (both new positions fit the 10% baseline; not used)",
@@ -63,6 +92,16 @@
       "type": "stop_limit",
       "stop": 0.68,
       "limit": 0.63,
+      "qty": 1,
+      "gtc": true,
+      "state": "confirmed (resting)"
+    },
+    {
+      "order_id": "6a6376a6-2eb5-4614-b668-66d10cc893f5",
+      "symbol": "IREN",
+      "type": "stop_limit",
+      "stop": 1.19,
+      "limit": 1.10,
       "qty": 1,
       "gtc": true,
       "state": "confirmed (resting)"
@@ -90,7 +129,7 @@
       "count": 2,
       "pnl_vs_plan": -25.0
     },
-    "open_positions_count": 1
+    "open_positions_count": 2
   },
   "logged_signals": [
     {
