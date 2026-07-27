@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-27T15:56:00Z",
+  "last_updated_utc": "2026-07-27T16:00:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1542.0,
@@ -467,6 +467,12 @@
       "signal": "USER DIRECTIVE: 'when I say scan make sure you always scan for both calls and puts not just calls, seems to be causing issues.'",
       "status": "IMPLEMENTED TWO_SIDED_REPORTING in BOTH scanner_instructions.txt (Discipline Rules) and dynamic_scanner_directive.txt (section 3, step 6). Process/output fix -- changes no gate, threshold, or sizing parameter, so freeze-legal.",
       "honest_finding": "Checked the record rather than just agreeing. The 2026-07-27 morning scan DID pull full-watchlist equity quotes, so both sides were examined and the put side genuinely had zero triggers at that time (deepest red was MARA -1.82%, well inside the -3% gate) -- no put candidate was actually missed. BUT the user-facing OUTPUT was entirely call-side (a table of call candidates, no mention of the put side), which from the user's seat is indistinguishable from never having scanned puts. ROOT CAUSE: the 2026-07-21 lesson already required this and was violated -- because it was worded as a CHECK ('EVERY scan+ratchet pass checks both sides explicitly') rather than a REPORT. I satisfied the letter (data pulled) while failing the intent (user could not see it). The new rule fixes the wording: reporting the empty side, with the evidence that it is empty, is what makes the check auditable. Repeat-violation of an already-logged lesson -- worth noting that a rule which depends on agent discipline rather than a structural output requirement is not actually a rule."
+    },
+    {
+      "date": "2026-07-27T16:00Z",
+      "signal": "User: 'Pass' on the recommended MARA $11P.",
+      "status": "NO ENTRY. Declined the only clean put candidate of the pass. Account stays at 1 open position (RIVN $18C, stop 0.30/0.28 resting). Day 07-27 realized -9.02 (RGTI). Cash ~$1506.",
+      "note": "Worth logging as a discipline datapoint, not just a non-event: the candidate cleared every mechanical gate (delta -0.33, spread 3.3%, earnings-clear, regime-aligned, $31 sizing) and was still passed on judgment -- the extension concern raised from the RGTI post-mortem. This is the system declining a gate-passing signal, which is the opposite failure mode from the 07-22/07-24 stretch where gate-passing signals were taken and faded. If MARA continues down from here, this pass is the cost of the new caution; if it bounces, the caution was correct. Logging both possibilities before the outcome is known."
     }
   ],
   "watchlist": {
