@@ -5,20 +5,49 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-24T15:39:22Z",
+  "last_updated_utc": "2026-07-27T14:25:11Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1550.14,
-    "cash_approx": 1550.14,
-    "buying_power": 1491.3,
-    "note": "Capital added 2026-07-24: cash 1049.46 -> 1491.30 (~$490 deposit). New 10% baseline budget = $156.83. Account went FLAT 2026-07-24T15:39Z (IREN stopped -29.02, RIVN user-closed +13.00, day net -16.02) -- 0 open positions, cash/total $1550.14. New entries HALTED for rest of 2026-07-24 after a 5-losing-close stretch (07-22 through 07-24); user considering whether to continue the system at all.",
+    "cash_approx": 1514.14,
+    "buying_power": 1514.14,
+    "note": "Capital added 2026-07-24: cash 1049.46 -> 1491.30 (~$490 deposit). New 10% baseline budget = $156.83. Account went FLAT 2026-07-24T15:39Z (day net -16.02) after a 5-losing-close stretch; user seriously considered ending the system, then continued. New session 2026-07-27 (Monday): QQQ flat/chop, but a real quantum-sector rotation (QBTS/RGTI/IONQ all +10-17%) plus RIVN +4.8% (uncorrelated). Entered RIVN $18C 1 lot @0.35 as the cleanest book of the day; a second entry (quantum name, RGTI) was being sized when this was last updated.",
     "sizing": {
       "baseline_10pct": 156.83,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
       "exception_retires_at_equity": 1100
     }
   },
-  "open_positions": [],
+  "open_positions": [
+    {
+      "symbol": "RIVN",
+      "contract": "RIVN $18.00C 2026-07-31",
+      "qty": 1,
+      "entry_price": 0.35,
+      "entry_utc": "2026-07-27T14:25:03Z",
+      "hwm": 0.35,
+      "hwm_direction": "call (favorable = price rises as RIVN rises)",
+      "trail_pct": 15,
+      "management": "trail-only (1-lot)",
+      "resting_stop_order_id": "6a676a47-7e82-4a2b-a5ae-f79de13539ab",
+      "stop_trigger": 0.30,
+      "stop_limit": 0.28,
+      "stop_qty": 1,
+      "stop_order_state": "confirmed (GTC resting)",
+      "unrealized_pct_at_last_check": 0,
+      "sizing_note": "1 lot $35, well within $156.83 baseline",
+      "cluster_note": "idiosyncratic/EV -- tape-aligned breakout call on RIVN's own +4.8% move, uncorrelated with the same-day quantum-sector rotation (QBTS/RGTI/IONQ); cleanest book of 6 candidates screened (2.8-2.9% spread)",
+      "ratchet_history": [
+        {
+          "utc": "2026-07-27T14:25:11Z",
+          "hwm": 0.35,
+          "stop": 0.30,
+          "limit": 0.28,
+          "note": "initial broker stop ~15% below 0.35 fill"
+        }
+      ]
+    }
+  ],
   "open_positions_ARCHIVE_2026-07-24": [
     {
       "symbol": "RIVN",
@@ -92,8 +121,19 @@
       ]
     }
   ],
-  "exception_slot": "FREE (account flat, not used)",
-  "resting_stop_orders": [],
+  "exception_slot": "FREE (RIVN fits baseline, not used)",
+  "resting_stop_orders": [
+    {
+      "order_id": "6a676a47-7e82-4a2b-a5ae-f79de13539ab",
+      "symbol": "RIVN",
+      "type": "stop_limit",
+      "stop": 0.30,
+      "limit": 0.28,
+      "qty": 1,
+      "gtc": true,
+      "state": "confirmed (resting)"
+    }
+  ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
@@ -117,7 +157,7 @@
       "count": 3,
       "pnl_vs_plan": -12.0
     },
-    "open_positions_count": 0
+    "open_positions_count": 1
   },
   "logged_signals": [
     {
@@ -399,6 +439,11 @@
       "date": "2026-07-24T15:39Z",
       "signal": "User manually closed RIVN $16P via the Robinhood app (placed_agent=user) while the agent's resting profit-locked stop (0.82/0.77) was still live and unfilled. Broker auto-cancelled the resting stop on the manual fill.",
       "status": "CLOSED +13.00 (+17.3%, filled 0.88 vs 0.75 entry). Breaks the losing streak -- first win since 07-21. Day 07-24 net realized -29.02+13.00 = -16.02. Account FLAT (0 positions), cash/total $1550.14. Corrected the record when the user cited 'IREN -29, 5 in a row' -- the -29 figure was accurate but the RIVN close (a win) happened around the same time and was not yet reflected; gave the user the corrected, complete picture rather than a convenient one."
+    },
+    {
+      "date": "2026-07-27T14:25Z",
+      "signal": "New session 2026-07-27 (Monday), after the user seriously considered ending the system on 07-24 and decided to continue. Position poll confirmed flat first. QQQ flat -0.12% (chop, be-selective, no broad regime read). Real quantum-sector rotation: QBTS +17.0%, RGTI +10.0%, IONQ +10.3% moving together, no earnings behind any of the three (checked 07-24 to 07-28 calendar). RIVN +4.8%, uncorrelated with quantum. DKNG +4.2% but every near-money strike ran 12-27% spreads -- rejected, thin book despite the move.",
+      "status": "Treated QBTS/RGTI/IONQ as ONE correlated slot (not 3 independent idiosyncratic bets) despite the directive's default idiosyncratic clustering, per the directive's own instruction to cluster by what actually moves together. ENTERED RIVN $18C 1 lot @0.35 (delta 0.28, spread 2.8%, cost $35, cleanest book of the day). Broker stop 0.30/0.28 GTC on fill. Presented RGTI as the quantum recommendation over QBTS (most extended, +17%, same chase-risk shape as the SMCI/MARA losses) and IONQ (costlier); user asked which quantum name I'd recommend -- second entry pending user confirmation."
     }
   ],
   "watchlist": {
