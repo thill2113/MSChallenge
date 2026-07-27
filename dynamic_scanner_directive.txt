@@ -114,6 +114,22 @@ For each active asset (that passed the regime gate):
 4. EARNINGS_GATE: skip any candidate whose underlying reports earnings
    within 2 calendar days (get_earnings_calendar).
 5. Candidates passing all gates → broker review → human confirmation.
+6. TWO_SIDED_REPORTING (added 2026-07-27 — MANDATORY OUTPUT REQUIREMENT,
+   not just an internal check). The word "scan" ALWAYS means both sides.
+   Every scan response to the user MUST explicitly state the state of BOTH
+   the call/breakout side AND the put/breakdown side — even when one side
+   is empty, and even when the regime gate has closed one side. An empty
+   side is reported as an explicit line ("PUT side: no triggers, deepest
+   red was MARA -1.8%, inside the -3% gate"), never by silent omission.
+   WHY THIS EXISTS: the 2026-07-21 log already required checking both
+   sides, but was worded as a CHECK, not a REPORT. On 2026-07-27 the
+   morning scan pulled full-watchlist quotes (so both sides WERE examined,
+   and the put side genuinely had zero triggers) yet the user-facing output
+   listed only call candidates. From the user's seat, "checked and empty"
+   and "never checked" are indistinguishable -- which correctly read as the
+   agent scanning one side only. Reporting the empty side is what makes the
+   check verifiable. A scan report naming only one side is INCOMPLETE and
+   must be corrected before the user acts on it.
 
 ## 4. EXECUTION & SIZING
 * Capital Limit: 10% of total equity per setup, from live get_portfolio.

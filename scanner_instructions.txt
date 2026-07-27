@@ -211,6 +211,22 @@ DISCIPLINE RULES  (added 2026-07-23 — DEMONSTRABLE-LIVE-HARM FIX, freeze-legal
   breakeven (SOFI 2026-07-23: +18.75% -> breakeven). Until the mechanical
   fix is unfrozen, the human take-profit is the protection against give-back.
 
+- TWO_SIDED_REPORTING (added 2026-07-27, user-directed; process/output fix,
+  freeze-legal — changes no gate, threshold, or sizing parameter):
+  "Scan" ALWAYS means BOTH calls and puts. Every scan response MUST explicitly
+  report the state of BOTH sides — the call/breakout side AND the put/breakdown
+  side — including when a side is empty or the regime gate has closed it.
+  An empty side gets an explicit line with the evidence that it is empty
+  (e.g. "PUT side: no triggers, deepest red MARA -1.8%, inside the -3% gate"),
+  never silent omission. A one-sided scan report is INCOMPLETE.
+  Rationale: the 2026-07-21 log already mandated CHECKING both sides, but was
+  worded as a check rather than a report. On 2026-07-27 the morning scan did
+  examine both sides (full-watchlist quotes pulled; put side genuinely had zero
+  triggers) but the user-facing output listed only call candidates — which is
+  indistinguishable, from the user's side, from never having scanned puts at
+  all. The user flagged it. Reporting the empty side is what makes the check
+  auditable; that is the whole point.
+
 AUDIT
 - Log every asset scanned, the metrics computed, the pass/fail of each gate, and
   every order payload (submitted, reviewed, or blocked) with a timestamp.

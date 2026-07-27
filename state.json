@@ -5,7 +5,7 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-27T15:37:00Z",
+  "last_updated_utc": "2026-07-27T15:56:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1542.0,
@@ -30,7 +30,7 @@
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
       "resting_stop_order_id": "6a676a47-7e82-4a2b-a5ae-f79de13539ab",
-      "stop_trigger": 0.30,
+      "stop_trigger": 0.3,
       "stop_limit": 0.28,
       "stop_qty": 1,
       "stop_order_state": "confirmed (GTC resting)",
@@ -41,7 +41,7 @@
         {
           "utc": "2026-07-27T14:25:11Z",
           "hwm": 0.35,
-          "stop": 0.30,
+          "stop": 0.3,
           "limit": 0.28,
           "note": "initial broker stop ~15% below 0.35 fill"
         }
@@ -95,15 +95,15 @@
       "symbol": "IREN",
       "contract": "IREN $35.00P 2026-07-31",
       "qty": 1,
-      "entry_price": 1.40,
+      "entry_price": 1.4,
       "entry_utc": "2026-07-24T14:28:43Z",
-      "hwm": 1.40,
+      "hwm": 1.4,
       "hwm_direction": "put (favorable = price rises as IREN falls)",
       "trail_pct": 15,
       "management": "trail-only (1-lot)",
       "resting_stop_order_id": "6a6376a6-2eb5-4614-b668-66d10cc893f5",
       "stop_trigger": 1.19,
-      "stop_limit": 1.10,
+      "stop_limit": 1.1,
       "stop_qty": 1,
       "stop_order_state": "confirmed (GTC resting)",
       "unrealized_pct_at_last_check": 0,
@@ -113,9 +113,9 @@
       "ratchet_history": [
         {
           "utc": "2026-07-24T14:28:54Z",
-          "hwm": 1.40,
+          "hwm": 1.4,
           "stop": 1.19,
-          "limit": 1.10,
+          "limit": 1.1,
           "note": "initial broker stop ~15% below 1.40 fill"
         }
       ]
@@ -127,7 +127,7 @@
       "order_id": "6a676a47-7e82-4a2b-a5ae-f79de13539ab",
       "symbol": "RIVN",
       "type": "stop_limit",
-      "stop": 0.30,
+      "stop": 0.3,
       "limit": 0.28,
       "qty": 1,
       "gtc": true,
@@ -456,6 +456,17 @@
       "signal": "Check-in (polled positions+orders first -- caught a silent fill). RGTI $16C NO LONGER open: broker stop (0.44/0.41) FIRED at 0.43 at 14:33:40, ~6.5min after the 0.52 entry. Broad tape rolled over during the hour: QQQ -0.12% at entry -> -0.96% now. Whole quantum group faded with it (RGTI 15.57->15.12, QBTS 18.97->18.81, IONQ 36.22->34.88). RIVN $18C still open, mark 0.36 vs 0.35 entry (+2.9%), RIVN underlying 16.58 (+4.7%) -- holding up better than the quantum group.",
       "status": "RGTI closed -9.02 (-17.3%), MFE ~0 -- never green. NO ratchet on RIVN (0.36 vs 0.35 HWM is noise; a 15% trail off 0.36 = 0.306, functionally the existing 0.30 stop). Stop holds 0.30/0.28, confirmed resting. Day 07-27 realized -9.02. 1 open position, cash ~$1506.",
       "pattern_note": "RGTI is the 4th instance this month of the same shape: entry into an already-extended intraday move that reverses within minutes (SMCI +25% gap -13.08; MARA breakout x2 -20.12/-8.08; IREN -29.02; now RGTI -9.02). IMPORTANT: RGTI was deliberately chosen as the LEAST-extended of the three quantum names (+10% vs QBTS +17%) and still faded -- so name-selection within the rotation was not the deciding variable. The common factor is TIMING: entering a sector move that has already run for the session, rather than the specific ticker. This is distinct from the earlier REGIME_ALIGNMENT_FILTER diagnosis (counter-tape entries) -- RGTI was NOT counter-tape at entry (QQQ was flat/chop, quantum was the day's strongest group). Candidate rule for review: an EXTENSION gate (skip entries where the underlying is already >N% into a same-session move, or require a pullback/consolidation rather than buying the vertical part of the move). Logging as an observation for the post-freeze review, not a live rule change; 2 losing closes today would arm LOSS_STREAK_CIRCUIT_BREAKER."
+    },
+    {
+      "date": "2026-07-27T15:56Z",
+      "signal": "Put-side scan on user request, after the tape flipped red (QQQ -0.12% -> -0.98%). PUT triggers, all ONE cluster (crypto miners): IREN -5.31%, MARA -4.99%, CLSK -4.20%. All three earnings-clear (verified via jq against the get_earnings_calendar dump, which overflowed context -- queried the file directly rather than skipping the gate). CALL side: no valid entries -- regime gate has calls closed, and the morning's quantum names faded (QBTS +15.8%, RGTI +7.2%, IONQ +6.3%, all off their highs); DKNG +6.3%/HIMS +5.0%/SOFI +2.8% green but counter-regime. TQQQ -2.93% just misses the -3.0% index tier.",
+      "status": "Contract checks: MARA $11P (delta -0.33, spread 3.3%, $31, OI 7234) and IREN $33P (delta -0.32, spread 3.1%, $131) both clean. CLSK REJECTED on spread again (13.0-13.8%, 4th logged instance of chronic CLSK book thinness). IREN $34P rejected on budget ($169 > $156.83). RECOMMENDED MARA $11P 1 lot -- tightest economics, cheapest risk. Flagged two honest caveats before asking: (1) this is the same extension question as RGTI -- these names are already -4 to -5.3% into the session; argued the distinction is a deteriorating tape (continuation) vs the quantum spike into a flat tape, while stating I am not certain that distinction is sufficient given I got the last one wrong; (2) we lost -29.02 on an IREN put on 07-24 in almost this exact setup, which is the main reason I pointed at MARA over IREN. Also surfaced that 1 more losing close arms LOSS_STREAK_CIRCUIT_BREAKER. AWAITING user decision -- NOT entered."
+    },
+    {
+      "date": "2026-07-27T15:58Z",
+      "signal": "USER DIRECTIVE: 'when I say scan make sure you always scan for both calls and puts not just calls, seems to be causing issues.'",
+      "status": "IMPLEMENTED TWO_SIDED_REPORTING in BOTH scanner_instructions.txt (Discipline Rules) and dynamic_scanner_directive.txt (section 3, step 6). Process/output fix -- changes no gate, threshold, or sizing parameter, so freeze-legal.",
+      "honest_finding": "Checked the record rather than just agreeing. The 2026-07-27 morning scan DID pull full-watchlist equity quotes, so both sides were examined and the put side genuinely had zero triggers at that time (deepest red was MARA -1.82%, well inside the -3% gate) -- no put candidate was actually missed. BUT the user-facing OUTPUT was entirely call-side (a table of call candidates, no mention of the put side), which from the user's seat is indistinguishable from never having scanned puts. ROOT CAUSE: the 2026-07-21 lesson already required this and was violated -- because it was worded as a CHECK ('EVERY scan+ratchet pass checks both sides explicitly') rather than a REPORT. I satisfied the letter (data pulled) while failing the intent (user could not see it). The new rule fixes the wording: reporting the empty side, with the evidence that it is empty, is what makes the check auditable. Repeat-violation of an already-logged lesson -- worth noting that a rule which depends on agent discipline rather than a structural output requirement is not actually a rule."
     }
   ],
   "watchlist": {
