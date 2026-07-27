@@ -5,13 +5,13 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-27T14:27:15Z",
+  "last_updated_utc": "2026-07-27T15:37:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 1551.06,
-    "cash_approx": 1463.06,
+    "equity_approx": 1542.0,
+    "cash_approx": 1506.0,
     "buying_power": 1463.06,
-    "note": "Capital added 2026-07-24: cash 1049.46 -> 1491.30 (~$490 deposit). New 10% baseline budget = $156.83. Account went FLAT 2026-07-24T15:39Z (day net -16.02) after a 5-losing-close stretch; user seriously considered ending the system, then continued. New session 2026-07-27 (Monday): QQQ flat/chop, but a real quantum-sector rotation (QBTS/RGTI/IONQ all +10-17%) plus RIVN +4.8% (uncorrelated). Entered RIVN $18C 1 lot @0.35 (cleanest book) + RGTI $16C 1 lot @0.52 (quantum slot, picked over the more-extended QBTS and pricier IONQ). 2 open positions, cash $1463.06.",
+    "note": "Capital added 2026-07-24: cash 1049.46 -> 1491.30 (~$490 deposit). New 10% baseline budget = $156.83. Account went FLAT 2026-07-24T15:39Z (day net -16.02) after a 5-losing-close stretch; user seriously considered ending the system, then continued. New session 2026-07-27 (Monday): QQQ flat/chop, but a real quantum-sector rotation (QBTS/RGTI/IONQ all +10-17%) plus RIVN +4.8% (uncorrelated). Entered RIVN $18C 1 lot @0.35 (cleanest book) + RGTI $16C 1 lot @0.52 (quantum slot). RGTI stopped out -9.02 at 14:33 as the tape rolled over (QQQ -0.12% -> -0.96%). 1 open position (RIVN), cash $1506.00, total $1542.00, day 07-27 realized -9.02.",
     "sizing": {
       "baseline_10pct": 156.83,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
@@ -44,35 +44,6 @@
           "stop": 0.30,
           "limit": 0.28,
           "note": "initial broker stop ~15% below 0.35 fill"
-        }
-      ]
-    },
-    {
-      "symbol": "RGTI",
-      "contract": "RGTI $16.00C 2026-07-31",
-      "qty": 1,
-      "entry_price": 0.52,
-      "entry_utc": "2026-07-27T14:27:02Z",
-      "hwm": 0.52,
-      "hwm_direction": "call (favorable = price rises as RGTI rises)",
-      "trail_pct": 15,
-      "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a676ac2-4bc9-418b-a78a-136ed13bd6f7",
-      "stop_trigger": 0.44,
-      "stop_limit": 0.41,
-      "stop_qty": 1,
-      "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": 0,
-      "sizing_note": "1 lot $52, well within $156.83 baseline",
-      "cluster_note": "quantum-sector (treated as its own correlated cluster today, not generic idiosyncratic) -- QBTS/RGTI/IONQ all breaking out together; RGTI chosen over QBTS (most extended, +17%, chase-risk) and IONQ (3x cost); quantum slot now 1/1 -- no further quantum entries this session without closing this one first",
-      "entry_note": "book moved fast during vetting: spread widened from 5.3% (first screen) to 11.8% (fail) to 2.2% (recommendation) to 8.0% (live fill) within ~15 minutes -- re-verified live immediately before placing each time, did not act on a stale quote",
-      "ratchet_history": [
-        {
-          "utc": "2026-07-27T14:27:14Z",
-          "hwm": 0.52,
-          "stop": 0.44,
-          "limit": 0.41,
-          "note": "initial broker stop ~15% below 0.52 fill"
         }
       ]
     }
@@ -161,16 +132,6 @@
       "qty": 1,
       "gtc": true,
       "state": "confirmed (resting)"
-    },
-    {
-      "order_id": "6a676ac2-4bc9-418b-a78a-136ed13bd6f7",
-      "symbol": "RGTI",
-      "type": "stop_limit",
-      "stop": 0.44,
-      "limit": 0.41,
-      "qty": 1,
-      "gtc": true,
-      "state": "confirmed (resting)"
     }
   ],
   "realized_pnl_by_day": {
@@ -181,7 +142,8 @@
     "2026-07-21": 36.84,
     "2026-07-22": -33.2,
     "2026-07-23": -8.2,
-    "2026-07-24": -16.02
+    "2026-07-24": -16.02,
+    "2026-07-27": -9.02
   },
   "session_stats": {
     "trades_total": 33,
@@ -196,7 +158,7 @@
       "count": 3,
       "pnl_vs_plan": -12.0
     },
-    "open_positions_count": 2
+    "open_positions_count": 1
   },
   "logged_signals": [
     {
@@ -488,6 +450,12 @@
       "date": "2026-07-27T14:27Z",
       "signal": "User: 'Yes take it, 1 lot' (RGTI, the recommended quantum name). Re-verified the RGTI $16C quote live immediately before placing -- spread had moved again (5.3% -> 11.8% -> 2.2% -> 8.0% across ~15min, a fast-moving penny-quantum book) but still passed the 10% gate at 8.0%.",
       "status": "ENTERED RGTI $16.00C 2026-07-31 x1 @0.52 (vs 0.53 limit, improvement; delta 0.40, cost $52). Broker stop 0.44/0.41 GTC on fill, confirmed resting. Two-sided-by-theme book now: RIVN (idiosyncratic/EV) + RGTI (quantum-sector, the only quantum slot taken -- QBTS and IONQ deliberately passed on to avoid doubling the correlated bet). 2 open positions, cash $1463.06."
+    },
+    {
+      "date": "2026-07-27T15:37Z",
+      "signal": "Check-in (polled positions+orders first -- caught a silent fill). RGTI $16C NO LONGER open: broker stop (0.44/0.41) FIRED at 0.43 at 14:33:40, ~6.5min after the 0.52 entry. Broad tape rolled over during the hour: QQQ -0.12% at entry -> -0.96% now. Whole quantum group faded with it (RGTI 15.57->15.12, QBTS 18.97->18.81, IONQ 36.22->34.88). RIVN $18C still open, mark 0.36 vs 0.35 entry (+2.9%), RIVN underlying 16.58 (+4.7%) -- holding up better than the quantum group.",
+      "status": "RGTI closed -9.02 (-17.3%), MFE ~0 -- never green. NO ratchet on RIVN (0.36 vs 0.35 HWM is noise; a 15% trail off 0.36 = 0.306, functionally the existing 0.30 stop). Stop holds 0.30/0.28, confirmed resting. Day 07-27 realized -9.02. 1 open position, cash ~$1506.",
+      "pattern_note": "RGTI is the 4th instance this month of the same shape: entry into an already-extended intraday move that reverses within minutes (SMCI +25% gap -13.08; MARA breakout x2 -20.12/-8.08; IREN -29.02; now RGTI -9.02). IMPORTANT: RGTI was deliberately chosen as the LEAST-extended of the three quantum names (+10% vs QBTS +17%) and still faded -- so name-selection within the rotation was not the deciding variable. The common factor is TIMING: entering a sector move that has already run for the session, rather than the specific ticker. This is distinct from the earlier REGIME_ALIGNMENT_FILTER diagnosis (counter-tape entries) -- RGTI was NOT counter-tape at entry (QQQ was flat/chop, quantum was the day's strongest group). Candidate rule for review: an EXTENSION gate (skip entries where the underlying is already >N% into a same-session move, or require a pullback/consolidation rather than buying the vertical part of the move). Logging as an observation for the post-freeze review, not a live rule change; 2 losing closes today would arm LOSS_STREAK_CIRCUIT_BREAKER."
     }
   ],
   "watchlist": {
