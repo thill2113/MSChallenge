@@ -7,7 +7,7 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-07-28T15:54:00Z",
+  "last_updated_utc": "2026-07-28T18:12:15Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1533.94,
@@ -27,16 +27,16 @@
       "qty": 1,
       "entry_price": 1.35,
       "entry_utc": "2026-07-28T15:53:31Z",
-      "hwm": 1.35,
+      "hwm": 1.56,
       "hwm_direction": "put (favorable = price rises as IREN falls)",
       "trail_pct": 35,
       "management": "trail-only (1-lot), v1.1 35% width",
-      "resting_stop_order_id": "6a68d08a-de28-453f-b707-348dfed6854a",
-      "stop_trigger": 0.88,
-      "stop_limit": 0.82,
+      "resting_stop_order_id": "6a68f0fb-a79e-40b2-bb7e-1af4230764c2",
+      "stop_trigger": 1.01,
+      "stop_limit": 0.95,
       "stop_qty": 1,
       "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": 0,
+      "unrealized_pct_at_last_check": 15.6,
       "leverage_check": "0.240 x 34.19 / 1.35 = 6.1x; 35% stop = 5.6% underlying move (IREN daily range ~5-6%). Under v1.0's 15% stop this would have been 2.4% = inside the noise band.",
       "sizing_note": "$135 position, $47 risk = 3.1% of equity. ABOVE the v1.1 2.5% cap -- disclosed override, user-approved. Nothing clearing all gates today fit under the $110 risk-based cap: cheap contracts had wide books, tight books cost $143+. Flagged as a real tension in v1.1 at this account size.",
       "cluster_note": "crypto_beta 1/2. Only open position.",
@@ -48,6 +48,13 @@
           "stop": 0.88,
           "limit": 0.82,
           "note": "initial broker stop 35% below 1.35 fill (v1.1 width)"
+        },
+        {
+          "utc": "2026-07-28T18:12:11Z",
+          "hwm": 1.56,
+          "stop": 1.01,
+          "limit": 0.95,
+          "note": "new high 1.56 (+15.6%); 35% v1.1 trail off HWM (1.56 x 0.65 = 1.014 -> 1.01). Risk cut from $47 (3.1% equity) to $34 (2.2%) -- now INSIDE the 2.5% v1.1 cap, so the disclosed sizing override has self-corrected via the first ratchet. Still below the 1.35 entry: cannot lock a profit until HWM > ~2.08 (+54%) under the wider trail. Old order 6a68d08a cancelled+confirmed before placing 6a68f0fb."
         }
       ]
     }
@@ -128,11 +135,11 @@
   "exception_slot": "N/A under v1.1 risk-based sizing",
   "resting_stop_orders": [
     {
-      "order_id": "6a68d08a-de28-453f-b707-348dfed6854a",
+      "order_id": "6a68f0fb-a79e-40b2-bb7e-1af4230764c2",
       "symbol": "IREN",
       "type": "stop_limit",
-      "stop": 0.88,
-      "limit": 0.82,
+      "stop": 1.01,
+      "limit": 0.95,
       "qty": 1,
       "gtc": true,
       "state": "confirmed (resting)"
