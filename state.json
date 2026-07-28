@@ -5,49 +5,20 @@
     "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
     "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
   },
-  "last_updated_utc": "2026-07-27T16:00:00Z",
+  "last_updated_utc": "2026-07-28T15:15:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 1542.0,
-    "cash_approx": 1506.0,
-    "buying_power": 1463.06,
-    "note": "Capital added 2026-07-24: cash 1049.46 -> 1491.30 (~$490 deposit). New 10% baseline budget = $156.83. Account went FLAT 2026-07-24T15:39Z (day net -16.02) after a 5-losing-close stretch; user seriously considered ending the system, then continued. New session 2026-07-27 (Monday): QQQ flat/chop, but a real quantum-sector rotation (QBTS/RGTI/IONQ all +10-17%) plus RIVN +4.8% (uncorrelated). Entered RIVN $18C 1 lot @0.35 (cleanest book) + RGTI $16C 1 lot @0.52 (quantum slot). RGTI stopped out -9.02 at 14:33 as the tape rolled over (QQQ -0.12% -> -0.96%). 1 open position (RIVN), cash $1506.00, total $1542.00, day 07-27 realized -9.02.",
+    "equity_approx": 1533.94,
+    "cash_approx": 1533.94,
+    "buying_power": 1506.0,
+    "note": "Two deposits to date (+$500 on 07-20, ~$490 on 07-24). Account FLAT 2026-07-28T15:01Z after the RIVN $18C overnight hold stopped out -7.08. Cash/total $1533.94. Lifetime realized +92.60 across the campaign, but the run since 07-22 is 7 losses / 1 win. 10% baseline budget ~$153.",
     "sizing": {
       "baseline_10pct": 156.83,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
       "exception_retires_at_equity": 1100
     }
   },
-  "open_positions": [
-    {
-      "symbol": "RIVN",
-      "contract": "RIVN $18.00C 2026-07-31",
-      "qty": 1,
-      "entry_price": 0.35,
-      "entry_utc": "2026-07-27T14:25:03Z",
-      "hwm": 0.35,
-      "hwm_direction": "call (favorable = price rises as RIVN rises)",
-      "trail_pct": 15,
-      "management": "trail-only (1-lot)",
-      "resting_stop_order_id": "6a676a47-7e82-4a2b-a5ae-f79de13539ab",
-      "stop_trigger": 0.3,
-      "stop_limit": 0.28,
-      "stop_qty": 1,
-      "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": 0,
-      "sizing_note": "1 lot $35, well within $156.83 baseline",
-      "cluster_note": "idiosyncratic/EV -- tape-aligned breakout call on RIVN's own +4.8% move, uncorrelated with the same-day quantum-sector rotation (QBTS/RGTI/IONQ); cleanest book of 6 candidates screened (2.8-2.9% spread)",
-      "ratchet_history": [
-        {
-          "utc": "2026-07-27T14:25:11Z",
-          "hwm": 0.35,
-          "stop": 0.3,
-          "limit": 0.28,
-          "note": "initial broker stop ~15% below 0.35 fill"
-        }
-      ]
-    }
-  ],
+  "open_positions": [],
   "open_positions_ARCHIVE_2026-07-24": [
     {
       "symbol": "RIVN",
@@ -121,19 +92,8 @@
       ]
     }
   ],
-  "exception_slot": "FREE (both positions fit baseline, not used)",
-  "resting_stop_orders": [
-    {
-      "order_id": "6a676a47-7e82-4a2b-a5ae-f79de13539ab",
-      "symbol": "RIVN",
-      "type": "stop_limit",
-      "stop": 0.3,
-      "limit": 0.28,
-      "qty": 1,
-      "gtc": true,
-      "state": "confirmed (resting)"
-    }
-  ],
+  "exception_slot": "FREE (account flat)",
+  "resting_stop_orders": [],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
@@ -143,7 +103,8 @@
     "2026-07-22": -33.2,
     "2026-07-23": -8.2,
     "2026-07-24": -16.02,
-    "2026-07-27": -9.02
+    "2026-07-27": -9.02,
+    "2026-07-28": -7.08
   },
   "session_stats": {
     "trades_total": 33,
@@ -158,7 +119,8 @@
       "count": 3,
       "pnl_vs_plan": -12.0
     },
-    "open_positions_count": 1
+    "open_positions_count": 0,
+    "lifetime_realized": 92.6
   },
   "logged_signals": [
     {
@@ -473,6 +435,13 @@
       "signal": "User: 'Pass' on the recommended MARA $11P.",
       "status": "NO ENTRY. Declined the only clean put candidate of the pass. Account stays at 1 open position (RIVN $18C, stop 0.30/0.28 resting). Day 07-27 realized -9.02 (RGTI). Cash ~$1506.",
       "note": "Worth logging as a discipline datapoint, not just a non-event: the candidate cleared every mechanical gate (delta -0.33, spread 3.3%, earnings-clear, regime-aligned, $31 sizing) and was still passed on judgment -- the extension concern raised from the RGTI post-mortem. This is the system declining a gate-passing signal, which is the opposite failure mode from the 07-22/07-24 stretch where gate-passing signals were taken and faded. If MARA continues down from here, this pass is the cost of the new caution; if it bounces, the caution was correct. Logging both possibilities before the outcome is known."
+    },
+    {
+      "date": "2026-07-28T15:15Z",
+      "signal": "New session 2026-07-28. Position poll first -- caught the overnight outcome: RIVN $18C broker stop (0.30/0.28) FIRED at 0.28 at 15:01:40 today, filled exactly at the limit with no slippage. Account FLAT. Broad tape red again: QQQ -1.14% (674.33 vs 682.12 close). RIVN 16.235 (-1.49%). MARA -5.27% (11.15).",
+      "status": "RIVN closed -7.08 (-20.2%). MFE was +8.6% (mark 0.38 at 17:03 on 07-27) but no high above 0.38 was ever confirmed, so a profit-locking ratchet was never mathematically available (15% trail off 0.38 = 0.323, still under the 0.35 entry). Day 07-28 realized -7.08. Lifetime realized +92.60. Cash/total $1533.94.",
+      "mara_pass_followup": "Closing the loop on the 07-27 pass, honestly and against my own interest in looking right: the pass was correct on OUR rules but the DIRECTION eventually proved right. MARA went 11.53 (recommendation) -> 11.78 (07-27 close, +2.2% against the put) -> 11.15 now (-5.27% today). A 1-lot $11P at 0.31 with the standard ~0.26/0.24 stop would have been stopped out on 07-27 for roughly -6 when the mark hit 0.215; it would NOT have survived to see today's decline, where it would now be profitable. So: the pass saved money given our 15% stop discipline, but the underlying thesis was not wrong -- it was early by one session and the stop would have whipsawed us out. This is a distinct failure mode from the extension problem and should be logged as such: a correct directional call can still lose under a tight trail if entry timing is early.",
+      "streak_note": "Record since 07-22 is now 7 losses / 1 win (SMCI -13.08, MARA -20.12, SOFI -0.12, MARA -8.08, IREN -29.02, RIVN +13.00 WIN, RGTI -9.02, RIVN -7.08). Lifetime is still positive (+92.60) only because of the 07-17 and 07-21 sessions. The two 07-27/07-28 losses were both SMALL by design (-9.02, -7.08) -- position sizing is working as intended and is limiting damage -- but the hit rate is the problem, not the sizing. LOSS_STREAK_CIRCUIT_BREAKER is NOT armed for 07-28: RIVN is the first close of this session, and the rule counts consecutive losing closes within a session."
     }
   ],
   "watchlist": {
