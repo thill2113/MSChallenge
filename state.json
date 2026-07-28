@@ -1,9 +1,11 @@
 {
-  "ruleset_version": "1.0-frozen-2026-07-15",
+  "ruleset_version": "1.1-revised-2026-07-28",
   "freeze": {
     "active": true,
-    "unfreeze_condition": "20-30 completed system trades in trades.csv (safety fixes exempt)",
-    "next_scan_mode": "LIVE (dry-run passed 2026-07-15 14:30 UTC; pipeline validated)"
+    "revised_utc": "2026-07-28T15:40:00Z",
+    "unfreeze_condition": "20 MORE completed closes under v1.1 (target n=39 total); safety fixes always exempt",
+    "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
+    "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
   "last_updated_utc": "2026-07-28T15:15:00Z",
   "account": {
@@ -635,5 +637,14 @@
       "SPCX": "~$199"
     },
     "note": "MAX_POSITION_PCT stays 10%% (formula unchanged); only the dollar figure it produces moved with equity -- freeze-safe, not a rule change. Promote NVDA/PLTR from log-only-priced-out to tradeable only after a real contract check passes all gates."
+  },
+  "ruleset_v1_1_changes": {
+    "STOP_WIDTH_PCT": "15% -> 35% of premium (leverage-aware; ~3-5% underlying)",
+    "SIZING": "flat 10% position -> risk-based: MAX_RISK_PER_TRADE 2.5% equity, position = risk/stop_width (~$110 cap at current equity)",
+    "DTE_WINDOW": "3-7 -> 7-14 days",
+    "EARNINGS_GATE_FULL_LIFE": "NEW - earnings checked across entire contract life, not 2 days from entry. Required companion to the DTE widening; caught MARA 08-06 earnings under an 08-07 expiry the same day it was written.",
+    "SPIKE_PROFIT_CAPTURE": "recalibrated - trail now needs HWM > ~+54% (was ~+18%) to lock any gain, so discretionary take-profit is now the PRIMARY profit mechanism; surface at >=+40%, and on any stall after +25%",
+    "unchanged": "delta>=0.20, spread<=10% + penny floor, $5 underlying floor, regime gate, correlation clusters (max 2), MAX_OPEN_POSITIONS=3, entry cutoff 19:15 UTC, broker-resident stops, human confirmation on every entry",
+    "accepted_tradeoff": "Each individual loss is now ~2.3x larger. Position size cut to hold dollar risk ~flat. Bet is that far fewer noise stop-outs + surviving to catch fat-tail winners outweighs larger single losses. UNPROVEN - n=19 with 2 dominant trades is thin evidence."
   }
 }

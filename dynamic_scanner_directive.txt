@@ -131,12 +131,25 @@ For each active asset (that passed the regime gate):
    check verifiable. A scan report naming only one side is INCOMPLETE and
    must be corrected before the user acts on it.
 
-## 4. EXECUTION & SIZING
-* Capital Limit: 10% of total equity per setup, from live get_portfolio.
+## 4. EXECUTION & SIZING   [v1.1 — REVISED 2026-07-28]
+* RISK-BASED SIZING (binding constraint): MAX_RISK_PER_TRADE = 2.5% of equity;
+  POSITION_SIZE = risk_cap / STOP_WIDTH_PCT (35%). At ~$1,534 equity that is
+  ~$38 risk => ~$110 max position. The 10%-of-equity cap remains an absolute
+  ceiling but is normally NOT the binding number.
+* STOP_WIDTH_PCT = 35% (was 15%). Before every entry compute and state:
+  leverage = |delta| x underlying / premium ; implied_underlying_stop = 35%/lev.
+  If implied_underlying_stop < 2.5%, the stop is still inside that name's noise
+  band — widen or skip. (v1.0's 15% stop equalled 1.1-1.6% underlying moves on
+  names with 4-10% daily ranges; 6 of 10 losers never traded above entry.)
 * Options entries: minimum delta 0.20 (absolute). Contracts below the floor
   are rejected regardless of price — no deep-OTM lottery tickets.
-* MIN_DTE: 3–7 days to expiration required. 0DTE strictly forbidden unless
-  a separate, tighter manual trailing stop is attached.
+* DTE_WINDOW: 7–14 days (was 3–7). Both fat-tail winners were 8-DTE holds of
+  22-43 hours; 3-DTE contracts measured -27% to -36% theta PER DAY on
+  2026-07-28. If nothing exists inside 7-14, prefer the nearest expiration
+  BEYOND 14 over anything under 7. 0DTE strictly forbidden.
+* EARNINGS_GATE_FULL_LIFE: with 7-14 DTE the 2-day earnings lookahead is no
+  longer sufficient — check earnings across the ENTIRE contract life through
+  expiration and reject anything that spans a report.
 * Liquidity: spread ≤ 10% OR (ask − bid) == $0.01 (penny-floor exception).
 * Order Type: Marketable Limit (Ask * 1.02). NO MARKET ORDERS.
 * ORDER_TTL: unfilled after 15–30 seconds → cancel, re-quote, recalculate.
