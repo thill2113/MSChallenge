@@ -7,7 +7,7 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-07-29T17:40:30Z",
+  "last_updated_utc": "2026-07-29T19:40:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 1640.84,
@@ -460,6 +460,19 @@
       "v1_1_validation": "FIRST TRADE UNDER RULESET v1.1 AND IT DIRECTLY VALIDATED THE DIAGNOSIS. Counterfactual: v1.0's 15% stop would have rested at 1.15, i.e. only a 2.4% move in IREN -- IREN traded down and up several percent intraday on 07-28, so that stop would almost certainly have fired within hours for a ~-20 loss, exactly the MFE=0 pattern that produced 6 of the prior 10 losers. The v1.1 35% stop (0.88 = 5.6% underlying) held through the noise and let a 25-hour overnight move develop. The DTE widening also mattered: an 08-07 contract (10 DTE) survived overnight where a 3-DTE contract would have bled 27-36%/day.",
       "capture_quality": "MFE +89.3% (mark 2.555), captured +79.3% => ~89% capture ratio, by far the best of the campaign (SOFI 07-17 captured ~30% of a +181% MFE; the 07-23 SOFI put captured 0% of +18.75%). Driver: the SPIKE_PROFIT_CAPTURE tighten-into-strength ratchet to 2.10 plus a deliberate discretionary exit, rather than waiting for a trail. Honest note: an 8-minute pause between surfacing the recommendation and the user's confirm gave back ~8 dollars of the peak -- surfaced to the user in real time as a live illustration of the give-back mechanism.",
       "rule_deviation_resolved": "The 2.10/1.95 protective stop placed at 17:31 was deliberately TIGHTER than the v1.1 35% trail (which would have been 1.66). Flagged at the time, logged, and rendered moot by the discretionary close 9 minutes later. No unlogged drift."
+    },
+    {
+      "date": "2026-07-29T18:43Z",
+      "signal": "Post-close-of-IREN scan, both sides per TWO_SIDED_REPORTING. PUT side had 8 watchlist triggers (HIMS -11.13%, IREN -8.56%, MARA -7.34%, SOFI -7.15%, CLSK -7.01%, RGTI -6.65%, QBTS -5.16%, IONQ -3.13%). CALL side: only NFLX green (+1.24%), nowhere near the +3% gate, and regime had calls closed.",
+      "status": "NO ENTRY. Gate accounting: EARNINGS_GATE_FULL_LIFE killed 5 of 8 (IONQ 08-05, QBTS 08-06, RGTI 08-06, MARA 08-06, and SOFI which reported 07-29 am so its -7.15% is an earnings gap not momentum -- the entire quantum sector reports next week). HIMS rejected on 22.2% then 16.4% then 13.3% spread despite being the biggest mover. IREN $28P rejected on cost ($165 > both the $117 risk cap and $164 hard cap). CLSK recommended TWICE and failed BOTH times on re-quote: $11.50P went 8.9% -> 19.5% -> 22.2%, then $12.00P went 18.8% -> 5.9% (recommended) -> 42.7% with 1845 offered against 67 bid as market makers pulled bids. THIRD instance in two days of a recommendation evaporating between quote and confirmation (IONQ 07-28, CLSK $11.50P, CLSK $12P). Did not chase any of them.",
+      "regime_reversal": "Material: QQQ ran from -0.81% at scan start to +0.11% within 45 minutes, a ~0.9% intraday reversal that moved the regime into the +-0.5% CHOP band where the rule says prefer to pass. Had the 2-lot CLSK order filled at 18:01 or 18:28, it would have been a put into a reversing tape with a 43% spread and no clean exit. The liquidity gate and the regime gate independently pointed the same direction."
+    },
+    {
+      "date": "2026-07-29T19:40Z",
+      "signal": "User asked the counterfactual: 'we are missing recommendations because I'm working -- would we have made money or lost?' Priced every unexecuted recommendation at the current BID (realistic exit), not the mark.",
+      "status": "HONEST ANSWER: we LEFT roughly +$75-100 on the table. MARA $11P (passed 07-27) 0.31 -> 0.85 bid = +54. IONQ $30P (not placed 07-28) 1.10 -> 1.34 = +24. CLSK $11.50P x2 0.47 -> 0.53 = +12. CLSK $12P x2 0.70 -> 0.74 = +8. All four were directionally right. Still smaller than the single executed trade (+106.90).",
+      "v1_1_second_validation": "MARA is the important case. Under v1.0's 15% stop (0.26) it stops out 07-27 for ~-6 when the mark hit 0.215. Under v1.1's 35% stop (0.2015) it SURVIVES BY 1.4 CENTS and is now +54. Same trade, opposite outcome, purely from stop width -- a second independent confirmation of the stop-width diagnosis, though honestly a near-miss rather than a comfortable margin.",
+      "AGENT ERROR -- SELF REPORTED": "On 2026-07-28 I recommended IONQ $30P 08-07 and stated it was 'earnings-clear through expiry'. That assertion was NOT verified: my jq query against the earnings dump that day filtered only for MARA/IREN/SOFI/CLSK/HIMS -- IONQ was never in the filter list. IONQ reports 2026-08-05, INSIDE the 08-07 contract life. The trade would be profitable right now, which makes this worse not better: the spread widening blocked it by luck, not by process. I asserted a gate had passed when I had not run it. LESSON: when a gate is claimed as passed, the check must cover the specific candidate being recommended -- never infer clearance from a query whose filter list omits the name. Applied correctly on the 07-29 scan (all 8 candidates queried explicitly), which is how IONQ/QBTS/RGTI got caught."
     }
   ],
   "watchlist": {
@@ -662,5 +675,12 @@
     "SPIKE_PROFIT_CAPTURE": "recalibrated - trail now needs HWM > ~+54% (was ~+18%) to lock any gain, so discretionary take-profit is now the PRIMARY profit mechanism; surface at >=+40%, and on any stall after +25%",
     "unchanged": "delta>=0.20, spread<=10% + penny floor, $5 underlying floor, regime gate, correlation clusters (max 2), MAX_OPEN_POSITIONS=3, entry cutoff 19:15 UTC, broker-resident stops, human confirmation on every entry",
     "accepted_tradeoff": "Each individual loss is now ~2.3x larger. Position size cut to hold dollar risk ~flat. Bet is that far fewer noise stop-outs + surviving to catch fat-tail winners outweighs larger single losses. UNPROVEN - n=19 with 2 dominant trades is thin evidence."
+  },
+  "authorization_model": {
+    "live_autonomous": false,
+    "human_confirm_required_every_entry": true,
+    "pre_authorization_status": "PROPOSED 2026-07-29, DECLINED BY USER -- 'We are not there yet. Let's make some more $ then when I'm comfortable we can make that change.'",
+    "revisit_condition": "User-initiated only. Do NOT re-propose unsolicited; raise again only if the user asks, or if latency demonstrably costs a large amount on a single trade.",
+    "accepted_cost": "With confirm-required, some candidates will expire between recommendation and approval. Measured cost 07-27..07-29 was ~$75-100 across 4 recommendations. User has explicitly accepted this cost in exchange for keeping a human in the loop on every live order."
   }
 }
