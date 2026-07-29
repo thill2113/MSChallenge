@@ -7,65 +7,20 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-07-29T17:31:30Z",
+  "last_updated_utc": "2026-07-29T17:40:30Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 1533.94,
-    "cash_approx": 1533.94,
-    "buying_power": 1506.0,
-    "note": "Two deposits to date (+$500 on 07-20, ~$490 on 07-24). Account FLAT 2026-07-28T15:01Z after the RIVN $18C overnight hold stopped out -7.08. Cash/total $1533.94. Lifetime realized +92.60 across the campaign, but the run since 07-22 is 7 losses / 1 win. 10% baseline budget ~$153.",
+    "equity_approx": 1640.84,
+    "cash_approx": 1640.84,
+    "buying_power": 1398.9,
+    "note": "Two deposits to date (+$500 07-20, ~$490 07-24). Account FLAT 2026-07-29T17:40Z after closing IREN $30P for +106.90, the largest single win of the campaign. Cash/total $1640.84. Lifetime realized +199.5. 10% baseline ~$164; v1.1 risk-based cap (2.5% risk / 35% stop) ~$117.",
     "sizing": {
       "baseline_10pct": 156.83,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
       "exception_retires_at_equity": 1100
     }
   },
-  "open_positions": [
-    {
-      "symbol": "IREN",
-      "contract": "IREN $30.00P 2026-08-07",
-      "qty": 1,
-      "entry_price": 1.35,
-      "entry_utc": "2026-07-28T15:53:31Z",
-      "hwm": 2.555,
-      "hwm_direction": "put (favorable = price rises as IREN falls)",
-      "trail_pct": 35,
-      "management": "trail-only (1-lot), v1.1 35% width",
-      "resting_stop_order_id": "6a6a38ed-f63c-4632-8115-c81e4d3507d4",
-      "stop_trigger": 2.1,
-      "stop_limit": 1.95,
-      "stop_qty": 1,
-      "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": 89.3,
-      "leverage_check": "0.240 x 34.19 / 1.35 = 6.1x; 35% stop = 5.6% underlying move (IREN daily range ~5-6%). Under v1.0's 15% stop this would have been 2.4% = inside the noise band.",
-      "sizing_note": "$135 position, $47 risk = 3.1% of equity. ABOVE the v1.1 2.5% cap -- disclosed override, user-approved. Nothing clearing all gates today fit under the $110 risk-based cap: cheap contracts had wide books, tight books cost $143+. Flagged as a real tension in v1.1 at this account size.",
-      "cluster_note": "crypto_beta 1/2. Only open position.",
-      "profit_plan": "v1.1 trail cannot lock a gain until HWM > ~+54% (0.65 x HWM > 1.35 => HWM > 2.08). Discretionary take-profit is the PRIMARY mechanism: surface review at >=+40%, and on any stall after +25%.",
-      "ratchet_history": [
-        {
-          "utc": "2026-07-28T15:53:46Z",
-          "hwm": 1.35,
-          "stop": 0.88,
-          "limit": 0.82,
-          "note": "initial broker stop 35% below 1.35 fill (v1.1 width)"
-        },
-        {
-          "utc": "2026-07-28T18:12:11Z",
-          "hwm": 1.56,
-          "stop": 1.01,
-          "limit": 0.95,
-          "note": "new high 1.56 (+15.6%); 35% v1.1 trail off HWM (1.56 x 0.65 = 1.014 -> 1.01). Risk cut from $47 (3.1% equity) to $34 (2.2%) -- now INSIDE the 2.5% v1.1 cap, so the disclosed sizing override has self-corrected via the first ratchet. Still below the 1.35 entry: cannot lock a profit until HWM > ~2.08 (+54%) under the wider trail. Old order 6a68d08a cancelled+confirmed before placing 6a68f0fb."
-        },
-        {
-          "utc": "2026-07-29T17:31:25Z",
-          "hwm": 2.555,
-          "stop": 2.1,
-          "limit": 1.95,
-          "note": "OVERNIGHT WINNER. IREN broke down hard on 07-29 (-9.57% to 30.685, now BELOW the 30 strike); option 1.35 -> 2.555 = +89.3%. Delta -0.414 (near ATM). DELIBERATE DEVIATION FROM THE 35% v1.1 TRAIL, flagged: the rule-compliant 35% ratchet would sit at 1.66 (2.555 x 0.65), locking only +23% of an available +89% -- precisely the give-back SPIKE_PROFIT_CAPTURE exists to prevent. Placed a TIGHTER ~18% stop at 2.10/1.95 instead, locking ~+$75 (+56%) while leaving room for a normal pullback. Justification: SPIKE_PROFIT_CAPTURE mandates protecting into strength above +40%, and this is a parabolic 2-day move. Limit set 15c under the trigger (not 6c) for fill cushion given the 7.4% spread. Old order 6a68f0fb cancelled+confirmed first."
-        }
-      ]
-    }
-  ],
+  "open_positions": [],
   "open_positions_ARCHIVE_2026-07-24": [
     {
       "symbol": "RIVN",
@@ -139,19 +94,8 @@
       ]
     }
   ],
-  "exception_slot": "N/A under v1.1 risk-based sizing",
-  "resting_stop_orders": [
-    {
-      "order_id": "6a6a38ed-f63c-4632-8115-c81e4d3507d4",
-      "symbol": "IREN",
-      "type": "stop_limit",
-      "stop": 2.1,
-      "limit": 1.95,
-      "qty": 1,
-      "gtc": true,
-      "state": "confirmed (resting)"
-    }
-  ],
+  "exception_slot": "FREE (account flat)",
+  "resting_stop_orders": [],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
@@ -162,7 +106,8 @@
     "2026-07-23": -8.2,
     "2026-07-24": -16.02,
     "2026-07-27": -9.02,
-    "2026-07-28": -7.08
+    "2026-07-28": -7.08,
+    "2026-07-29": 106.9
   },
   "session_stats": {
     "trades_total": 33,
@@ -177,8 +122,8 @@
       "count": 3,
       "pnl_vs_plan": -12.0
     },
-    "open_positions_count": 1,
-    "lifetime_realized": 92.6
+    "open_positions_count": 0,
+    "lifetime_realized": 199.5
   },
   "logged_signals": [
     {
@@ -507,6 +452,14 @@
       "status": "ENTERED IREN $30P 08-07 x1 @1.35 (vs 1.43 limit, 8c improvement). Broker stop 0.88/0.82 GTC confirmed. First trade under v1.1.",
       "gate_rejections_this_pass": "MARA $10.50P 08-07 -- passed trigger/delta/spread/cost/OI but REJECTED by the brand-new EARNINGS_GATE_FULL_LIFE (MARA reports 08-06, one day before expiry). This gate did not exist 30 minutes earlier and was created as a consequence of widening DTE; it caught a live trade the same day it was written, which is the strongest possible validation of the companion-gate reasoning. IONQ $30P -- was THE recommendation and the user said go, but the book widened 8.5% -> 13.0% between recommendation and confirmation; did NOT place, re-verified twice, then found IREN $30P as a strictly better contract (12x the open interest). Declining to override a hard liquidity gate under time pressure, immediately after publishing a discipline revision, was the correct call and is logged as such.",
       "disclosed_override": "IREN sizing is $47 risk = 3.1% of equity vs the 2.5% v1.1 cap. Offered the user three explicit options (take at 3.3% risk / tighten stop to 25% and stay in cap / no trade) with a recommendation and the reasoning against option 2 (tighter stop re-enters the noise band we just widened away from). User chose option 1. This is a KNOWN TENSION in v1.1: at ~$1,534 equity, a 35% stop + 2.5% risk cap implies a ~$110 max position, but today every all-gates-clear contract cost $135+. Flag for the next review: either the risk cap needs to be ~3.5% at this account size, or the system needs to accept far fewer tradeable days."
+    },
+    {
+      "date": "2026-07-29T17:40Z",
+      "signal": "IREN $30P 08-07 CLOSED at 2.42 (vs 1.35 entry) on user confirmation. Held ~25.8h overnight. IREN -9.05% on the day to 30.86, through the 30 strike; QQQ -0.93%.",
+      "status": "REALIZED +106.90 (+79.3% on premium) -- LARGEST SINGLE WIN OF THE CAMPAIGN, beating IONQ +57.92. Day 07-29 realized +106.90. Lifetime realized +199.5. Account FLAT, cash $1640.84.",
+      "v1_1_validation": "FIRST TRADE UNDER RULESET v1.1 AND IT DIRECTLY VALIDATED THE DIAGNOSIS. Counterfactual: v1.0's 15% stop would have rested at 1.15, i.e. only a 2.4% move in IREN -- IREN traded down and up several percent intraday on 07-28, so that stop would almost certainly have fired within hours for a ~-20 loss, exactly the MFE=0 pattern that produced 6 of the prior 10 losers. The v1.1 35% stop (0.88 = 5.6% underlying) held through the noise and let a 25-hour overnight move develop. The DTE widening also mattered: an 08-07 contract (10 DTE) survived overnight where a 3-DTE contract would have bled 27-36%/day.",
+      "capture_quality": "MFE +89.3% (mark 2.555), captured +79.3% => ~89% capture ratio, by far the best of the campaign (SOFI 07-17 captured ~30% of a +181% MFE; the 07-23 SOFI put captured 0% of +18.75%). Driver: the SPIKE_PROFIT_CAPTURE tighten-into-strength ratchet to 2.10 plus a deliberate discretionary exit, rather than waiting for a trail. Honest note: an 8-minute pause between surfacing the recommendation and the user's confirm gave back ~8 dollars of the peak -- surfaced to the user in real time as a live illustration of the give-back mechanism.",
+      "rule_deviation_resolved": "The 2.10/1.95 protective stop placed at 17:31 was deliberately TIGHTER than the v1.1 35% trail (which would have been 1.66). Flagged at the time, logged, and rendered moot by the discretionary close 9 minutes later. No unlogged drift."
     }
   ],
   "watchlist": {
