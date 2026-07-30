@@ -7,7 +7,7 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-07-30T14:03:00Z",
+  "last_updated_utc": "2026-07-30T18:39:25Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 2140.84,
@@ -35,16 +35,16 @@
       "qty": 1,
       "entry_price": 0.85,
       "entry_utc": "2026-07-30T14:02:43Z",
-      "hwm": 0.85,
+      "hwm": 1.11,
       "hwm_direction": "call (favorable = price rises as HIMS rises)",
       "trail_pct": 35,
       "management": "trail-only (1-lot), v1.1 35% width",
-      "resting_stop_order_id": "6a6b598d-a0cc-42db-b917-5458f5f0e44d",
-      "stop_trigger": 0.55,
-      "stop_limit": 0.51,
+      "resting_stop_order_id": "6a6b9a56-564e-4a50-870b-8ff35ea24a30",
+      "stop_trigger": 0.72,
+      "stop_limit": 0.65,
       "stop_qty": 1,
       "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": 0,
+      "unrealized_pct_at_last_check": 30.6,
       "leverage_check": "0.354 x 26.36 / 0.85 = 11.0x; 35% stop = 3.2% underlying, clears the 2.5% floor.",
       "sizing_note": "$85 position, $30 risk = 1.4% of equity ($2,140.84). Well inside the $53.52 / 2.5% cap -- no override needed, first entry since the deposit where sizing was not a constraint.",
       "cluster_note": "idiosyncratic. Only open position.",
@@ -58,8 +58,16 @@
           "stop": 0.55,
           "limit": 0.51,
           "note": "initial broker stop 35% below 0.85 fill (v1.1 width)"
+        },
+        {
+          "utc": "2026-07-30T18:39:18Z",
+          "hwm": 1.11,
+          "stop": 0.72,
+          "limit": 0.65,
+          "note": "new high 1.11 (+30.6% on mark). 35% v1.1 trail off HWM (1.11 x 0.65 = 0.7215 -> 0.72). Risk cut from $30 (1.4% equity) to $13 (0.6%). Still below the 0.85 entry -- profit lock needs HWM > ~1.31 (+54%). Limit set 7c under the trigger (wider than usual) BECAUSE of the 19.8% spread: a tight limit risks not filling on a thin book. Old order 6a6b598d cancelled+confirmed first."
         }
-      ]
+      ],
+      "spread_watch": "Book widened 8.6% (entry) -> 12.9% (14:48) -> 19.8% now (bid 1.00/ask 1.22). Volume still only ~75-100. The thin-book weakness flagged at entry is REAL and is now the binding constraint: mark shows +30.6% but the BID shows +17.6% realizable. Roughly 13 points of the paper gain is spread, not profit."
     }
   ],
   "open_positions_ARCHIVE_2026-07-24": [
@@ -540,6 +548,13 @@
       "earnings_gate_process_fix": "Ran the earnings check EXPLICITLY per candidate name this pass -- the direct fix for the 07-28 IONQ error where I asserted 'earnings-clear' from a query whose filter list omitted IONQ. Result: MARA/IONQ/QBTS/RGTI/DKNG all report 08-05..08-06 (blocked for an 08-07 expiry), and RIVN reports TONIGHT 07-30 pm. Six names removed by earnings alone.",
       "leverage_check_first_real_save": "SOFI $16.50C had the best book of the day (4.3% spread, OI 4863, volume 1656, only $24) and would have looked like an obvious take. The mandatory leverage check killed it: 0.297 x 15.71 / 0.235 = 19.9x, so the 35% stop equalled a 1.76% SOFI move -- BELOW the 2.5% floor. Cheap far-OTM contracts carry enormous leverage, so a v1.1-compliant-looking stop can still be a v1.0-style noise stop. First time this check independently rejected a candidate that every other gate passed.",
       "extension_applied_prospectively": "CLSK (+21.10%, $16C, 8.3% spread) and IREN (+26.72%) both cleared spread/delta/earnings and were REJECTED on extension. Rationale given to the user with the supporting split: gap-chases lost 4 times (SMCI +25% -13.08, RGTI +10% -9.02, MARA -20.12/-8.08) while moderate-momentum calls won (07-21 MARA +3.5% and TQQQ +4.4%, both +18.92). CLSK's 35% stop equals a 3.5% move on a name that just moved 21% -- clears the generic floor but is far inside its practical noise band. FLAG FOR NEXT REVIEW: the 2.5% leverage floor is a fixed constant and does not scale with a name's realized daily range; consider making it ATR-relative."
+    },
+    {
+      "date": "2026-07-30T18:39Z",
+      "signal": "Check-in ~4.6h after the HIMS entry. HIMS 26.36 -> 27.015 (+8.06% on the day, was +5.44% at entry). Option 0.85 -> 1.11 mark = +30.6%. QQQ holding the full gap at +3.06%.",
+      "status": "RATCHETED stop 0.55/0.51 -> 0.72/0.65. Risk $30 -> $13. No take-profit surfaced yet despite clearing the +25% stall threshold: HIMS is at its highs, not stalling, and with a 19.8% spread selling now nets only +$15 (bid 1.00) versus the +$26 the mark implies. The spread, not the direction, is what would make an exit expensive here.",
+      "EXTENSION_CALL_SCORECARD": "Tracking the 07-30 decision to pass on the big movers, as promised, and it is currently CORRECT. Since the pass (14:02 -> 18:38): HIMS 26.36 -> 27.015 = +2.5%; CLSK 14.545 -> 14.475 = -0.5%; IREN 37.1425 -> 36.93 = -0.6%. The moderate-momentum name gained while BOTH extended names drifted lower. This is the first prospective (not retrospective) test of the extension criterion and it held. Caveat against over-reading it: one intraday sample, small magnitudes, and the day is not over -- a late rip in CLSK/IREN would flip it. Will re-score at the close.",
+      "spread_lesson": "HIMS OI 192 / volume ~75 was flagged as the known weakness at entry and it has behaved exactly as feared: spread 8.6% -> 19.8% in 4.6 hours while the position was WINNING. Note this is the opposite failure from CLSK on 07-29 (spread blew out before entry, blocking it) -- here it blew out AFTER entry, trapping value inside the bid/ask. FLAG FOR NEXT REVIEW: consider a minimum-liquidity floor (e.g. OI >= 500 AND volume >= 200) as a hard gate, not just a caveat. Two of the last three entries had thin books; the gate that catches this pre-entry does not currently exist."
     }
   ],
   "watchlist": {
