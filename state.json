@@ -7,17 +7,25 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-07-29T19:40:00Z",
+  "last_updated_utc": "2026-07-29T19:45:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 1640.84,
-    "cash_approx": 1640.84,
-    "buying_power": 1398.9,
-    "note": "Two deposits to date (+$500 07-20, ~$490 07-24). Account FLAT 2026-07-29T17:40Z after closing IREN $30P for +106.90, the largest single win of the campaign. Cash/total $1640.84. Lifetime realized +199.5. 10% baseline ~$164; v1.1 risk-based cap (2.5% risk / 35% stop) ~$117.",
+    "equity_approx": 2140.84,
+    "cash_approx": 2140.84,
+    "buying_power": 2140.84,
+    "note": "Three deposits to date: +$500 07-20, ~$490 07-24, +$500 07-29 (post-close, cash-only). Account FLAT at $2,140.84, all cash. Lifetime realized +199.50 across 21 closes. v1.1 sizing at new equity: 2.5% risk = $53.52 => max position ~$153 at the 35% stop; 10% hard cap $214.",
     "sizing": {
-      "baseline_10pct": 156.83,
+      "baseline_10pct": 214.08,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
-      "exception_retires_at_equity": 1100
+      "exception_retires_at_equity": 1100,
+      "v1_1_risk_based": {
+        "max_risk_per_trade_pct": 2.5,
+        "max_risk_per_trade_usd": 53.52,
+        "stop_width_pct": 35,
+        "max_position_usd": 152.92,
+        "hard_position_cap_usd": 214.08,
+        "note": "Recomputed at $2,140.84 equity after the 2026-07-29 deposit (+$500, cash-only)."
+      }
     }
   },
   "open_positions": [],
@@ -473,6 +481,13 @@
       "status": "HONEST ANSWER: we LEFT roughly +$75-100 on the table. MARA $11P (passed 07-27) 0.31 -> 0.85 bid = +54. IONQ $30P (not placed 07-28) 1.10 -> 1.34 = +24. CLSK $11.50P x2 0.47 -> 0.53 = +12. CLSK $12P x2 0.70 -> 0.74 = +8. All four were directionally right. Still smaller than the single executed trade (+106.90).",
       "v1_1_second_validation": "MARA is the important case. Under v1.0's 15% stop (0.26) it stops out 07-27 for ~-6 when the mark hit 0.215. Under v1.1's 35% stop (0.2015) it SURVIVES BY 1.4 CENTS and is now +54. Same trade, opposite outcome, purely from stop width -- a second independent confirmation of the stop-width diagnosis, though honestly a near-miss rather than a comfortable margin.",
       "AGENT ERROR -- SELF REPORTED": "On 2026-07-28 I recommended IONQ $30P 08-07 and stated it was 'earnings-clear through expiry'. That assertion was NOT verified: my jq query against the earnings dump that day filtered only for MARA/IREN/SOFI/CLSK/HIMS -- IONQ was never in the filter list. IONQ reports 2026-08-05, INSIDE the 08-07 contract life. The trade would be profitable right now, which makes this worse not better: the spread widening blocked it by luck, not by process. I asserted a gate had passed when I had not run it. LESSON: when a gate is claimed as passed, the check must cover the specific candidate being recommended -- never infer clearance from a query whose filter list omits the name. Applied correctly on the 07-29 scan (all 8 candidates queried explicitly), which is how IONQ/QBTS/RGTI got caught."
+    },
+    {
+      "date": "2026-07-29T19:45Z",
+      "signal": "User FYI: added capital. get_portfolio confirms cash/total 2140.84, up $500 from the 1640.84 post-IREN-close figure. Cash-only add, no position change (account was already flat). Deposit arrived after the 19:15 entry cutoff and near the 20:00 close, so it has no effect on today's trading.",
+      "status": "Recomputed v1.1 risk-based sizing: 2.5% risk cap $41.02 -> $53.52; max position at the 35% stop $117 -> $152.92; 10% hard cap $164 -> $214.08. No rule parameters changed -- only the dollar amounts the percentages resolve to. Freeze-safe.",
+      "resolves_known_tension": "This materially relieves the v1.1 sizing tension logged 2026-07-28. At $1,534-1,640 equity, the 35% stop plus 2.5% risk cap implied a ~$110-117 max position, but nearly every all-gates-clear contract cost $135-181 -- which forced a disclosed override on the IREN entry (3.1% risk) and blocked IREN $28P/$31P outright. At $2,141 the cap is ~$153: the IREN $30P that produced +106.90 now fits at 2.2% risk with NO override needed, and IONQ $30P fits at 1.8%. The IREN $28P ($165) and $31P ($181) are still over, so the tension is reduced, not eliminated. DO NOT raise the 2.5% risk cap -- the added capital solved it the right way; revisit only if clean candidates are still being blocked at this equity level.",
+      "watchlist_impact": "NVDA (~$119) and PLTR (~$144) now sit inside the $153 risk-based cap as well as the old 10% baseline, so both are genuinely tradeable on a live contract re-check rather than theoretically promoted. Still priced out at this equity: HOOD/MSTR/COIN/GOOGL/TSLA/AAPL/SPCX."
     }
   ],
   "watchlist": {
