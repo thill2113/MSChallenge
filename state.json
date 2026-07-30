@@ -7,7 +7,7 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-07-29T19:45:00Z",
+  "last_updated_utc": "2026-07-30T14:03:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 2140.84,
@@ -28,7 +28,40 @@
       }
     }
   },
-  "open_positions": [],
+  "open_positions": [
+    {
+      "symbol": "HIMS",
+      "contract": "HIMS $28.00C 2026-08-07",
+      "qty": 1,
+      "entry_price": 0.85,
+      "entry_utc": "2026-07-30T14:02:43Z",
+      "hwm": 0.85,
+      "hwm_direction": "call (favorable = price rises as HIMS rises)",
+      "trail_pct": 35,
+      "management": "trail-only (1-lot), v1.1 35% width",
+      "resting_stop_order_id": "6a6b598d-a0cc-42db-b917-5458f5f0e44d",
+      "stop_trigger": 0.55,
+      "stop_limit": 0.51,
+      "stop_qty": 1,
+      "stop_order_state": "confirmed (GTC resting)",
+      "unrealized_pct_at_last_check": 0,
+      "leverage_check": "0.354 x 26.36 / 0.85 = 11.0x; 35% stop = 3.2% underlying, clears the 2.5% floor.",
+      "sizing_note": "$85 position, $30 risk = 1.4% of equity ($2,140.84). Well inside the $53.52 / 2.5% cap -- no override needed, first entry since the deposit where sizing was not a constraint.",
+      "cluster_note": "idiosyncratic. Only open position.",
+      "selection_rationale": "Chosen over CLSK +21.10% and IREN +26.72% on EXTENSION grounds. Both bigger movers passed spread/delta/earnings but match the gap-chase shape that produced 4 losses (SMCI, RGTI, MARA x2). HIMS +5.44% matches the magnitude profile of the 07-21 winners instead. This is the first time the extension concern has been applied as a deliberate selection criterion rather than logged as a regret.",
+      "known_weakness": "OI 192 / volume 50 -- thin book. Exit liquidity is the main risk, same failure mode CLSK exhibited on 07-29 when its spread went 5.9% -> 42.7% in 15 minutes.",
+      "profit_plan": "35% trail cannot lock a gain until HWM > ~1.31 (+54%). Discretionary take-profit is PRIMARY: surface at >=+40% (1.19), and on any stall after +25% (1.06).",
+      "ratchet_history": [
+        {
+          "utc": "2026-07-30T14:02:53Z",
+          "hwm": 0.85,
+          "stop": 0.55,
+          "limit": 0.51,
+          "note": "initial broker stop 35% below 0.85 fill (v1.1 width)"
+        }
+      ]
+    }
+  ],
   "open_positions_ARCHIVE_2026-07-24": [
     {
       "symbol": "RIVN",
@@ -103,7 +136,18 @@
     }
   ],
   "exception_slot": "FREE (account flat)",
-  "resting_stop_orders": [],
+  "resting_stop_orders": [
+    {
+      "order_id": "6a6b598d-a0cc-42db-b917-5458f5f0e44d",
+      "symbol": "HIMS",
+      "type": "stop_limit",
+      "stop": 0.55,
+      "limit": 0.51,
+      "qty": 1,
+      "gtc": true,
+      "state": "confirmed (resting)"
+    }
+  ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
@@ -130,7 +174,7 @@
       "count": 3,
       "pnl_vs_plan": -12.0
     },
-    "open_positions_count": 0,
+    "open_positions_count": 1,
     "lifetime_realized": 199.5
   },
   "logged_signals": [
@@ -488,6 +532,14 @@
       "status": "Recomputed v1.1 risk-based sizing: 2.5% risk cap $41.02 -> $53.52; max position at the 35% stop $117 -> $152.92; 10% hard cap $164 -> $214.08. No rule parameters changed -- only the dollar amounts the percentages resolve to. Freeze-safe.",
       "resolves_known_tension": "This materially relieves the v1.1 sizing tension logged 2026-07-28. At $1,534-1,640 equity, the 35% stop plus 2.5% risk cap implied a ~$110-117 max position, but nearly every all-gates-clear contract cost $135-181 -- which forced a disclosed override on the IREN entry (3.1% risk) and blocked IREN $28P/$31P outright. At $2,141 the cap is ~$153: the IREN $30P that produced +106.90 now fits at 2.2% risk with NO override needed, and IONQ $30P fits at 1.8%. The IREN $28P ($165) and $31P ($181) are still over, so the tension is reduced, not eliminated. DO NOT raise the 2.5% risk cap -- the added capital solved it the right way; revisit only if clean candidates are still being blocked at this equity level.",
       "watchlist_impact": "NVDA (~$119) and PLTR (~$144) now sit inside the $153 risk-based cap as well as the old 10% baseline, so both are genuinely tradeable on a live contract re-check rather than theoretically promoted. Still priced out at this equity: HOOD/MSTR/COIN/GOOGL/TSLA/AAPL/SPCX."
+    },
+    {
+      "date": "2026-07-30T14:02Z",
+      "signal": "New session 07-30. MAJOR REGIME REVERSAL: QQQ +2.97% (661.73 -> 681.39) after falling ~8% over two weeks. Note 07-29 closed at 661.73, sharply below the 676.23 seen at 18:43 that day -- the late-session collapse validated standing down. CALL side live, PUT side blocked. 9 call triggers; crypto miners exploded (IREN +26.72%, CLSK +21.10%, MARA +18.81%).",
+      "status": "ENTERED HIMS $28C 08-07 x1 @0.85. PUT side reported explicitly per TWO_SIDED_REPORTING: NFLX -3.89% and DKNG -3.22% both triggered but are blocked by the regime gate (and DKNG has 08-06 earnings).",
+      "earnings_gate_process_fix": "Ran the earnings check EXPLICITLY per candidate name this pass -- the direct fix for the 07-28 IONQ error where I asserted 'earnings-clear' from a query whose filter list omitted IONQ. Result: MARA/IONQ/QBTS/RGTI/DKNG all report 08-05..08-06 (blocked for an 08-07 expiry), and RIVN reports TONIGHT 07-30 pm. Six names removed by earnings alone.",
+      "leverage_check_first_real_save": "SOFI $16.50C had the best book of the day (4.3% spread, OI 4863, volume 1656, only $24) and would have looked like an obvious take. The mandatory leverage check killed it: 0.297 x 15.71 / 0.235 = 19.9x, so the 35% stop equalled a 1.76% SOFI move -- BELOW the 2.5% floor. Cheap far-OTM contracts carry enormous leverage, so a v1.1-compliant-looking stop can still be a v1.0-style noise stop. First time this check independently rejected a candidate that every other gate passed.",
+      "extension_applied_prospectively": "CLSK (+21.10%, $16C, 8.3% spread) and IREN (+26.72%) both cleared spread/delta/earnings and were REJECTED on extension. Rationale given to the user with the supporting split: gap-chases lost 4 times (SMCI +25% -13.08, RGTI +10% -9.02, MARA -20.12/-8.08) while moderate-momentum calls won (07-21 MARA +3.5% and TQQQ +4.4%, both +18.92). CLSK's 35% stop equals a 3.5% move on a name that just moved 21% -- clears the generic floor but is far inside its practical noise band. FLAG FOR NEXT REVIEW: the 2.5% leverage floor is a fixed constant and does not scale with a name's realized daily range; consider making it ATR-relative."
     }
   ],
   "watchlist": {
