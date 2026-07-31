@@ -7,69 +7,28 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-07-30T19:52:00Z",
+  "last_updated_utc": "2026-07-31T13:40:30Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 2656.8,
-    "cash_approx": 2555.8,
+    "equity_approx": 2723.74,
+    "cash_approx": 2723.74,
     "buying_power": 2555.8,
-    "note": "Four deposits to date: +$500 07-20, ~$490 07-24, +$500 07-29, +$515 07-30. Total value $2,656.80 (cash $2,555.80 + HIMS $28C ~$101). Lifetime realized +199.50 over 21 closes. v1.1 sizing: 2.5% risk = $66.42 => max position ~$190 at the 35% stop; 10% hard cap $265.68.",
+    "note": "Four deposits to date (+$500 07-20, ~$490 07-24, +$500 07-29, +$515 07-30). Account FLAT 2026-07-31T13:39Z after closing HIMS $28C for +82.94. Cash/total $2,723.74. Lifetime realized +282.44 over 22 closes. v1.1 sizing at this equity: 2.5% risk = $68.09 => max position ~$195; 10% hard cap $272.37.",
     "sizing": {
-      "baseline_10pct": 265.68,
+      "baseline_10pct": 272.37,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
       "exception_retires_at_equity": 1100,
       "v1_1_risk_based": {
         "max_risk_per_trade_pct": 2.5,
-        "max_risk_per_trade_usd": 66.42,
+        "max_risk_per_trade_usd": 68.09,
         "stop_width_pct": 35,
-        "max_position_usd": 189.77,
-        "hard_position_cap_usd": 265.68,
-        "note": "Recomputed at $2,656.80 total (cash 2555.80 + HIMS position ~101) after the 4th deposit, 2026-07-30 ~19:52 UTC."
+        "max_position_usd": 194.55,
+        "hard_position_cap_usd": 272.37,
+        "note": "Recomputed at $2,723.74 after the HIMS close."
       }
     }
   },
-  "open_positions": [
-    {
-      "symbol": "HIMS",
-      "contract": "HIMS $28.00C 2026-08-07",
-      "qty": 1,
-      "entry_price": 0.85,
-      "entry_utc": "2026-07-30T14:02:43Z",
-      "hwm": 1.11,
-      "hwm_direction": "call (favorable = price rises as HIMS rises)",
-      "trail_pct": 35,
-      "management": "trail-only (1-lot), v1.1 35% width",
-      "resting_stop_order_id": "6a6b9a56-564e-4a50-870b-8ff35ea24a30",
-      "stop_trigger": 0.72,
-      "stop_limit": 0.65,
-      "stop_qty": 1,
-      "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": 17.6,
-      "leverage_check": "0.354 x 26.36 / 0.85 = 11.0x; 35% stop = 3.2% underlying, clears the 2.5% floor.",
-      "sizing_note": "$85 position, $30 risk = 1.4% of equity ($2,140.84). Well inside the $53.52 / 2.5% cap -- no override needed, first entry since the deposit where sizing was not a constraint.",
-      "cluster_note": "idiosyncratic. Only open position.",
-      "selection_rationale": "Chosen over CLSK +21.10% and IREN +26.72% on EXTENSION grounds. Both bigger movers passed spread/delta/earnings but match the gap-chase shape that produced 4 losses (SMCI, RGTI, MARA x2). HIMS +5.44% matches the magnitude profile of the 07-21 winners instead. This is the first time the extension concern has been applied as a deliberate selection criterion rather than logged as a regret.",
-      "known_weakness": "OI 192 / volume 50 -- thin book. Exit liquidity is the main risk, same failure mode CLSK exhibited on 07-29 when its spread went 5.9% -> 42.7% in 15 minutes.",
-      "profit_plan": "35% trail cannot lock a gain until HWM > ~1.31 (+54%). Discretionary take-profit is PRIMARY: surface at >=+40% (1.19), and on any stall after +25% (1.06).",
-      "ratchet_history": [
-        {
-          "utc": "2026-07-30T14:02:53Z",
-          "hwm": 0.85,
-          "stop": 0.55,
-          "limit": 0.51,
-          "note": "initial broker stop 35% below 0.85 fill (v1.1 width)"
-        },
-        {
-          "utc": "2026-07-30T18:39:18Z",
-          "hwm": 1.11,
-          "stop": 0.72,
-          "limit": 0.65,
-          "note": "new high 1.11 (+30.6% on mark). 35% v1.1 trail off HWM (1.11 x 0.65 = 0.7215 -> 0.72). Risk cut from $30 (1.4% equity) to $13 (0.6%). Still below the 0.85 entry -- profit lock needs HWM > ~1.31 (+54%). Limit set 7c under the trigger (wider than usual) BECAUSE of the 19.8% spread: a tight limit risks not filling on a thin book. Old order 6a6b598d cancelled+confirmed first."
-        }
-      ],
-      "spread_watch": "Spread round-tripped 8.6% (entry) -> 19.8% (18:38) -> 8.0% now (bid0.96/ask1.04), volume 50 -> 162. Exit liquidity is currently GOOD. Thin-book risk is intermittent, not permanent -- it comes and goes with volume."
-    }
-  ],
+  "open_positions": [],
   "open_positions_ARCHIVE_2026-07-24": [
     {
       "symbol": "RIVN",
@@ -144,18 +103,7 @@
     }
   ],
   "exception_slot": "FREE (account flat)",
-  "resting_stop_orders": [
-    {
-      "order_id": "6a6b598d-a0cc-42db-b917-5458f5f0e44d",
-      "symbol": "HIMS",
-      "type": "stop_limit",
-      "stop": 0.55,
-      "limit": 0.51,
-      "qty": 1,
-      "gtc": true,
-      "state": "confirmed (resting)"
-    }
-  ],
+  "resting_stop_orders": [],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
@@ -167,7 +115,8 @@
     "2026-07-24": -16.02,
     "2026-07-27": -9.02,
     "2026-07-28": -7.08,
-    "2026-07-29": 106.9
+    "2026-07-29": 106.9,
+    "2026-07-31": 82.94
   },
   "session_stats": {
     "trades_total": 33,
@@ -182,8 +131,8 @@
       "count": 3,
       "pnl_vs_plan": -12.0
     },
-    "open_positions_count": 1,
-    "lifetime_realized": 199.5
+    "open_positions_count": 0,
+    "lifetime_realized": 282.44
   },
   "logged_signals": [
     {
@@ -569,6 +518,14 @@
       "status": "Recomputed v1.1 risk-based sizing ONLY -- no rule parameters touched, just the dollar amounts the percentages resolve to. 2.5% risk cap $53.52 -> $66.42; max position at the 35% stop $152.92 -> $189.77; 10% hard cap $214.08 -> $265.68. Freeze-safe.",
       "sizing_tension_now_fully_resolved": "The v1.1 sizing constraint logged 07-28 is now effectively gone. History: at $1,534 equity the cap was ~$110 and forced a disclosed 3.1% override on the IREN entry; at $1,640 it was ~$117 and blocked IREN $28P ($165) and $31P ($181) outright; at $2,657 the cap is ~$190 and BOTH now fit (2.2% and 2.4% risk). NVDA (~$119) and PLTR (~$144) also fit comfortably at 1.6% and 1.9%. EXPLICIT WARNING TO FUTURE SELF: the 2.5% risk cap has NOT been raised and must not be. Four deposits in eleven days have solved every sizing complaint by adding equity rather than loosening risk. That is the correct direction, but it also means the cap has never actually been stress-tested against a shrinking account. If equity ever falls materially, the cap will bind hard again and the honest response is fewer tradeable days, not a higher percentage.",
       "position_note": "HIMS $28C unaffected -- still 1 lot @0.85, mark ~1.085 (+27.6%), bid 1.03 (+21.2% realizable), stop 0.72/0.65 resting. Take-profit/hold decision was surfaced to the user with the stop-limit gap-risk caveat; no reply before the deposit message, so the position rides overnight by default under the existing stop."
+    },
+    {
+      "date": "2026-07-31T13:39Z",
+      "signal": "New session 07-31. Position poll first: HIMS $28C survived the overnight hold and GAPPED UP. HIMS 27.04 close -> 28.645 (+5.93%), now ITM above the 28 strike. Option 0.85 -> 1.815 mark (+113.5%), bid 1.70. QQQ +1.59% extending the prior day's +3% rally.",
+      "status": "RATCHETED stop 0.72/0.65 -> 1.45/1.28 first (protection before deliberation), then CLOSED at 1.68 on user confirmation. REALIZED +82.94 (+97.6% on premium). Day 07-31 realized +82.94. Lifetime realized +282.44. Account FLAT, cash $2,723.74.",
+      "overnight_decision_credit": "The hold was the USER'S call, not the agent's. On 07-30 the agent surfaced the take-profit trigger at +17.6% and explicitly warned that a stop-LIMIT does not protect against a gap down. User chose to hold; it gapped UP. Recording this accurately rather than absorbing the credit -- the agent's recommendation was to hold too, but the decision and the risk were the user's.",
+      "rule_deviation_flagged": "The 1.45/1.28 protective ratchet was again TIGHTER than the v1.1 35% trail (which would have been 1.18, locking only $33 of an available $85). Same deliberate deviation as the IREN trade on 07-29, flagged at the time and rendered moot by the close 90 seconds later. Two instances now: when a position spikes far past +40%, the 35% trail is too loose to protect the gain, and the agent has twice overridden it toward a tighter stop. THIS IS A PATTERN, NOT A ONE-OFF -- it should become an explicit rule at the next review (e.g. above +60% unrealized, trail width tightens to 15-20%) rather than continuing as a repeated judgment call.",
+      "thin_book_was_the_deciding_factor": "Volume only 14 contracts on 07-31, OI 237, spread 12.7%. One lot exited cleanly against a 186-size bid, but a reversal would have left no meaningful bid. The same thin-book weakness flagged at entry and observed intraday on 07-30 (spread 8.6% -> 19.8% -> 8.0%) is what tipped the recommendation to close rather than ride a strong trend. FLAG STILL OPEN for next review: a hard liquidity floor (OI >= 500 AND volume >= 200) would have blocked this entry -- and it would have blocked a +82.94 winner. That is the honest tension and it argues for treating liquidity as a SIZING input rather than a binary gate."
     }
   ],
   "watchlist": {
