@@ -7,24 +7,24 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-07-30T18:46:00Z",
+  "last_updated_utc": "2026-07-30T19:52:00Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 2140.84,
-    "cash_approx": 2140.84,
-    "buying_power": 2140.84,
-    "note": "Three deposits to date: +$500 07-20, ~$490 07-24, +$500 07-29 (post-close, cash-only). Account FLAT at $2,140.84, all cash. Lifetime realized +199.50 across 21 closes. v1.1 sizing at new equity: 2.5% risk = $53.52 => max position ~$153 at the 35% stop; 10% hard cap $214.",
+    "equity_approx": 2656.8,
+    "cash_approx": 2555.8,
+    "buying_power": 2555.8,
+    "note": "Four deposits to date: +$500 07-20, ~$490 07-24, +$500 07-29, +$515 07-30. Total value $2,656.80 (cash $2,555.80 + HIMS $28C ~$101). Lifetime realized +199.50 over 21 closes. v1.1 sizing: 2.5% risk = $66.42 => max position ~$190 at the 35% stop; 10% hard cap $265.68.",
     "sizing": {
-      "baseline_10pct": 214.08,
+      "baseline_10pct": 265.68,
       "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
       "exception_retires_at_equity": 1100,
       "v1_1_risk_based": {
         "max_risk_per_trade_pct": 2.5,
-        "max_risk_per_trade_usd": 53.52,
+        "max_risk_per_trade_usd": 66.42,
         "stop_width_pct": 35,
-        "max_position_usd": 152.92,
-        "hard_position_cap_usd": 214.08,
-        "note": "Recomputed at $2,140.84 equity after the 2026-07-29 deposit (+$500, cash-only)."
+        "max_position_usd": 189.77,
+        "hard_position_cap_usd": 265.68,
+        "note": "Recomputed at $2,656.80 total (cash 2555.80 + HIMS position ~101) after the 4th deposit, 2026-07-30 ~19:52 UTC."
       }
     }
   },
@@ -562,6 +562,13 @@
       "status": "USER CHOSE TO HOLD. No action taken. Stop 0.72/0.65 resting, risk capped at $13. Position carries overnight unless closed before 20:00.",
       "redeploy_analysis": "Recommended AGAINST selling-to-redeploy, grounded rather than assumed. Checked every alternative live: SOFI $16.50C -- SOFI now +5.90% with an excellent book (OI 4863, volume 6744, 5.6% spread) but leverage 0.414 x 16.15 / 0.36 = 18.6x means a 35% stop = 1.88% move, still under the 2.5% floor, REJECTED AGAIN for the same reason as the morning scan. TQQQ $66C spread 10.9%, still fails. NFLX recovered to -0.97%, no longer triggers. DKNG -4.93% blocked by regime (calls-only) plus 08-06 earnings. CLSK/IREN extension-rejected and both still drifting lower. MARA/IONQ/QBTS/RGTI/RIVN earnings-blocked. CONCLUSION: selling to redeploy would cost ~8% exit spread + ~8-11% entry spread = 16-19% round-trip friction, to buy something that does not currently pass gates, with ~30 minutes to the 19:15 cutoff. Worst of the available options.",
       "note": "Second consecutive session where the leverage check independently rejected SOFI despite it having the best order book on the board. Cheap near-money contracts on a low-priced underlying systematically carry 17-20x leverage, which makes the 35% premium stop equal a ~2% underlying move. If SOFI keeps qualifying on every other gate and failing only on leverage, the honest options are (a) accept SOFI is untradeable under v1.1, or (b) size it with a wider stop as a deliberate exception. Do NOT quietly lower the floor. Flag for the next review alongside the ATR-relative floor question."
+    },
+    {
+      "date": "2026-07-30T19:52Z",
+      "signal": "User FYI: added capital again (4th deposit). get_portfolio confirms total $2,656.80 -- cash $2,555.80 plus the open HIMS $28C valued ~$101. Up ~$515 from the $2,140.84 figure recorded this morning. Deposit landed ~8 minutes before the 20:00 close and well past the 19:15 entry cutoff, so zero effect on today's trading.",
+      "status": "Recomputed v1.1 risk-based sizing ONLY -- no rule parameters touched, just the dollar amounts the percentages resolve to. 2.5% risk cap $53.52 -> $66.42; max position at the 35% stop $152.92 -> $189.77; 10% hard cap $214.08 -> $265.68. Freeze-safe.",
+      "sizing_tension_now_fully_resolved": "The v1.1 sizing constraint logged 07-28 is now effectively gone. History: at $1,534 equity the cap was ~$110 and forced a disclosed 3.1% override on the IREN entry; at $1,640 it was ~$117 and blocked IREN $28P ($165) and $31P ($181) outright; at $2,657 the cap is ~$190 and BOTH now fit (2.2% and 2.4% risk). NVDA (~$119) and PLTR (~$144) also fit comfortably at 1.6% and 1.9%. EXPLICIT WARNING TO FUTURE SELF: the 2.5% risk cap has NOT been raised and must not be. Four deposits in eleven days have solved every sizing complaint by adding equity rather than loosening risk. That is the correct direction, but it also means the cap has never actually been stress-tested against a shrinking account. If equity ever falls materially, the cap will bind hard again and the honest response is fewer tradeable days, not a higher percentage.",
+      "position_note": "HIMS $28C unaffected -- still 1 lot @0.85, mark ~1.085 (+27.6%), bid 1.03 (+21.2% realizable), stop 0.72/0.65 resting. Take-profit/hold decision was surfaced to the user with the stop-limit gap-risk caveat; no reply before the deposit message, so the position rides overnight by default under the existing stop."
     }
   ],
   "watchlist": {
