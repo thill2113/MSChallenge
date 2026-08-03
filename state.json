@@ -7,7 +7,7 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-08-03T16:35:30Z",
+  "last_updated_utc": "2026-08-03T17:11:30Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 2725.44,
@@ -35,16 +35,16 @@
       "qty": 1,
       "entry_price": 0.75,
       "entry_utc": "2026-08-03T14:00:49Z",
-      "hwm": 1.035,
+      "hwm": 1.15,
       "hwm_direction": "call (favorable = price rises as SOFI rises)",
       "trail_pct": 35,
       "management": "trail-only (1-lot), v1.1 35% width",
-      "resting_stop_order_id": "6a70c349-f25e-493a-a60e-be115332d3cb",
-      "stop_trigger": 0.67,
-      "stop_limit": 0.63,
+      "resting_stop_order_id": "6a70cbbd-cd73-4ba0-ab2b-33cb6339a81b",
+      "stop_trigger": 0.75,
+      "stop_limit": 0.7,
       "stop_qty": 1,
       "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": 38.0,
+      "unrealized_pct_at_last_check": 53.3,
       "leverage_check": "0.567 x 17.165 / 0.75 = 13.0x; 35% stop = 2.70% underlying. Clears the 2.5% floor but is the TIGHTEST of any v1.1 entry -- SOFI moved 5.2% today, so 2.70% is roughly half a daily range. Watch for a noise stop-out.",
       "sizing_note": "$75 position, $26 risk = 1.0% of equity ($2,725.44). Smallest risk of any v1.1 entry; cap is $68.14.",
       "cluster_note": "idiosyncratic. Only open position.",
@@ -71,6 +71,13 @@
           "stop": 0.67,
           "limit": 0.63,
           "note": "new high 1.035 (+38%), spread 2.9% -- real move. 35% trail off HWM (1.035x0.65=0.673->0.67). Risk cut from $12 to $4. APPROACHING SPIKE_PROFIT_CAPTURE (+40% threshold) -- will surface take-profit review next check if it clears 1.05 or stalls. Old order 6a70aca9 cancelled+confirmed first."
+        },
+        {
+          "utc": "2026-08-03T17:11:25Z",
+          "hwm": 1.15,
+          "stop": 0.75,
+          "limit": 0.7,
+          "note": "CLEARED +40% SPIKE_PROFIT_CAPTURE THRESHOLD. New high 1.15 (+53.3%), spread 3.5%. 35% trail off HWM (1.15x0.65=0.7475->0.75). FIRST RATCHET THAT LOCKS A PROFIT on this position: stop 0.75 > 0.75 entry... actually exactly at entry (0.75 stop vs 0.75 entry) -- floor is breakeven-plus (fees), not yet a real locked gain, but no longer any downside risk. Old order 6a70c349 cancelled+confirmed first."
         }
       ]
     },
