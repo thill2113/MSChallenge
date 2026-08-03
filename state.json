@@ -7,7 +7,7 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-08-03T17:11:30Z",
+  "last_updated_utc": "2026-08-03T19:23:45Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 2725.44,
@@ -30,58 +30,6 @@
   },
   "open_positions": [
     {
-      "symbol": "SOFI",
-      "contract": "SOFI $17.00C 2026-08-14",
-      "qty": 1,
-      "entry_price": 0.75,
-      "entry_utc": "2026-08-03T14:00:49Z",
-      "hwm": 1.15,
-      "hwm_direction": "call (favorable = price rises as SOFI rises)",
-      "trail_pct": 35,
-      "management": "trail-only (1-lot), v1.1 35% width",
-      "resting_stop_order_id": "6a70cbbd-cd73-4ba0-ab2b-33cb6339a81b",
-      "stop_trigger": 0.75,
-      "stop_limit": 0.7,
-      "stop_qty": 1,
-      "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": 53.3,
-      "leverage_check": "0.567 x 17.165 / 0.75 = 13.0x; 35% stop = 2.70% underlying. Clears the 2.5% floor but is the TIGHTEST of any v1.1 entry -- SOFI moved 5.2% today, so 2.70% is roughly half a daily range. Watch for a noise stop-out.",
-      "sizing_note": "$75 position, $26 risk = 1.0% of equity ($2,725.44). Smallest risk of any v1.1 entry; cap is $68.14.",
-      "cluster_note": "idiosyncratic. Only open position.",
-      "selection_rationale": "Chosen over IREN $44C purely on LIQUIDITY: SOFI OI 5750/vol 3642 with a 2.7% spread vs IREN OI 536/vol 121 with a 9.3% spread. Thin books are the campaign's most recurring execution failure (HIMS, CLSK, IONQ). Also 1/3 the IV (53% vs 135%), half the theta (4.1%/day vs 8.5%), and 1/3 the risk. Tradeoff accepted: ITM delta 0.567 means less convexity than IREN's 0.326.",
-      "profit_plan": "35% trail cannot lock a gain until HWM > ~1.15 (+54%). Discretionary take-profit is PRIMARY: surface at >=+40% (1.05), and on any stall after +25% (0.94).",
-      "ratchet_history": [
-        {
-          "utc": "2026-08-03T14:01:02Z",
-          "hwm": 0.75,
-          "stop": 0.49,
-          "limit": 0.45,
-          "note": "initial broker stop 35% below 0.75 fill (v1.1 width)"
-        },
-        {
-          "utc": "2026-08-03T14:58:49Z",
-          "hwm": 0.84,
-          "stop": 0.55,
-          "limit": 0.51,
-          "note": "new high 0.84 (+12%), spread only 2.4% so the move is well outside noise. 35% trail off HWM (0.84x0.65=0.546->0.55). Risk cut from $26 to $12. Old order 6a709f1e cancelled+confirmed first."
-        },
-        {
-          "utc": "2026-08-03T16:35:21Z",
-          "hwm": 1.035,
-          "stop": 0.67,
-          "limit": 0.63,
-          "note": "new high 1.035 (+38%), spread 2.9% -- real move. 35% trail off HWM (1.035x0.65=0.673->0.67). Risk cut from $12 to $4. APPROACHING SPIKE_PROFIT_CAPTURE (+40% threshold) -- will surface take-profit review next check if it clears 1.05 or stalls. Old order 6a70aca9 cancelled+confirmed first."
-        },
-        {
-          "utc": "2026-08-03T17:11:25Z",
-          "hwm": 1.15,
-          "stop": 0.75,
-          "limit": 0.7,
-          "note": "CLEARED +40% SPIKE_PROFIT_CAPTURE THRESHOLD. New high 1.15 (+53.3%), spread 3.5%. 35% trail off HWM (1.15x0.65=0.7475->0.75). FIRST RATCHET THAT LOCKS A PROFIT on this position: stop 0.75 > 0.75 entry... actually exactly at entry (0.75 stop vs 0.75 entry) -- floor is breakeven-plus (fees), not yet a real locked gain, but no longer any downside risk. Old order 6a70c349 cancelled+confirmed first."
-        }
-      ]
-    },
-    {
       "symbol": "IREN",
       "contract": "IREN $44.00C 2026-08-14",
       "qty": 1,
@@ -91,12 +39,12 @@
       "hwm_direction": "call (favorable = price rises as IREN rises)",
       "trail_pct": 35,
       "management": "trail-only (1-lot), v1.1 35% width",
-      "resting_stop_order_id": "6a70a3f9-9f10-4ff5-b9a4-908dac87fbda",
-      "stop_trigger": 1.22,
-      "stop_limit": 1.12,
+      "resting_stop_order_id": "6a70eabc-86d9-4c0b-bd03-7cb78012d011",
+      "stop_trigger": 1.34,
+      "stop_limit": 1.24,
       "stop_qty": 1,
       "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": -2.1,
+      "unrealized_pct_at_last_check": 2.1,
       "leverage_check": "0.341 x 38.61 / 1.88 = 7.00x; 35% stop = 5.00% underlying. Roomiest stop of any v1.1 entry, ~2x SOFI's 2.70%.",
       "sizing_note": "$188 position, $66 risk = 2.4% of equity. Just inside the $68.14 cap. Price rose between recommendation and fill (mark 1.755 -> 1.845), pushing cost from ~$180 to $188 and risk from $63 to $66 -- disclosed to the user, not absorbed silently.",
       "cluster_note": "crypto_beta. Paired with SOFI (idiosyncratic) -- clusters deliberately diversified. 2 of max 3 positions.",
@@ -115,6 +63,13 @@
           "utc": "2026-08-03T16:35:30Z",
           "hwm": 2.06,
           "note": "RECORD-KEEPING CORRECTION, no order change. User reported IREN touched 2.06 intraday (+9.6%) between the two prior checks, which the agent did not observe live and did not ratchet -- stop remained 1.22/1.12. Position then fell to mark 1.66 (-11.7%) and has since recovered to 1.84 (-2.1%), still below the 2.06 peak, so current price does NOT constitute a new high -- no ratchet fired this pass. HWM updated to 2.06 to reflect the true observed peak rather than the stale 1.88. Stop unchanged at 1.22/1.12; a ratchet off the real 2.06 peak would have been ~1.34, i.e. ~$12 of protection was not locked in due to the monitoring gap."
+        },
+        {
+          "utc": "2026-08-03T19:23:40Z",
+          "hwm": 2.06,
+          "stop": 1.34,
+          "limit": 1.24,
+          "note": "User cancelled the prior stop intending to sell, then asked for a hold/sell recommendation instead. Recommended HOLD (IREN stock +8.6% new intraday high, delta 0.367, IV still elevated, small existing gain). SELF-CAUGHT ERROR: first replacement attempt re-used the OLD 1.22/1.12 levels (matching the original entry-based stop) instead of recalculating a proper 35% trail off the corrected 2.06 true peak -- caught and fixed within the same turn before reporting completion. Correct stop 1.34/1.24 = 35% below the true HWM of 2.06."
         }
       ]
     }
@@ -195,16 +150,6 @@
   "exception_slot": "FREE (account flat)",
   "resting_stop_orders": [
     {
-      "order_id": "6a709f1e-5b80-4e98-abfb-abfdda0078a2",
-      "symbol": "SOFI",
-      "type": "stop_limit",
-      "stop": 0.49,
-      "limit": 0.45,
-      "qty": 1,
-      "gtc": true,
-      "state": "confirmed (resting)"
-    },
-    {
       "order_id": "6a70a3f9-9f10-4ff5-b9a4-908dac87fbda",
       "symbol": "IREN",
       "type": "stop_limit",
@@ -227,7 +172,8 @@
     "2026-07-27": -9.02,
     "2026-07-28": -7.08,
     "2026-07-29": 106.9,
-    "2026-07-31": 82.94
+    "2026-07-31": 82.94,
+    "2026-08-03": 38.0
   },
   "session_stats": {
     "trades_total": 33,
@@ -242,8 +188,8 @@
       "count": 3,
       "pnl_vs_plan": -12.0
     },
-    "open_positions_count": 2,
-    "lifetime_realized": 282.44
+    "open_positions_count": 1,
+    "lifetime_realized": 320.44
   },
   "logged_signals": [
     {
@@ -652,6 +598,14 @@
       "requote_discipline_worked_again": "Between the user's 'Go' and execution the $44C spread blew out to 11.6% -- over the gate. Did NOT place on that print. Re-quoted 13 seconds later, found 6.0%, and placed. This is the FIFTH instance of a recommendation widening at the moment of confirmation (IONQ 07-28, CLSK $11.50P and $12P 07-29, IREN today). In four of those the re-check correctly blocked a bad fill; here it correctly permitted a good one. The discipline is not merely conservative -- it discriminates.",
       "honest_slippage_disclosure": "The recommendation was priced at ~$180 / $63 risk; the fill was $188 / $66 risk because IREN kept rising during the exchange. Reported to the user at execution rather than quietly booked. Still inside the 2.5% cap.",
       "risk_note": "IREN is the higher-maintenance of the two: theta 8.2%/day vs SOFI 4.1%, IV 136% vs 54%, book ~1/10th as deep. Its 5.00% effective stop is the roomiest of any v1.1 entry, which partly offsets the thin book -- but it needs to work quickly."
+    },
+    {
+      "date": "2026-08-03T19:23Z",
+      "signal": "User: 'I sold SOFI. Where would it be if I kept holding? For IREN we missed a ratchet again and I cancelled the stop because I was going to sell. Recommend hold or sell IREN; if hold, place a stop.'",
+      "status": "RECONCILED: SOFI was sold by the USER directly (placed_agent=user) at 17:15:03, filled 1.13, realized +38.00 (+50.7%), ~4min after the agent's breakeven ratchet to 0.75/0.70. Confirmed via get_option_orders rather than assumed.",
+      "sofi_counterfactual": "At check time (19:22) SOFI mark was 1.195 / bid 1.18 -- holding would be worth ~+43 to +45, about $5-7 more than the $38 taken. Small, not a meaningful miss; user exited into strength with the stop already at breakeven.",
+      "iren_recommendation": "HOLD recommended and taken. IREN stock +8.6% on the day, new intraday high $39.95 (vs $38.61 entry-day print), delta 0.367 with IV 123% still elevated -- thesis intact, not deteriorating. Position was UNPROTECTED (stop cancelled, nothing resting) between the user's cancel and this check -- placed a fresh stop immediately as part of the same action, independent of the hold/sell discussion, since a naked options position is not acceptable to leave open even briefly.",
+      "self_caught_error": "First stop replacement attempt used 1.22/1.12 -- the ORIGINAL entry-based stop level -- instead of a proper 35% trail off the corrected true HWM of 2.06. Caught and corrected within the same turn (cancelled, replaced with 1.34/1.24) before reporting the action as complete. Root cause: pattern-matched the prior stop numbers instead of recalculating from state.json's corrected HWM field. Lesson: after any HWM correction, the NEXT stop placement must explicitly recompute from the corrected value, not copy the last order's numbers."
     }
   ],
   "watchlist": {
