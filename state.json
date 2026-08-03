@@ -7,11 +7,11 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-07-31T13:40:30Z",
+  "last_updated_utc": "2026-08-03T14:01:10Z",
   "account": {
     "number_masked": "****4177",
-    "equity_approx": 2723.74,
-    "cash_approx": 2723.74,
+    "equity_approx": 2725.44,
+    "cash_approx": 2650.44,
     "buying_power": 2555.8,
     "note": "Four deposits to date (+$500 07-20, ~$490 07-24, +$500 07-29, +$515 07-30). Account FLAT 2026-07-31T13:39Z after closing HIMS $28C for +82.94. Cash/total $2,723.74. Lifetime realized +282.44 over 22 closes. v1.1 sizing at this equity: 2.5% risk = $68.09 => max position ~$195; 10% hard cap $272.37.",
     "sizing": {
@@ -28,7 +28,39 @@
       }
     }
   },
-  "open_positions": [],
+  "open_positions": [
+    {
+      "symbol": "SOFI",
+      "contract": "SOFI $17.00C 2026-08-14",
+      "qty": 1,
+      "entry_price": 0.75,
+      "entry_utc": "2026-08-03T14:00:49Z",
+      "hwm": 0.75,
+      "hwm_direction": "call (favorable = price rises as SOFI rises)",
+      "trail_pct": 35,
+      "management": "trail-only (1-lot), v1.1 35% width",
+      "resting_stop_order_id": "6a709f1e-5b80-4e98-abfb-abfdda0078a2",
+      "stop_trigger": 0.49,
+      "stop_limit": 0.45,
+      "stop_qty": 1,
+      "stop_order_state": "confirmed (GTC resting)",
+      "unrealized_pct_at_last_check": 0,
+      "leverage_check": "0.567 x 17.165 / 0.75 = 13.0x; 35% stop = 2.70% underlying. Clears the 2.5% floor but is the TIGHTEST of any v1.1 entry -- SOFI moved 5.2% today, so 2.70% is roughly half a daily range. Watch for a noise stop-out.",
+      "sizing_note": "$75 position, $26 risk = 1.0% of equity ($2,725.44). Smallest risk of any v1.1 entry; cap is $68.14.",
+      "cluster_note": "idiosyncratic. Only open position.",
+      "selection_rationale": "Chosen over IREN $44C purely on LIQUIDITY: SOFI OI 5750/vol 3642 with a 2.7% spread vs IREN OI 536/vol 121 with a 9.3% spread. Thin books are the campaign's most recurring execution failure (HIMS, CLSK, IONQ). Also 1/3 the IV (53% vs 135%), half the theta (4.1%/day vs 8.5%), and 1/3 the risk. Tradeoff accepted: ITM delta 0.567 means less convexity than IREN's 0.326.",
+      "profit_plan": "35% trail cannot lock a gain until HWM > ~1.15 (+54%). Discretionary take-profit is PRIMARY: surface at >=+40% (1.05), and on any stall after +25% (0.94).",
+      "ratchet_history": [
+        {
+          "utc": "2026-08-03T14:01:02Z",
+          "hwm": 0.75,
+          "stop": 0.49,
+          "limit": 0.45,
+          "note": "initial broker stop 35% below 0.75 fill (v1.1 width)"
+        }
+      ]
+    }
+  ],
   "open_positions_ARCHIVE_2026-07-24": [
     {
       "symbol": "RIVN",
@@ -103,7 +135,18 @@
     }
   ],
   "exception_slot": "FREE (account flat)",
-  "resting_stop_orders": [],
+  "resting_stop_orders": [
+    {
+      "order_id": "6a709f1e-5b80-4e98-abfb-abfdda0078a2",
+      "symbol": "SOFI",
+      "type": "stop_limit",
+      "stop": 0.49,
+      "limit": 0.45,
+      "qty": 1,
+      "gtc": true,
+      "state": "confirmed (resting)"
+    }
+  ],
   "realized_pnl_by_day": {
     "2026-07-14": 15.68,
     "2026-07-15": -11.08,
@@ -131,7 +174,7 @@
       "count": 3,
       "pnl_vs_plan": -12.0
     },
-    "open_positions_count": 0,
+    "open_positions_count": 1,
     "lifetime_realized": 282.44
   },
   "logged_signals": [
@@ -526,6 +569,13 @@
       "overnight_decision_credit": "The hold was the USER'S call, not the agent's. On 07-30 the agent surfaced the take-profit trigger at +17.6% and explicitly warned that a stop-LIMIT does not protect against a gap down. User chose to hold; it gapped UP. Recording this accurately rather than absorbing the credit -- the agent's recommendation was to hold too, but the decision and the risk were the user's.",
       "rule_deviation_flagged": "The 1.45/1.28 protective ratchet was again TIGHTER than the v1.1 35% trail (which would have been 1.18, locking only $33 of an available $85). Same deliberate deviation as the IREN trade on 07-29, flagged at the time and rendered moot by the close 90 seconds later. Two instances now: when a position spikes far past +40%, the 35% trail is too loose to protect the gain, and the agent has twice overridden it toward a tighter stop. THIS IS A PATTERN, NOT A ONE-OFF -- it should become an explicit rule at the next review (e.g. above +60% unrealized, trail width tightens to 15-20%) rather than continuing as a repeated judgment call.",
       "thin_book_was_the_deciding_factor": "Volume only 14 contracts on 07-31, OI 237, spread 12.7%. One lot exited cleanly against a 186-size bid, but a reversal would have left no meaningful bid. The same thin-book weakness flagged at entry and observed intraday on 07-30 (spread 8.6% -> 19.8% -> 8.0%) is what tipped the recommendation to close rather than ride a strong trend. FLAG STILL OPEN for next review: a hard liquidity floor (OI >= 500 AND volume >= 200) would have blocked this entry -- and it would have blocked a +82.94 winner. That is the honest tension and it argues for treating liquidity as a SIZING input rather than a binary gate."
+    },
+    {
+      "date": "2026-08-03T14:00Z",
+      "signal": "New session 08-03. QQQ +0.55% (CALL side live, marginally). 6 call triggers: HIMS +7.31%, QBTS +6.69%, IONQ +6.52%, SOFI +5.24%, IREN +4.67%, RGTI +4.18%. PUT side reported explicitly per TWO_SIDED_REPORTING: EMPTY -- every watchlist name green, weakest CLSK +1.09%, nothing near -3%, and regime blocks puts anyway.",
+      "status": "ENTERED SOFI $17C 08-14 x1 @0.75. Broker stop 0.49/0.45 GTC confirmed. IREN $44C also qualified and was passed over on liquidity; user said they will rescan IREN shortly.",
+      "EARNINGS_GATE_CAUGHT_THE_TOP_MOVER": "CRITICAL: 08-07 dropped below MIN_DTE 7 today, forcing the 08-14 expiry, which extends the contract life past what my cached earnings file covered (only to 08-08). Pulled a FRESH calendar through 08-15 rather than reusing it -- and HIMS reports 2026-08-10, INSIDE the 08-14 contract life. HIMS was the day's biggest mover (+7.31%) and the stale file showed it clear. Reusing cached earnings data would have put us into a put... into a call straight through an earnings report. This is the same class of error as the 07-28 IONQ mistake and the fresh pull is what prevented it. RULE REINFORCED: when the expiry moves out, the earnings window MUST be re-pulled, not reused.",
+      "sofi_leverage_resolution": "SOFI has now failed the leverage floor on three strikes (07-30 $16.50C 19.9x; today $18C 17.6x; today $17.50C 15.4x) and finally PASSED on the ITM $17C at 13.0x. Confirms the structural finding: leverage = delta x S / premium, so cheap OTM contracts on low-priced underlyings are systematically un-tradeable under a 35%/2.5% stop regime. The remedy is ITM strikes, which raise premium faster than delta. This should be written into the directive as guidance at the next review: for underlyings under ~$40, start the strike search AT-or-IN the money rather than at delta 0.30."
     }
   ],
   "watchlist": {
