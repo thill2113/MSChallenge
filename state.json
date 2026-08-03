@@ -7,7 +7,7 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-08-03T14:22:00Z",
+  "last_updated_utc": "2026-08-03T14:58:55Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 2725.44,
@@ -35,16 +35,16 @@
       "qty": 1,
       "entry_price": 0.75,
       "entry_utc": "2026-08-03T14:00:49Z",
-      "hwm": 0.75,
+      "hwm": 0.84,
       "hwm_direction": "call (favorable = price rises as SOFI rises)",
       "trail_pct": 35,
       "management": "trail-only (1-lot), v1.1 35% width",
-      "resting_stop_order_id": "6a709f1e-5b80-4e98-abfb-abfdda0078a2",
-      "stop_trigger": 0.49,
-      "stop_limit": 0.45,
+      "resting_stop_order_id": "6a70aca9-5921-4f04-8ae3-67ec7b4ea8bc",
+      "stop_trigger": 0.55,
+      "stop_limit": 0.51,
       "stop_qty": 1,
       "stop_order_state": "confirmed (GTC resting)",
-      "unrealized_pct_at_last_check": 0,
+      "unrealized_pct_at_last_check": 12.0,
       "leverage_check": "0.567 x 17.165 / 0.75 = 13.0x; 35% stop = 2.70% underlying. Clears the 2.5% floor but is the TIGHTEST of any v1.1 entry -- SOFI moved 5.2% today, so 2.70% is roughly half a daily range. Watch for a noise stop-out.",
       "sizing_note": "$75 position, $26 risk = 1.0% of equity ($2,725.44). Smallest risk of any v1.1 entry; cap is $68.14.",
       "cluster_note": "idiosyncratic. Only open position.",
@@ -57,6 +57,13 @@
           "stop": 0.49,
           "limit": 0.45,
           "note": "initial broker stop 35% below 0.75 fill (v1.1 width)"
+        },
+        {
+          "utc": "2026-08-03T14:58:49Z",
+          "hwm": 0.84,
+          "stop": 0.55,
+          "limit": 0.51,
+          "note": "new high 0.84 (+12%), spread only 2.4% so the move is well outside noise. 35% trail off HWM (0.84x0.65=0.546->0.55). Risk cut from $26 to $12. Old order 6a709f1e cancelled+confirmed first."
         }
       ]
     },
