@@ -7,11 +7,11 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-08-03T14:01:10Z",
+  "last_updated_utc": "2026-08-03T14:22:00Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 2725.44,
-    "cash_approx": 2650.44,
+    "cash_approx": 2462.44,
     "buying_power": 2555.8,
     "note": "Four deposits to date (+$500 07-20, ~$490 07-24, +$500 07-29, +$515 07-30). Account FLAT 2026-07-31T13:39Z after closing HIMS $28C for +82.94. Cash/total $2,723.74. Lifetime realized +282.44 over 22 closes. v1.1 sizing at this equity: 2.5% risk = $68.09 => max position ~$195; 10% hard cap $272.37.",
     "sizing": {
@@ -57,6 +57,38 @@
           "stop": 0.49,
           "limit": 0.45,
           "note": "initial broker stop 35% below 0.75 fill (v1.1 width)"
+        }
+      ]
+    },
+    {
+      "symbol": "IREN",
+      "contract": "IREN $44.00C 2026-08-14",
+      "qty": 1,
+      "entry_price": 1.88,
+      "entry_utc": "2026-08-03T14:21:31Z",
+      "hwm": 1.88,
+      "hwm_direction": "call (favorable = price rises as IREN rises)",
+      "trail_pct": 35,
+      "management": "trail-only (1-lot), v1.1 35% width",
+      "resting_stop_order_id": "6a70a3f9-9f10-4ff5-b9a4-908dac87fbda",
+      "stop_trigger": 1.22,
+      "stop_limit": 1.12,
+      "stop_qty": 1,
+      "stop_order_state": "confirmed (GTC resting)",
+      "unrealized_pct_at_last_check": 0,
+      "leverage_check": "0.341 x 38.61 / 1.88 = 7.00x; 35% stop = 5.00% underlying. Roomiest stop of any v1.1 entry, ~2x SOFI's 2.70%.",
+      "sizing_note": "$188 position, $66 risk = 2.4% of equity. Just inside the $68.14 cap. Price rose between recommendation and fill (mark 1.755 -> 1.845), pushing cost from ~$180 to $188 and risk from $63 to $66 -- disclosed to the user, not absorbed silently.",
+      "cluster_note": "crypto_beta. Paired with SOFI (idiosyncratic) -- clusters deliberately diversified. 2 of max 3 positions.",
+      "known_weakness": "OI 536 / volume 149, roughly 1/10th SOFI's book. Theta 8.2%/day and IV 136% mean this must work quickly or it bleeds. Highest-maintenance position of the two.",
+      "execution_note": "Spread momentarily blew out to 11.6% between the user's go-ahead and execution; did NOT place on that print. Re-quoted, it tightened to 6.0%, then placed. Fifth time a recommendation has widened at the moment of confirmation -- the re-quote discipline has now prevented four bad fills and permitted this one.",
+      "profit_plan": "35% trail cannot lock a gain until HWM > ~2.89 (+54%). Discretionary take-profit PRIMARY: surface at >=+40% (2.63), and on any stall after +25% (2.35).",
+      "ratchet_history": [
+        {
+          "utc": "2026-08-03T14:21:45Z",
+          "hwm": 1.88,
+          "stop": 1.22,
+          "limit": 1.12,
+          "note": "initial broker stop 35% below 1.88 fill (v1.1 width)"
         }
       ]
     }
@@ -145,6 +177,16 @@
       "qty": 1,
       "gtc": true,
       "state": "confirmed (resting)"
+    },
+    {
+      "order_id": "6a70a3f9-9f10-4ff5-b9a4-908dac87fbda",
+      "symbol": "IREN",
+      "type": "stop_limit",
+      "stop": 1.22,
+      "limit": 1.12,
+      "qty": 1,
+      "gtc": true,
+      "state": "confirmed (resting)"
     }
   ],
   "realized_pnl_by_day": {
@@ -174,7 +216,7 @@
       "count": 3,
       "pnl_vs_plan": -12.0
     },
-    "open_positions_count": 1,
+    "open_positions_count": 2,
     "lifetime_realized": 282.44
   },
   "logged_signals": [
@@ -576,6 +618,14 @@
       "status": "ENTERED SOFI $17C 08-14 x1 @0.75. Broker stop 0.49/0.45 GTC confirmed. IREN $44C also qualified and was passed over on liquidity; user said they will rescan IREN shortly.",
       "EARNINGS_GATE_CAUGHT_THE_TOP_MOVER": "CRITICAL: 08-07 dropped below MIN_DTE 7 today, forcing the 08-14 expiry, which extends the contract life past what my cached earnings file covered (only to 08-08). Pulled a FRESH calendar through 08-15 rather than reusing it -- and HIMS reports 2026-08-10, INSIDE the 08-14 contract life. HIMS was the day's biggest mover (+7.31%) and the stale file showed it clear. Reusing cached earnings data would have put us into a put... into a call straight through an earnings report. This is the same class of error as the 07-28 IONQ mistake and the fresh pull is what prevented it. RULE REINFORCED: when the expiry moves out, the earnings window MUST be re-pulled, not reused.",
       "sofi_leverage_resolution": "SOFI has now failed the leverage floor on three strikes (07-30 $16.50C 19.9x; today $18C 17.6x; today $17.50C 15.4x) and finally PASSED on the ITM $17C at 13.0x. Confirms the structural finding: leverage = delta x S / premium, so cheap OTM contracts on low-priced underlyings are systematically un-tradeable under a 35%/2.5% stop regime. The remedy is ITM strikes, which raise premium faster than delta. This should be written into the directive as guidance at the next review: for underlyings under ~$40, start the strike search AT-or-IN the money rather than at delta 0.30."
+    },
+    {
+      "date": "2026-08-03T14:21Z",
+      "signal": "User requested an IREN rescan after taking SOFI. IREN improved materially in ~20 minutes: +4.67% -> +4.92%, and the $44C spread halved from 9.3% to 5.1%.",
+      "status": "ENTERED IREN $44C 08-14 x1 @1.88. Broker stop 1.22/1.12 GTC confirmed. Portfolio now 2 positions: SOFI $17C (idiosyncratic, $26 risk) + IREN $44C (crypto_beta, $66 risk) = $92 combined risk = 3.4% of equity. Clusters diversified, 2 of max 3 slots.",
+      "requote_discipline_worked_again": "Between the user's 'Go' and execution the $44C spread blew out to 11.6% -- over the gate. Did NOT place on that print. Re-quoted 13 seconds later, found 6.0%, and placed. This is the FIFTH instance of a recommendation widening at the moment of confirmation (IONQ 07-28, CLSK $11.50P and $12P 07-29, IREN today). In four of those the re-check correctly blocked a bad fill; here it correctly permitted a good one. The discipline is not merely conservative -- it discriminates.",
+      "honest_slippage_disclosure": "The recommendation was priced at ~$180 / $63 risk; the fill was $188 / $66 risk because IREN kept rising during the exchange. Reported to the user at execution rather than quietly booked. Still inside the 2.5% cap.",
+      "risk_note": "IREN is the higher-maintenance of the two: theta 8.2%/day vs SOFI 4.1%, IV 136% vs 54%, book ~1/10th as deep. Its 5.00% effective stop is the roomiest of any v1.1 entry, which partly offsets the thin book -- but it needs to work quickly."
     }
   ],
   "watchlist": {
