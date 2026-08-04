@@ -7,12 +7,12 @@
   "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
   "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
  },
- "last_updated_utc": "2026-08-04T15:16:30Z",
+ "last_updated_utc": "2026-08-04T17:32:10Z",
  "account": {
   "number_masked": "****4177",
   "equity_approx": 3317.24,
-  "cash_approx": 3134.24,
-  "buying_power": 2892.3,
+  "cash_approx": 2956.24,
+  "buying_power": 2714.3,
   "note": "Five deposits to date (+$500 07-20, ~$490 07-24, +$500 07-29, +$515 07-30, ~$500 08-04). Portfolio 2026-08-04T15:12Z: total 3317.24 all cash before the APLD entry; $241.94 of the IREN proceeds unsettled until 08-05. Lifetime realized +374.44 over 24 closes. v1.1 sizing at this equity: 2.5% risk = $82.93 => max position $236.94; 10% hard cap $331.72.",
   "sizing": {
    "baseline_10pct": 331.72,
@@ -35,13 +35,13 @@
    "qty": 1,
    "entry_price": 1.83,
    "entry_utc": "2026-08-04T15:16:00Z",
-   "hwm": 1.83,
+   "hwm": 2.055,
    "hwm_direction": "call (favorable = price rises as APLD rises)",
    "trail_pct": 35,
    "management": "v1.1 standard 35% trail off HWM",
-   "resting_stop_order_id": "6a72023b-380b-4e18-9b7a-9b3c02935530",
-   "stop_trigger": 1.19,
-   "stop_limit": 1.09,
+   "resting_stop_order_id": "6a7220fe-c68f-4e1e-85bb-2875f3822c9c",
+   "stop_trigger": 1.34,
+   "stop_limit": 1.24,
    "stop_qty": 1,
    "stop_order_state": "unconfirmed at placement (verify next check)",
    "leverage_check": "0.4656 x 30.96 / 1.83 = 8.03x; 35% stop = 4.36% underlying move. Second-roomiest v1.1 entry after IREN's 5.00%, and comfortably above the 2.5% floor.",
@@ -57,6 +57,45 @@
      "stop": 1.19,
      "limit": 1.09,
      "note": "initial broker stop 35% below the 1.83 fill (v1.1 standard width)"
+    },
+    {
+     "utc": "2026-08-04T17:27:26Z",
+     "hwm": 2.055,
+     "stop": 1.34,
+     "limit": 1.24,
+     "note": "First ratchet. Genuine new high -- mark 2.055 vs the 1.83 entry (+12.3%), APLD stock 31.61 (+7.19%), delta drifted 0.466 -> 0.510 moving ITM. Standard 35% trail off the new HWM. Risk cut $64 -> $49. Does NOT yet lock a gain (1.34 < 1.83 entry); the 35% width cannot protect a profit until HWM > 2.82, the same structural gap the IREN trade exposed, which is why the discretionary take-profit at 2.56 (+40%) stays PRIMARY. Old order 6a72023b cancelled and confirmed with 0 processed; ~40s unprotected between cancel and replace -- unavoidable, the MCP has no atomic replace."
+    }
+   ],
+   "unrealized_pct_at_last_check": 12.3
+  },
+  {
+   "symbol": "RIVN",
+   "contract": "RIVN $15.50C 2026-08-14",
+   "qty": 2,
+   "entry_price": 0.89,
+   "entry_utc": "2026-08-04T17:31:51Z",
+   "hwm": 0.89,
+   "hwm_direction": "call (favorable = price rises as RIVN rises)",
+   "trail_pct": 35,
+   "management": "v1.1 standard 35% trail off HWM",
+   "resting_stop_order_id": "6a722212-94a6-495f-9aa2-58be5b00b2e3",
+   "stop_trigger": 0.58,
+   "stop_limit": 0.53,
+   "stop_qty": 2,
+   "stop_order_state": "unconfirmed at placement (verify next check)",
+   "leverage_check": "0.6163 x 15.89 / 0.89 = 11.00x; 35% stop = 3.18% underlying move. Clears the 2.5% floor but is the TIGHTEST room of any open position -- APLD has 4.36%. Flagged at entry, not discovered later.",
+   "sizing_note": "2 lots at $178 total, $62.30 risk = 1.87% of ~$3,340 equity, inside the 2.5% cap. Chose K=15.50 over K=16.00 (cost $63, 12.8x, 2.73% stop) specifically to buy stop room rather than cheapness.",
+   "cluster_note": "idiosyncratic (EV). Deliberately selected to diversify against APLD's nasdaq_beta/AI-datacenter exposure. 2 of max 3 positions.",
+   "known_weakness": "Spread widened 5.59% -> 7.91% between recommendation and confirmation, with bid depth thinning 93 -> 18 lots. Passed the 8% gate by 0.09pp. Thinnest stop room of the book at 3.18%.",
+   "execution_note": "Seventh pre-confirmation re-quote. Spread widened but stayed inside the gate, so the trade was permitted rather than blocked -- the second time of seven that a widening did not veto. Refused the widened 0.92 ask; limit at 0.89 filled immediately, saving $6.",
+   "profit_plan": "35% trail cannot lock a gain until HWM > ~1.37 (+54%). Discretionary take-profit PRIMARY: surface at >=+40% (1.25), and on any stall after +25% (1.11).",
+   "ratchet_history": [
+    {
+     "utc": "2026-08-04T17:32:02Z",
+     "hwm": 0.89,
+     "stop": 0.58,
+     "limit": 0.53,
+     "note": "initial broker stop 35% below the 0.89 fill (v1.1 standard width)"
     }
    ]
   }
@@ -137,12 +176,22 @@
  "exception_slot": "FREE (account flat)",
  "resting_stop_orders": [
   {
-   "order_id": "6a72023b-380b-4e18-9b7a-9b3c02935530",
+   "order_id": "6a7220fe-c68f-4e1e-85bb-2875f3822c9c",
    "symbol": "APLD",
    "type": "stop_limit",
-   "stop": 1.19,
-   "limit": 1.09,
+   "stop": 1.34,
+   "limit": 1.24,
    "qty": 1,
+   "gtc": true,
+   "state": "unconfirmed at placement (verify next check)"
+  },
+  {
+   "order_id": "6a722212-94a6-495f-9aa2-58be5b00b2e3",
+   "symbol": "RIVN",
+   "type": "stop_limit",
+   "stop": 0.58,
+   "limit": 0.53,
+   "qty": 2,
    "gtc": true,
    "state": "unconfirmed at placement (verify next check)"
   }
@@ -176,7 +225,7 @@
    "count": 3,
    "pnl_vs_plan": -12.0
   },
-  "open_positions_count": 1,
+  "open_positions_count": 2,
   "lifetime_realized": 374.44
  },
  "logged_signals": [
@@ -636,6 +685,14 @@
    "underlying": 41.71,
    "move_pct": 4.93,
    "reason": "Re-entry considered ~35 min after the user closed this exact contract at 2.42. Quality is genuinely good -- spread 4.14%, delta 0.4464, leverage 7.01x, implied stop 4.99%, earnings-clear. Rejected on two counts: the 44C at mark 2.655 costs $266, which is 2.81% risk against the 2.5% cap; and it would mean buying back 24c ABOVE the exit on a name already +4.93% on the day. Sizing breach plus extension risk. Logged rather than silently skipped so the counterfactual can be scored."
+  },
+  {
+   "utc": "2026-08-04T17:27:00Z",
+   "symbol": "MULTI",
+   "side": "both",
+   "action": "SCAN_RESULT",
+   "regime": "QQQ +3.18% -> calls-only",
+   "reason": "TWO_SIDED_REPORTING. Calls: six names triggered +3% but the earnings gate removed four of the six largest movers -- RGTI +9.08% (08-06), QBTS +8.06% (08-06), IONQ +6.83% (08-05), RIOT +3.69% (08-05). TQQQ +9.53% excluded under the new leveraged-ETF pass-only rule written this morning. Survivors: RIVN +3.74% (taken) and IREN +3.70% (rejected on correlation with APLD plus a $239 cost against a $238.55 limit). Puts: CIFR -10.76% and HUT -5.26% are genuine put setups, both blocked by the calls-only regime; HUT also reports today. Worth noting the gate cost us the four biggest movers of the day -- that is the gate working as designed, not a malfunction, but it is the second straight scan where earnings blocked more than it passed."
   }
  ],
  "watchlist": {
