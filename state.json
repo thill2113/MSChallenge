@@ -7,7 +7,7 @@
   "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
   "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
  },
- "last_updated_utc": "2026-08-04T14:20:00Z",
+ "last_updated_utc": "2026-08-04T14:28:30Z",
  "account": {
   "number_masked": "****4177",
   "equity_approx": 2785.3,
@@ -37,14 +37,14 @@
    "entry_utc": "2026-08-03T14:21:31Z",
    "hwm": 2.56,
    "hwm_direction": "call (favorable = price rises as IREN rises)",
-   "trail_pct": 15,
+   "trail_pct": "discretionary (no longer a fixed trail off HWM)",
    "management": "trail-only (1-lot), DEVIATED to 15% width per user request",
-   "resting_stop_order_id": "6a71f141-e615-4bb1-80fc-7165ad4381f8",
-   "stop_trigger": 1.93,
-   "stop_limit": 1.83,
+   "resting_stop_order_id": "6a71f703-74fc-423d-848d-55ff67a4233f",
+   "stop_trigger": 2.05,
+   "stop_limit": 1.95,
    "stop_qty": 1,
    "stop_order_state": "confirmed (GTC resting)",
-   "unrealized_pct_at_last_check": 11.4,
+   "unrealized_pct_at_last_check": 17.0,
    "leverage_check": "0.341 x 38.61 / 1.88 = 7.00x; 35% stop = 5.00% underlying. Roomiest stop of any v1.1 entry, ~2x SOFI's 2.70%.",
    "sizing_note": "$188 position, $66 risk = 2.4% of equity. Just inside the $68.14 cap. Price rose between recommendation and fill (mark 1.755 -> 1.845), pushing cost from ~$180 to $188 and risk from $63 to $66 -- disclosed to the user, not absorbed silently.",
    "cluster_note": "crypto_beta. Paired with SOFI (idiosyncratic) -- clusters deliberately diversified. 2 of max 3 positions.",
@@ -84,6 +84,13 @@
      "stop": 1.93,
      "limit": 1.83,
      "note": "RECORD-KEEPING CORRECTION + USER HOLD DECISION, no order change. User reported IREN's contract peaked at 2.56 near the open (+36% off the 1.88 entry), not the 2.27 the agent had recorded. HWM corrected 2.27 -> 2.56. Consequence: the 15% trail the user asked for on the prior pass should have been 2.176 (2.56*0.85), not 1.93 -- the tighten was executed off a stale peak and is ~24c looser than intended. By the time the true peak was known, mark had fallen to 2.095 / bid 2.02, so the correct 2.18 trigger was ABOVE the live bid and could not be placed as a stop; it would already have fired somewhere near 2.05-2.10. THIRD monitoring-gap give-back on this position (2.06 on 08-03, 2.27 on 08-03, 2.56 on 08-04). Agent recommended SELL at the 2.02 bid (+$14) on three grounds: relative weakness (IREN +1.81% vs QQQ +2.19%), theta -0.1623/day = 7.7% of position value per day against a $21 mark gain, and two demonstrated failures to hold highs. USER OVERRODE: 'Keep iren where it is.' Position held, stop left at 1.93/1.83 unchanged. Decision logged as user discretionary override of an agent sell recommendation -- outcome to be scored on close."
+    },
+    {
+     "utc": "2026-08-04T14:28:19Z",
+     "hwm": 2.56,
+     "stop": 2.05,
+     "limit": 1.95,
+     "note": "USER-REQUESTED RATCHET, executed as a DISCRETIONARY TIGHTEN -- disclosed as such rather than presented as a rule-driven trail move. Under the trailing rule there was nothing to ratchet: mark 2.20 is still 14% below the corrected 2.56 HWM, and a trailing stop only advances on a NEW high. The two mechanical candidates both failed -- 15% off the 2.56 HWM = 2.176, above the 2.13 bid and unplaceable; 15% off the current 2.20 mark = 1.87, LOOSER than the resting 1.93. Moved to 2.05/1.95 instead, 3.8% below the bid (~2 half-spreads), locking +$17 minimum vs the +$5 the 1.93 stop protected. Context at the time: IREN 40.78 (+2.59%) now OUTPACING QQQ (+2.22%), reversing the relative-weakness read that drove the earlier sell recommendation; contract mark recovered 2.02 -> 2.13 bid in ~15 min. Known risk accepted: at IV 125% this name routinely moves >3.8% on noise, so whipsaw probability is materially higher than at 1.93. Justified by revealed preference -- three round-trips from the highs on this position and the user's repeated regret about give-backs. Old order 6a71f141 cancelled and confirmed 'cancelled' with 0 processed before placing."
     }
    ]
   }
@@ -164,15 +171,14 @@
  "exception_slot": "FREE (account flat)",
  "resting_stop_orders": [
   {
-   "order_id": "6a71f141-e615-4bb1-80fc-7165ad4381f8",
+   "order_id": "6a71f703-74fc-423d-848d-55ff67a4233f",
    "symbol": "IREN",
    "type": "stop_limit",
-   "stop": 1.93,
-   "limit": 1.83,
+   "stop": 2.05,
+   "limit": 1.95,
    "qty": 1,
    "gtc": true,
-   "state": "confirmed (resting)",
-   "note": "CORRECTED 2026-08-04: this array had gone stale, still listing the long-cancelled 6a70a3f9 at 1.22/1.12. Live order re-verified against get_option_orders."
+   "state": "unconfirmed at placement (verify next check)"
   }
  ],
  "realized_pnl_by_day": {
