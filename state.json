@@ -7,90 +7,56 @@
   "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
   "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
  },
- "last_updated_utc": "2026-08-04T14:28:30Z",
+ "last_updated_utc": "2026-08-04T15:16:30Z",
  "account": {
   "number_masked": "****4177",
-  "equity_approx": 2785.3,
-  "cash_approx": 2575.3,
-  "buying_power": 2575.3,
-  "note": "Four deposits to date (+$500 07-20, ~$490 07-24, +$500 07-29, +$515 07-30). Portfolio 2026-08-04T14:15Z: total 2785.30, cash 2575.30, options 210.00 (IREN). Lifetime realized +320.44 over 23 closes. v1.1 sizing at this equity: 2.5% risk = $69.63 => max position ~$199; 10% hard cap $278.53.",
+  "equity_approx": 3317.24,
+  "cash_approx": 3134.24,
+  "buying_power": 2892.3,
+  "note": "Five deposits to date (+$500 07-20, ~$490 07-24, +$500 07-29, +$515 07-30, ~$500 08-04). Portfolio 2026-08-04T15:12Z: total 3317.24 all cash before the APLD entry; $241.94 of the IREN proceeds unsettled until 08-05. Lifetime realized +374.44 over 24 closes. v1.1 sizing at this equity: 2.5% risk = $82.93 => max position $236.94; 10% hard cap $331.72.",
   "sizing": {
-   "baseline_10pct": 278.53,
+   "baseline_10pct": 331.72,
    "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
    "exception_retires_at_equity": 1100,
    "v1_1_risk_based": {
     "max_risk_per_trade_pct": 2.5,
-    "max_risk_per_trade_usd": 69.63,
+    "max_risk_per_trade_usd": 82.93,
     "stop_width_pct": 35,
-    "max_position_usd": 198.95,
-    "hard_position_cap_usd": 278.53,
-    "note": "Recomputed at $2,785.30 (2026-08-04 open)."
+    "max_position_usd": 236.94,
+    "hard_position_cap_usd": 331.72,
+    "note": "Recomputed at $3,317.24 after the 08-04 deposit and the IREN close. Leverage ceiling rises with equity: max tradeable underlying now ~$110/share (was ~$91)."
    }
   }
  },
  "open_positions": [
   {
-   "symbol": "IREN",
-   "contract": "IREN $44.00C 2026-08-14",
+   "symbol": "APLD",
+   "contract": "APLD $32.00C 2026-08-14",
    "qty": 1,
-   "entry_price": 1.88,
-   "entry_utc": "2026-08-03T14:21:31Z",
-   "hwm": 2.56,
-   "hwm_direction": "call (favorable = price rises as IREN rises)",
-   "trail_pct": "discretionary (no longer a fixed trail off HWM)",
-   "management": "trail-only (1-lot), DEVIATED to 15% width per user request",
-   "resting_stop_order_id": "6a71f703-74fc-423d-848d-55ff67a4233f",
-   "stop_trigger": 2.05,
-   "stop_limit": 1.95,
+   "entry_price": 1.83,
+   "entry_utc": "2026-08-04T15:16:00Z",
+   "hwm": 1.83,
+   "hwm_direction": "call (favorable = price rises as APLD rises)",
+   "trail_pct": 35,
+   "management": "v1.1 standard 35% trail off HWM",
+   "resting_stop_order_id": "6a72023b-380b-4e18-9b7a-9b3c02935530",
+   "stop_trigger": 1.19,
+   "stop_limit": 1.09,
    "stop_qty": 1,
-   "stop_order_state": "confirmed (GTC resting)",
-   "unrealized_pct_at_last_check": 17.0,
-   "leverage_check": "0.341 x 38.61 / 1.88 = 7.00x; 35% stop = 5.00% underlying. Roomiest stop of any v1.1 entry, ~2x SOFI's 2.70%.",
-   "sizing_note": "$188 position, $66 risk = 2.4% of equity. Just inside the $68.14 cap. Price rose between recommendation and fill (mark 1.755 -> 1.845), pushing cost from ~$180 to $188 and risk from $63 to $66 -- disclosed to the user, not absorbed silently.",
-   "cluster_note": "crypto_beta. Paired with SOFI (idiosyncratic) -- clusters deliberately diversified. 2 of max 3 positions.",
-   "known_weakness": "OI 536 / volume 149, roughly 1/10th SOFI's book. Theta 8.2%/day and IV 136% mean this must work quickly or it bleeds. Highest-maintenance position of the two.",
-   "execution_note": "Spread momentarily blew out to 11.6% between the user's go-ahead and execution; did NOT place on that print. Re-quoted, it tightened to 6.0%, then placed. Fifth time a recommendation has widened at the moment of confirmation -- the re-quote discipline has now prevented four bad fills and permitted this one.",
-   "profit_plan": "35% trail cannot lock a gain until HWM > ~2.89 (+54%). Discretionary take-profit PRIMARY: surface at >=+40% (2.63), and on any stall after +25% (2.35).",
+   "stop_order_state": "unconfirmed at placement (verify next check)",
+   "leverage_check": "0.4656 x 30.96 / 1.83 = 8.03x; 35% stop = 4.36% underlying move. Second-roomiest v1.1 entry after IREN's 5.00%, and comfortably above the 2.5% floor.",
+   "sizing_note": "$183 position, $64.05 risk = 1.93% of $3,317.24 equity, inside the 2.5% cap with room. Max position at this equity is $236.94; hard cap $331.72.",
+   "cluster_note": "nasdaq_beta / AI-datacenter. Sole position -- no correlation conflict.",
+   "known_weakness": "IV 108% and theta -0.1105/day = 6.0% of position value per day. Needs to work inside a few sessions. OI 570 / volume 137 is adequate but not deep. Entered at +4.95% on the day, so some extension risk.",
+   "execution_note": "Sixth re-quote before confirmation, and the first time the spread IMPROVED rather than blew out: 7.87% -> 6.13%. Filled at the 1.83 limit, between mark 1.795 and ask 1.85.",
+   "profit_plan": "35% trail cannot lock a gain until HWM > ~2.82 (+54%). Discretionary take-profit PRIMARY: surface at >=+40% (2.56), and on any stall after +25% (2.29). IREN just demonstrated the cost of relying on the trail alone.",
    "ratchet_history": [
     {
-     "utc": "2026-08-03T14:21:45Z",
-     "hwm": 1.88,
-     "stop": 1.22,
-     "limit": 1.12,
-     "note": "initial broker stop 35% below 1.88 fill (v1.1 width)"
-    },
-    {
-     "utc": "2026-08-03T16:35:30Z",
-     "hwm": 2.06,
-     "note": "RECORD-KEEPING CORRECTION, no order change. User reported IREN touched 2.06 intraday (+9.6%) between the two prior checks, which the agent did not observe live and did not ratchet -- stop remained 1.22/1.12. Position then fell to mark 1.66 (-11.7%) and has since recovered to 1.84 (-2.1%), still below the 2.06 peak, so current price does NOT constitute a new high -- no ratchet fired this pass. HWM updated to 2.06 to reflect the true observed peak rather than the stale 1.88. Stop unchanged at 1.22/1.12; a ratchet off the real 2.06 peak would have been ~1.34, i.e. ~$12 of protection was not locked in due to the monitoring gap."
-    },
-    {
-     "utc": "2026-08-03T19:23:40Z",
-     "hwm": 2.06,
-     "stop": 1.34,
-     "limit": 1.24,
-     "note": "User cancelled the prior stop intending to sell, then asked for a hold/sell recommendation instead. Recommended HOLD (IREN stock +8.6% new intraday high, delta 0.367, IV still elevated, small existing gain). SELF-CAUGHT ERROR: first replacement attempt re-used the OLD 1.22/1.12 levels (matching the original entry-based stop) instead of recalculating a proper 35% trail off the corrected 2.06 true peak -- caught and fixed within the same turn before reporting completion. Correct stop 1.34/1.24 = 35% below the true HWM of 2.06."
-    },
-    {
-     "utc": "2026-08-04T14:03:45Z",
-     "hwm": 2.27,
-     "stop": 1.93,
-     "limit": 1.83,
-     "note": "USER-REQUESTED TIGHTEN after asking 'should of sold iren' at the mark-1.99 pullback from the 2.27 peak. Agent showed IREN stock was still firm (+1.6%, barely off high) and recommended hold with standard 35% trail; user chose to tighten instead of sell or hold-as-is. DEVIATION from the standard 35% v1.1 width to a tighter 15% trail off the true 2.27 peak (2.27*0.85=1.9295->1.93). Locks +$5 minimum (1.93 vs 1.88 entry) and protects ~85% of the peak gain if it reverses from here, at the cost of a higher chance of a normal pullback triggering the stop. Old order 6a71ed31 (35% width, 1.48/1.38) cancelled+confirmed first."
-    },
-    {
-     "utc": "2026-08-04T14:18:00Z",
-     "hwm": 2.56,
-     "stop": 1.93,
-     "limit": 1.83,
-     "note": "RECORD-KEEPING CORRECTION + USER HOLD DECISION, no order change. User reported IREN's contract peaked at 2.56 near the open (+36% off the 1.88 entry), not the 2.27 the agent had recorded. HWM corrected 2.27 -> 2.56. Consequence: the 15% trail the user asked for on the prior pass should have been 2.176 (2.56*0.85), not 1.93 -- the tighten was executed off a stale peak and is ~24c looser than intended. By the time the true peak was known, mark had fallen to 2.095 / bid 2.02, so the correct 2.18 trigger was ABOVE the live bid and could not be placed as a stop; it would already have fired somewhere near 2.05-2.10. THIRD monitoring-gap give-back on this position (2.06 on 08-03, 2.27 on 08-03, 2.56 on 08-04). Agent recommended SELL at the 2.02 bid (+$14) on three grounds: relative weakness (IREN +1.81% vs QQQ +2.19%), theta -0.1623/day = 7.7% of position value per day against a $21 mark gain, and two demonstrated failures to hold highs. USER OVERRODE: 'Keep iren where it is.' Position held, stop left at 1.93/1.83 unchanged. Decision logged as user discretionary override of an agent sell recommendation -- outcome to be scored on close."
-    },
-    {
-     "utc": "2026-08-04T14:28:19Z",
-     "hwm": 2.56,
-     "stop": 2.05,
-     "limit": 1.95,
-     "note": "USER-REQUESTED RATCHET, executed as a DISCRETIONARY TIGHTEN -- disclosed as such rather than presented as a rule-driven trail move. Under the trailing rule there was nothing to ratchet: mark 2.20 is still 14% below the corrected 2.56 HWM, and a trailing stop only advances on a NEW high. The two mechanical candidates both failed -- 15% off the 2.56 HWM = 2.176, above the 2.13 bid and unplaceable; 15% off the current 2.20 mark = 1.87, LOOSER than the resting 1.93. Moved to 2.05/1.95 instead, 3.8% below the bid (~2 half-spreads), locking +$17 minimum vs the +$5 the 1.93 stop protected. Context at the time: IREN 40.78 (+2.59%) now OUTPACING QQQ (+2.22%), reversing the relative-weakness read that drove the earlier sell recommendation; contract mark recovered 2.02 -> 2.13 bid in ~15 min. Known risk accepted: at IV 125% this name routinely moves >3.8% on noise, so whipsaw probability is materially higher than at 1.93. Justified by revealed preference -- three round-trips from the highs on this position and the user's repeated regret about give-backs. Old order 6a71f141 cancelled and confirmed 'cancelled' with 0 processed before placing."
+     "utc": "2026-08-04T15:16:11Z",
+     "hwm": 1.83,
+     "stop": 1.19,
+     "limit": 1.09,
+     "note": "initial broker stop 35% below the 1.83 fill (v1.1 standard width)"
     }
    ]
   }
@@ -171,11 +137,11 @@
  "exception_slot": "FREE (account flat)",
  "resting_stop_orders": [
   {
-   "order_id": "6a71f703-74fc-423d-848d-55ff67a4233f",
-   "symbol": "IREN",
+   "order_id": "6a72023b-380b-4e18-9b7a-9b3c02935530",
+   "symbol": "APLD",
    "type": "stop_limit",
-   "stop": 2.05,
-   "limit": 1.95,
+   "stop": 1.19,
+   "limit": 1.09,
    "qty": 1,
    "gtc": true,
    "state": "unconfirmed at placement (verify next check)"
@@ -194,10 +160,11 @@
   "2026-07-28": -7.08,
   "2026-07-29": 106.9,
   "2026-07-31": 82.94,
-  "2026-08-03": 38.0
+  "2026-08-03": 38.0,
+  "2026-08-04": 54.0
  },
  "session_stats": {
-  "trades_total": 33,
+  "trades_total": 34,
   "system_trades": {
    "count": 23,
    "wins": 9,
@@ -210,7 +177,7 @@
    "pnl_vs_plan": -12.0
   },
   "open_positions_count": 1,
-  "lifetime_realized": 320.44
+  "lifetime_realized": 374.44
  },
  "logged_signals": [
   {
@@ -651,6 +618,24 @@
    "side": "put",
    "action": "NO_CANDIDATES",
    "reason": "TWO_SIDED_REPORTING: put side scanned and reported. QQQ +2.19% puts the regime gate firmly on calls-only, so put candidates are blocked on regime regardless of setup. CLSK was the only name showing a put trigger and it is on the wrong side of the tape. No put entries."
+  },
+  {
+   "utc": "2026-08-04T15:14:00Z",
+   "symbol": "TQQQ",
+   "side": "call",
+   "action": "REJECTED_JUDGMENT_OVER_GATES",
+   "underlying": 72.86,
+   "move_pct": 7.22,
+   "reason": "RULESET CALIBRATION GAP, newly identified. The 08-14 $75C passes every numeric gate -- spread 4.18%, delta 0.428, leverage 13.04x, implied underlying stop 2.68% (above the 2.5% floor), cost $239, OI 3161 / volume 1018. Rejected anyway. The 2.5% implied-stop floor was fitted to single-name stocks with 4-10% daily ranges, where 2.5% was already marginal. TQQQ is a 3x leveraged ETF that moved +7.22% today; a 2.68% stop on it is proportionally the SAME error that produced the six MFE-zero losers in June -- a stop sitting inside the instrument's own noise band. PROPOSED RULE: the implied-stop floor must scale with the underlying's realized daily range (e.g. floor = 0.5 x ATR%), not sit at a flat 2.5%. Until that is calibrated and tested, leveraged ETFs (TQQQ/SQQQ/SOXL/etc) are pass-only. Cheaper strikes fail anyway: 73.5C and 74C carry 12.5% and 9.6% spreads; the 73C at $328 breaches the $236.94 position limit."
+  },
+  {
+   "utc": "2026-08-04T15:14:00Z",
+   "symbol": "IREN",
+   "side": "call",
+   "action": "REJECTED_REENTRY",
+   "underlying": 41.71,
+   "move_pct": 4.93,
+   "reason": "Re-entry considered ~35 min after the user closed this exact contract at 2.42. Quality is genuinely good -- spread 4.14%, delta 0.4464, leverage 7.01x, implied stop 4.99%, earnings-clear. Rejected on two counts: the 44C at mark 2.655 costs $266, which is 2.81% risk against the 2.5% cap; and it would mean buying back 24c ABOVE the exit on a name already +4.93% on the day. Sizing breach plus extension risk. Logged rather than silently skipped so the counterfactual can be scored."
   }
  ],
  "watchlist": {
@@ -668,7 +653,8 @@
    "QBTS",
    "HIMS",
    "CORZ",
-   "NIO"
+   "NIO",
+   "APLD"
   ],
   "log_only_priced_out": [
    "TSLA",
