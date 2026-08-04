@@ -7,7 +7,7 @@
     "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
     "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
   },
-  "last_updated_utc": "2026-08-03T19:23:45Z",
+  "last_updated_utc": "2026-08-04T14:03:50Z",
   "account": {
     "number_masked": "****4177",
     "equity_approx": 2725.44,
@@ -35,13 +35,13 @@
       "qty": 1,
       "entry_price": 1.88,
       "entry_utc": "2026-08-03T14:21:31Z",
-      "hwm": 2.06,
+      "hwm": 2.27,
       "hwm_direction": "call (favorable = price rises as IREN rises)",
-      "trail_pct": 35,
-      "management": "trail-only (1-lot), v1.1 35% width",
-      "resting_stop_order_id": "6a70eabc-86d9-4c0b-bd03-7cb78012d011",
-      "stop_trigger": 1.34,
-      "stop_limit": 1.24,
+      "trail_pct": 15,
+      "management": "trail-only (1-lot), DEVIATED to 15% width per user request",
+      "resting_stop_order_id": "6a71f141-e615-4bb1-80fc-7165ad4381f8",
+      "stop_trigger": 1.93,
+      "stop_limit": 1.83,
       "stop_qty": 1,
       "stop_order_state": "confirmed (GTC resting)",
       "unrealized_pct_at_last_check": 2.1,
@@ -70,6 +70,13 @@
           "stop": 1.34,
           "limit": 1.24,
           "note": "User cancelled the prior stop intending to sell, then asked for a hold/sell recommendation instead. Recommended HOLD (IREN stock +8.6% new intraday high, delta 0.367, IV still elevated, small existing gain). SELF-CAUGHT ERROR: first replacement attempt re-used the OLD 1.22/1.12 levels (matching the original entry-based stop) instead of recalculating a proper 35% trail off the corrected 2.06 true peak -- caught and fixed within the same turn before reporting completion. Correct stop 1.34/1.24 = 35% below the true HWM of 2.06."
+        },
+        {
+          "utc": "2026-08-04T14:03:45Z",
+          "hwm": 2.27,
+          "stop": 1.93,
+          "limit": 1.83,
+          "note": "USER-REQUESTED TIGHTEN after asking 'should of sold iren' at the mark-1.99 pullback from the 2.27 peak. Agent showed IREN stock was still firm (+1.6%, barely off high) and recommended hold with standard 35% trail; user chose to tighten instead of sell or hold-as-is. DEVIATION from the standard 35% v1.1 width to a tighter 15% trail off the true 2.27 peak (2.27*0.85=1.9295->1.93). Locks +$5 minimum (1.93 vs 1.88 entry) and protects ~85% of the peak gain if it reverses from here, at the cost of a higher chance of a normal pullback triggering the stop. Old order 6a71ed31 (35% width, 1.48/1.38) cancelled+confirmed first."
         }
       ]
     }
