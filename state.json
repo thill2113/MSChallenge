@@ -7,24 +7,36 @@
   "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
   "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
  },
- "last_updated_utc": "2026-08-04T19:36:30Z",
+ "last_updated_utc": "2026-08-04T20:15:00Z",
  "account": {
   "number_masked": "****4177",
-  "equity_approx": 3317.24,
-  "cash_approx": 2956.24,
-  "buying_power": 2714.3,
-  "note": "Five deposits to date (+$500 07-20, ~$490 07-24, +$500 07-29, +$515 07-30, ~$500 08-04). Portfolio 2026-08-04T15:12Z: total 3317.24 all cash before the APLD entry; $241.94 of the IREN proceeds unsettled until 08-05. Lifetime realized +374.44 over 24 closes. v1.1 sizing at this equity: 2.5% risk = $82.93 => max position $236.94; 10% hard cap $331.72.",
+  "equity_approx": 4302.12,
+  "cash_approx": 3956.12,
+  "buying_power": 3714.18,
+  "note": "Six deposits to date (+$500 07-20, ~$490 07-24, +$500 07-29, +$515 07-30, ~$500 08-04 midday, ~$1,000 08-04 post-close). Portfolio 2026-08-04 post-close: total 4302.12, cash 3956.12, options 346.00 (APLD 1 lot + RIVN 2 lots, combined basis $361, so roughly -$15 unrealized). Buying power 3714.18 -- the $241.94 gap to cash is the IREN proceeds, unsettled until 08-05. Lifetime realized +374.44 over 24 closes.",
   "sizing": {
-   "baseline_10pct": 331.72,
+   "baseline_10pct": 430.21,
    "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
    "exception_retires_at_equity": 1100,
    "v1_1_risk_based": {
     "max_risk_per_trade_pct": 2.5,
-    "max_risk_per_trade_usd": 82.93,
+    "max_risk_per_trade_usd": 107.55,
     "stop_width_pct": 35,
-    "max_position_usd": 236.94,
-    "hard_position_cap_usd": 331.72,
-    "note": "Recomputed at $3,317.24 after the 08-04 deposit and the IREN close. Leverage ceiling rises with equity: max tradeable underlying now ~$110/share (was ~$91)."
+    "max_position_usd": 307.29,
+    "hard_position_cap_usd": 430.21,
+    "note": "Recomputed at $4,302.12 after the second 08-04 deposit. Leverage ceiling rises with position size: max tradeable underlying now ~$143/share at delta 0.30 (~$108 at delta 0.40), up from ~$110. This newly unlocks HOOD ~$91, MSTR ~$94 and HUT ~$106, all of which sat on log_only_priced_out purely on cost. TSLA ~$328 and NVDA remain out of reach."
+   },
+   "open_risk_after_deposit": {
+    "APLD": {
+     "risk_usd": 49.0,
+     "pct_of_equity": 1.14
+    },
+    "RIVN": {
+     "risk_usd": 62.0,
+     "pct_of_equity": 1.44
+    },
+    "combined_pct": 2.58,
+    "note": "Deposit mechanically de-risks the book: combined open risk falls from 3.32% of equity to 2.58% without touching a position. Both stops remain intraday-only (market_hours=regular_hours), so these figures still understate true overnight risk."
    }
   }
  },
@@ -809,6 +821,16 @@
     "AFRM"
    ],
    "rationale": "Built a 20-name candidate list constrained by the ~$91/share leverage ceiling (get_scans blocked by the MCP approval gate twice; pivoted to get_equity_quotes). Five names triggered +3%: JOBY +4.70, ACHR +3.72, RKLB +3.67, AFRM +3.65, SMR +3.38. Explicit per-name EARNINGS_GATE_FULL_LIFE check through 08-15 blocked JOBY 08-05, SMR 08-05, RKLB 08-10, ACHR 08-10 (also OKLO 08-07, WULF 08-05, UPST 08-04, SMCI 08-11, HUT 08-04, RIOT 08-05, LCID 08-04). BBAI +5.07 and PLUG +2.88 excluded by the $5 underlying floor. Only AFRM survived, then failed on execution quality -- see logged_signals. Earnings-clear non-triggering names added as monitoring candidates: CORZ 22.84 and NIO 4.79 have usable geometry; TEM 46.11 already on the illiquid list; MSTR 94.41 and HOOD 91.03 stay log-only, above the leverage ceiling."
+  },
+  {
+   "utc": "2026-08-04T20:15:00Z",
+   "action": "leverage ceiling raised by deposit",
+   "promoted_candidates": [
+    "HOOD",
+    "MSTR",
+    "HUT"
+   ],
+   "rationale": "Equity $3,317 -> $4,302 lifts max position $236.94 -> $307.29, which lifts the underlying price ceiling from ~$110 to ~$143/share at delta 0.30. HOOD ~$91, MSTR ~$94 and HUT ~$106 were on log_only_priced_out for cost reasons alone and are now theoretically tradeable. NOT promoted to the tradeable list yet -- each still needs a live spread/leverage/earnings check, and HUT reported 08-04 so it is inside a post-earnings window. Recorded as candidates to price on the next scan."
   }
  ],
  "correlation_clusters": {
