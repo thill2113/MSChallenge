@@ -957,5 +957,72 @@
   "pre_authorization_status": "PROPOSED 2026-07-29, DECLINED BY USER -- 'We are not there yet. Let's make some more $ then when I'm comfortable we can make that change.'",
   "revisit_condition": "User-initiated only. Do NOT re-propose unsolicited; raise again only if the user asks, or if latency demonstrably costs a large amount on a single trade.",
   "accepted_cost": "With confirm-required, some candidates will expire between recommendation and approval. Measured cost 07-27..07-29 was ~$75-100 across 4 recommendations. User has explicitly accepted this cost in exchange for keeping a human in the loop on every live order."
- }
+ },
+ "performance_target": {
+  "type": "WEEKLY_NOT_DAILY",
+  "target_usd": 500,
+  "period": "Mon-Fri, bucketed by realized close date",
+  "set_utc": "2026-08-04T20:40:00Z",
+  "rationale": "User asked for $100/day. The ledger says that is 3.7x the demonstrated rate: 14 trading days, mean $26.75/day, median $17.30/day, and only 2 of 14 days reached +$100. Converted to $500/week -- the same ambition, ~$100 per trading day -- because a DAILY dollar target forces a trade on days with no qualifying setup, which is the exact mechanism behind the five-loss streak. Evidence: on 08-04, a +3.5% QQQ tape and the best conditions observed to date, a 20-name scan produced 6 triggers of which the earnings gate killed 4, leaving 2 tradeable. Six qualifying setups per day does not exist. A weekly bucket lets a zero-setup day be a zero-trade day and lets one +$107 day carry the week, which is how this P&L actually arrives.",
+  "hard_rule": "The target NEVER justifies an entry that fails any gate. If the week is short on Friday, it stays short. Missing the target is an acceptable outcome; forcing a marginal entry to hit it is not.",
+  "baseline_stats_at_set": {
+   "closes": 23,
+   "win_rate_pct": 56.5,
+   "avg_win": 38.09,
+   "avg_loss": -12.08,
+   "win_loss_ratio": 3.15,
+   "expectancy_per_trade": 16.28,
+   "mean_per_day": 26.75,
+   "median_per_day": 17.3,
+   "days_over_100": "2 of 14",
+   "top2_trades_share": "$189.84 of $374.44 (51%) came from 2 of 23 trades -- the edge is real but carried by outliers"
+  },
+  "scaling_math": "At the demonstrated $16.28 expectancy, $100/day needs either 6.1 trades/day (setup supply does not support it), 2x risk per trade (doubles drawdown at a 56.5% win rate), or ~3.7x capital. The capital path is the only safe one: roughly $16,000 equity produces $100/day under the SAME rules and win rate. Current equity $4,302.12. Until then the bottleneck is setup supply, not size.",
+  "weekly_history": {
+   "2026-07-13": 110.36,
+   "2026-07-20": -1.66,
+   "2026-07-27": 173.74,
+   "2026-08-03": 92.0
+  },
+  "current_week_start": "2026-08-03",
+  "current_week_realized": 92.0
+ },
+ "scheduled_actions": [
+  {
+   "id": "POST_EARNINGS_SCAN_2026-08-06",
+   "when": "2026-08-06 morning (Thursday), after 9:30 ET",
+   "status": "planned",
+   "purpose": "Deliberately hunt post-earnings momentum -- a setup class the current ruleset already PERMITS but which has never once been targeted. After a print, implied vol has already collapsed, so premium is cheap relative to delta; that LOWERS leverage for the same delta and therefore WIDENS the implied underlying stop, which is the single variable that separated the v1.1 winners from the v1.0 losers. Direction is also established rather than a coin flip.",
+   "universe_reported_by_then": {
+    "2026-08-04": [
+     "HUT (am)",
+     "CIFR (am)",
+     "LCID (pm)"
+    ],
+    "2026-08-05": [
+     "IONQ (pm)",
+     "RIOT (am)",
+     "WULF (am)"
+    ],
+    "2026-08-06 am only": [
+     "QBTS"
+    ]
+   },
+   "explicitly_NOT_clear_thursday": [
+    "RGTI (08-06 pm)",
+    "MARA (08-06 pm)",
+    "CLSK (08-06 pm)",
+    "DKNG (08-06 pm)"
+   ],
+   "method": [
+    "1. Re-pull a FRESH earnings calendar -- never reuse a cached file; the 07-31 stale-file incident let HIMS through.",
+    "2. Confirm each candidate's print is actually PAST, and that no SECOND earnings event falls inside the contract life.",
+    "3. Apply the normal regime gate, then spread <=8%, delta 0.35-0.55, leverage <=14x / implied underlying stop >=2.5%.",
+    "4. Expect BETTER leverage than usual because IV has crushed -- if a post-earnings candidate does not show a wider implied stop than a comparable non-earnings name, re-check the numbers.",
+    "5. Do NOT enter on the gap day itself; the anti-gap-chase rule still applies. Day 2+ drift is the target.",
+    "6. TWO_SIDED_REPORTING: a bad print is a put setup, and post-earnings drift runs both directions. Report both sides."
+   ],
+   "note": "Recorded as a plan, not an automated trigger. No scheduled job was created."
+  }
+ ]
 }
