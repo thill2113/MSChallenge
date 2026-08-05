@@ -108,6 +108,30 @@ RISK / SIZING LIMITS
                                  Cheap contracts fail %-spread math on a
                                  single-tick book despite being maximally
                                  liquid in absolute terms.
+- BID_DEPTH_COLLAPSE    = REJECT when bid_size at confirmation is more than 50%
+  (added 2026-08-05,      below bid_size at recommendation. THIS GATE IS
+   USER-DIRECTED)         INDEPENDENT OF SPREAD — a contract that still passes
+                          MAX_SPREAD_PCT is rejected anyway if depth has halved.
+                          Applies at the re-quote step, alongside the existing
+                          spread re-check. Record both readings in trades.csv.
+  WHY: spread measures the price being quoted; depth measures whether that price
+  is real. A tight quote resting on a handful of contracts is a advertisement,
+  not a market, and it is the better predictor of a bad exit.
+  EVIDENCE (RIVN $15.50C, 2026-08-04/05, −$68.00, MFE 0.0%): at confirmation the
+  spread had widened 5.59% → 7.91% AND bid depth had collapsed 93 → 18 lots. The
+  trade was permitted because spread cleared the 8% gate by 0.09pp. It never
+  traded above entry — the seventh MFE-zero loser — and the exit had to be taken
+  into an 18%-wide book with a 1-lot bid. The spread gate saw a pass; the depth
+  reading was screaming.
+  KNOWN CALIBRATION ISSUE, unresolved by design — do not silently "fix" it:
+  a pure percentage test has no absolute floor. On CIFR 2026-08-05 depth moved
+  1237 → 561 lots, a 55% collapse that trips this gate, yet 561 contracts against
+  a 1-lot order is not a liquidity problem in any practical sense. As written,
+  this rule WOULD have blocked that entry. Whether to add an absolute floor
+  (e.g. exempt when depth ≥ 200 lots, or ≥ 50× order size) is an open question
+  logged in state.json → open_tuning_questions. Until the user rules on it, the
+  percentage test binds as specified and any block it produces must be reported
+  with both the percentage and the absolute lot counts so the cost is visible.
 - MIN_UNDERLYING_PRICE  = $5.00 (added 2026-07-20, SAFETY FIX). Underlyings
                                  priced below $5 are excluded from options
                                  entries entirely — no scan, no contract

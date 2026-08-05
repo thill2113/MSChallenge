@@ -151,6 +151,15 @@ For each active asset (that passed the regime gate):
   longer sufficient — check earnings across the ENTIRE contract life through
   expiration and reject anything that spans a report.
 * Liquidity: spread ≤ 10% OR (ask − bid) == $0.01 (penny-floor exception).
+* BID_DEPTH_COLLAPSE (2026-08-05, user-directed): at the re-quote step, compare
+  bid_size against the reading taken at recommendation. If depth has fallen more
+  than 50%, REJECT — regardless of spread, even when spread still passes. Report
+  both the percentage and the absolute lot counts, and log both to trades.csv.
+  Spread is the price being quoted; depth is whether that price is real.
+  RIVN 2026-08-04: spread 5.59%→7.91% (passed by 0.09pp) but depth 93→18 lots.
+  Closed −$68.00 with MFE 0.0%, exited into an 18%-wide book on a 1-lot bid.
+  Open calibration question — the rule has no absolute floor, so a 1237→561
+  move blocks despite 561 lots being ample. See state.json open_tuning_questions.
 * Order Type: Marketable Limit (Ask * 1.02). NO MARKET ORDERS.
 * ORDER_TTL: unfilled after 15–30 seconds → cancel, re-quote, recalculate.
   Never leave a limit resting for minutes.
