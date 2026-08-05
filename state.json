@@ -7,7 +7,7 @@
   "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
   "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
  },
- "last_updated_utc": "2026-08-05T15:55:00Z",
+ "last_updated_utc": "2026-08-05T16:25:00Z",
  "account": {
   "number_masked": "****4177",
   "equity_approx": 4207.12,
@@ -644,6 +644,15 @@
    "side": "n/a",
    "action": "GAP_IDENTIFIED_BID_DEPTH",
    "reason": "THIRD ruleset gap. RIVN closed at -68.00 with MFE 0.0% -- it never traded above entry. At entry the spread had widened 5.59% -> 7.91% AND bid depth had collapsed 93 -> 18 lots; the trade was permitted because spread cleared 8% by 0.09pp. Depth is not measured by any gate. The same pattern appeared again on CIFR today (372 -> 58). PROPOSED RULE: reject when bid depth falls more than ~50% between recommendation and confirmation, independently of spread. Spread measures the quoted price; depth measures whether that price is real, and it is the better predictor of a bad exit."
+  },
+  {
+   "utc": "2026-08-05T16:24:10Z",
+   "symbol": "CIFR",
+   "side": "put",
+   "action": "BLOCKED_BID_DEPTH_COLLAPSE",
+   "underlying": 19.56,
+   "move_pct": -4.02,
+   "reason": "FIRST LIVE FIRING of BID_DEPTH_COLLAPSE, 12 minutes after the user directed the rule. Depth fell across the whole put chain in 12 minutes: K19.5 1195->131, K20 1203->123, K20.5 1244->63, K21 1508->65 (-89% to -96% against a 50% threshold). Spreads TIGHTENED over the same window (K20.5 6.73%->6.09%, K21 6.67%->5.27%), so every strike still cleared MAX_SPREAD_PCT and a spread-only ruleset would have permitted the trade at the best leverage yet recorded (K21 4.77x, 7.34% implied stop). Exactly the RIVN pathology: tight quote, empty book. Distinct from the authoring-time false-positive concern -- 63 lots against a $220 contract is thin absolutely as well as proportionally, so both measures agree. Regime also reverted QQQ -0.59% (puts-only) -> -0.34% (chop). Fourth consecutive CIFR block in ~1 hour."
   }
  ],
  "watchlist": {
@@ -878,7 +887,8 @@
   "SPIKE_PROFIT_CAPTURE": "recalibrated - trail now needs HWM > ~+54% (was ~+18%) to lock any gain, so discretionary take-profit is now the PRIMARY profit mechanism; surface at >=+40%, and on any stall after +25%",
   "unchanged": "delta>=0.20, spread<=10% + penny floor, $5 underlying floor, regime gate, correlation clusters (max 2), MAX_OPEN_POSITIONS=3, entry cutoff 19:15 UTC, broker-resident stops, human confirmation on every entry",
   "accepted_tradeoff": "Each individual loss is now ~2.3x larger. Position size cut to hold dollar risk ~flat. Bet is that far fewer noise stop-outs + surviving to catch fat-tail winners outweighs larger single losses. UNPROVEN - n=19 with 2 dominant trades is thin evidence.",
-  "BID_DEPTH_COLLAPSE_2026-08-05": "USER-DIRECTED RULE ADDED. Reject any entry whose bid_size at confirmation is more than 50% below the reading taken at recommendation, INDEPENDENT of spread -- a contract still inside MAX_SPREAD_PCT is rejected anyway if depth has halved. Applied at the re-quote step alongside the spread re-check; both readings logged to trades.csv. Rationale: spread measures the price being quoted, depth measures whether that price is real. Evidence: RIVN $15.50C closed -68.00 with MFE 0.0% (never traded above entry, seventh such loser); at confirmation spread had gone 5.59% -> 7.91%, clearing the 8% gate by 0.09pp, while depth collapsed 93 -> 18 lots. The exit then had to be taken into an 18%-wide book on a 1-lot bid. Written into scanner_instructions.txt (SAFEGUARDS) and dynamic_scanner_directive.txt section 4."
+  "BID_DEPTH_COLLAPSE_2026-08-05": "USER-DIRECTED RULE ADDED. Reject any entry whose bid_size at confirmation is more than 50% below the reading taken at recommendation, INDEPENDENT of spread -- a contract still inside MAX_SPREAD_PCT is rejected anyway if depth has halved. Applied at the re-quote step alongside the spread re-check; both readings logged to trades.csv. Rationale: spread measures the price being quoted, depth measures whether that price is real. Evidence: RIVN $15.50C closed -68.00 with MFE 0.0% (never traded above entry, seventh such loser); at confirmation spread had gone 5.59% -> 7.91%, clearing the 8% gate by 0.09pp, while depth collapsed 93 -> 18 lots. The exit then had to be taken into an 18%-wide book on a 1-lot bid. Written into scanner_instructions.txt (SAFEGUARDS) and dynamic_scanner_directive.txt section 4.",
+  "BID_DEPTH_COLLAPSE_first_firing": "2026-08-05T16:24Z, 12 minutes after authoring. Blocked CIFR $20.50P on a 95% depth collapse while the spread gate still passed and leverage was the best on record. Validates the rule's core claim -- spread measures the quoted price, depth measures whether it is real -- on a case where the two disagreed and depth was right to veto. Does NOT resolve the absolute-floor question in open_tuning_questions: this firing had thin depth on both the percentage and absolute measures, so it is not evidence either way about the 561-lot edge case."
  },
  "authorization_model": {
   "live_autonomous": false,
