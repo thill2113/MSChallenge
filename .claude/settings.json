@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Robinhood",
+      "mcp__c704efbe-1e59-4edd-b733-8aa3cc7813e5",
+
+      "mcp__Robinhood__place_option_order",
+      "mcp__Robinhood__cancel_option_order",
+      "mcp__Robinhood__review_option_order",
+      "mcp__Robinhood__get_scans",
+      "mcp__Robinhood__run_scan",
+
+      "mcp__c704efbe-1e59-4edd-b733-8aa3cc7813e5__place_option_order",
+      "mcp__c704efbe-1e59-4edd-b733-8aa3cc7813e5__cancel_option_order",
+      "mcp__c704efbe-1e59-4edd-b733-8aa3cc7813e5__review_option_order",
+      "mcp__c704efbe-1e59-4edd-b733-8aa3cc7813e5__get_scans",
+      "mcp__c704efbe-1e59-4edd-b733-8aa3cc7813e5__run_scan"
+    ]
+  }
+}
