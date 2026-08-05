@@ -1022,7 +1022,9 @@
     "5. Do NOT enter on the gap day itself; the anti-gap-chase rule still applies. Day 2+ drift is the target.",
     "6. TWO_SIDED_REPORTING: a bad print is a put setup, and post-earnings drift runs both directions. Report both sides."
    ],
-   "note": "Recorded as a plan, not an automated trigger. No scheduled job was created."
+   "note": "Recorded as a plan, not an automated trigger. No scheduled job was created.",
+   "reminder_mechanism": "CLAUDE.md at repo root carries a PENDING ACTIONS table at the top. CLAUDE.md is auto-loaded into context at session start, so any Thursday session surfaces this before the user has to remember it. Mark status done/expired after running, and remove the CLAUDE.md row.",
+   "user_request": "User asked on 2026-08-04: \"Remind me on Thursday when I start a session.\""
   }
  ]
 }
