@@ -4,10 +4,11 @@
   "active": true,
   "revised_utc": "2026-07-28T15:40:00Z",
   "unfreeze_condition": "20 MORE completed closes under v1.1 (target n=39 total); safety fixes always exempt",
-  "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
-  "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
+  "next_scan_mode": "HALTED -- no live entries. Paper/review only.",
+  "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override.",
+  "TRADING_HALTED_2026-08-06": "REAL-MONEY TRADING HALTED by user instruction pending full strategy review. See STRATEGY_REVIEW_2026-08-06.md. Headline: 95% bootstrap CI on expectancy is [-8.83,+23.13] and CROSSES ZERO at n=26 -- the edge is not statistically established. v1.1 stop widening quantified as an error: no winner ever drew past -14.70%, so the extra room rescued zero winners; replaying v1.1 at a 15% stop yields +191.54 vs +88.84 actual, +102.70 improvement. Short holds (<6h) are net negative: n=16, PF 0.64, expectancy -4.44. Long holds (>=6h): n=10, PF 3.15, expectancy +25.25, permutation p=0.043. Recommendation: PAPER TRADING until 50 trades with a CI lower bound above zero. No real-money orders until go/no-go criteria in section 11 of the review are met."
  },
- "last_updated_utc": "2026-08-06T18:35:00Z",
+ "last_updated_utc": "2026-08-06T19:45:00Z",
  "account": {
   "number_masked": "****4177",
   "equity_approx": 4123.88,

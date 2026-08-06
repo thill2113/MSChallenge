@@ -3,6 +3,18 @@
 This repo drives a **real Robinhood brokerage account with real money** (Agentic, ••••4177,
 `account_number` **404924177**, option_level_2, agentic_allowed) via the Robinhood MCP tools.
 
+## 🛑 TRADING HALTED — 2026-08-06
+
+**NO REAL-MONEY ORDERS.** Halted by user instruction pending strategy review.
+Read `STRATEGY_REVIEW_2026-08-06.md` before proposing anything.
+
+Headline: expectancy 95% CI is **[−$8.83, +$23.13] — it crosses zero at n=26.** The edge is not
+statistically established. Resume live trading only when every go/no-go criterion in §11 of the
+review is met (≥50 paper trades, CI lower bound > 0, PF ≥ 1.60, drawdown ≤ 8%, ≥10 trades per
+regime, no 4-loss run, short-hold book not negative, P0+P1 controls in code).
+
+Paper trading and analysis are permitted. Live orders are not.
+
 ## ⚠️ PENDING ACTIONS — check these first
 
 None currently pending.
