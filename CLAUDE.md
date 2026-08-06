@@ -5,9 +5,7 @@ This repo drives a **real Robinhood brokerage account with real money** (Agentic
 
 ## ⚠️ PENDING ACTIONS — check these first
 
-| Do on | Action |
-|---|---|
-| **Thu 2026-08-06, after 9:30 ET** | **Run the post-earnings scan.** Full method + universe in `state.json` → `scheduled_actions[]` → `POST_EARNINGS_SCAN_2026-08-06`. User asked to be reminded at session start. Surface it before anything else, then mark `status` done/expired. |
+None currently pending.
 
 Remove rows here once done or stale. If the date has passed and it wasn't run, say so plainly rather than
 silently dropping it.
