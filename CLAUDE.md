@@ -15,6 +15,28 @@ regime, no 4-loss run, short-hold book not negative, P0+P1 controls in code).
 
 Paper trading and analysis are permitted. Live orders are not.
 
+### P0 controls are implemented IN CODE — run them, don't re-derive them
+
+```
+python3 risk_controls.py SYMBOL SIDE ENTRY QTY EQUITY QQQ_PCT   # exit 0 = allowed, 1 = blocked
+python3 -m unittest test_risk_controls                          # 20 tests
+python3 replay_controls.py                                      # what each control catches historically
+```
+
+| P0 | Control | Where |
+|---|---|---|
+| 1 | Stop width **15%** (reverted from 35%) | `risk_controls.compute_stop()` |
+| 2 | Drawdown halt 2.5% + cross-session loss streak | `risk_controls.drawdown_from_peak()`, `consecutive_losses()` |
+| 3 | **Chop regime = hard block**, not advisory | `risk_controls.is_chop()` |
+| 4 | Paper mode default; LIVE needs explicit opt-in | `risk_controls.Mode` |
+
+**`evaluate()` returns a boolean. A block has no override path and no
+clean-setup exception.** The −$83.00 loss on 2026-08-06 happened because the chop
+rule existed in prose, was read correctly, was restated as a caveat, and was then
+argued past. Do not reason about whether a block "really applies" — if the gate
+says blocked, there is no trade. The prose files describe these rules; the code
+*is* them, and where they disagree the code wins.
+
 ## ⚠️ PENDING ACTIONS — check these first
 
 None currently pending.

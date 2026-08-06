@@ -96,9 +96,15 @@ Both are permanent watchlist members alongside the dynamic scan output.
 0. REGIME GATE FIRST (added 2026-07-23, see scanner_instructions.txt
    REGIME_ALIGNMENT_FILTER): before evaluating any single-name trigger, read
    QQQ % change on the day. QQQ <= -0.5% => only the SHORT/PUT side is live
-   this pass; QQQ >= +0.5% => only the LONG/CALL side; within +-0.5% => chop,
-   be selective and prefer to pass. Do NOT nominate a candidate whose side
-   fights the regime, no matter how clean the single-name trigger looks.
+   this pass; QQQ >= +0.5% => only the LONG/CALL side; within +-0.5% => CHOP.
+   *** CHOP IS A HARD BLOCK AS OF 2026-08-06 (P0-3). NOT "prefer to pass". ***
+   ENFORCED IN CODE: risk_controls.is_chop(). A chop reading denies the trade;
+   there is no clean-setup exception and no caveat-and-proceed path. The prior
+   wording ("be selective and prefer to pass") was advisory, was read aloud,
+   restated as a caveat, and overridden on 2026-08-06 for -$83.00. That is the
+   whole reason this is now code.
+   Do NOT nominate a candidate whose side fights the regime, no matter how
+   clean the single-name trigger looks.
    Also enforce NO_SAME_NAME_REENTRY and LOSS_STREAK_CIRCUIT_BREAKER here.
 For each active asset (that passed the regime gate):
 1. Liquidity Filter: (Ask - Bid) / Mid-Price ≤ 10% OR ask−bid == $0.01;
@@ -133,11 +139,13 @@ For each active asset (that passed the regime gate):
 
 ## 4. EXECUTION & SIZING   [v1.1 — REVISED 2026-07-28]
 * RISK-BASED SIZING (binding constraint): MAX_RISK_PER_TRADE = 2.5% of equity;
-  POSITION_SIZE = risk_cap / STOP_WIDTH_PCT (35%). At ~$1,534 equity that is
+  POSITION_SIZE = risk_cap / STOP_WIDTH_PCT (15% as of v1.2). At ~$1,534 equity that is
   ~$38 risk => ~$110 max position. The 10%-of-equity cap remains an absolute
   ceiling but is normally NOT the binding number.
-* STOP_WIDTH_PCT = 35% (was 15%). Before every entry compute and state:
-  leverage = |delta| x underlying / premium ; implied_underlying_stop = 35%/lev.
+* STOP_WIDTH_PCT = 15% -- REVERTED 2026-08-06 (v1.2) from the 35% v1.1 value.
+  ENFORCED IN CODE: risk_controls.compute_stop(). Do not hand-compute a stop.
+  Before every entry compute and state:
+  leverage = |delta| x underlying / premium ; implied_underlying_stop = 15%/lev.
   If implied_underlying_stop < 2.5%, the stop is still inside that name's noise
   band — widen or skip. (v1.0's 15% stop equalled 1.1-1.6% underlying moves on
   names with 4-10% daily ranges; 6 of 10 losers never traded above entry.)

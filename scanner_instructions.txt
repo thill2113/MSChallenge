@@ -68,12 +68,14 @@ RISK / SIZING LIMITS
   budget as the BINDING constraint. Size from RISK, not from position cost. ***
     MAX_RISK_PER_TRADE  = 2.5% of total equity  (at $1,534 equity => ~$38)
     POSITION_SIZE       = MAX_RISK_PER_TRADE / STOP_WIDTH_PCT
-                          (at 35% stop => max position ~$110)
+                          (at 15% stop => max position ~$687 at $4.1k equity;
+                           the 10%-of-equity cap is then the binding constraint)
     HARD_POSITION_CAP   = 10% of equity (MAX_POSITION_PCT below still applies
                           as an absolute ceiling; risk-based size is normally
                           the smaller and therefore the binding number).
   WHY: v1.0 sized positions at 10% and stopped at 15%, i.e. ~$23 risk per trade
-  but a stop inside the noise band. v1.1 widens the stop (see STOP_WIDTH_PCT)
+  but a stop inside the noise band. v1.1 widened the stop; v1.2 reverted it
+  after the widening was measured and found to help no winner (see STOP_WIDTH_PCT)
   which would have raised per-trade risk to ~$44 at the old position size, so
   position size is cut to hold risk near its prior level. Same money at risk,
   far fewer noise stop-outs. This is the whole trade-off: FEWER, LARGER losses
@@ -165,7 +167,20 @@ RISK / SIZING LIMITS
                                  If NO expiration exists inside 7-14 DTE, the
                                  nearest expiration BEYOND 14 is preferred over
                                  anything under 7 — never buy the theta cliff.
-- STOP_WIDTH_PCT        = 35%   *** v1.1 (2026-07-28): widened from 15%. ***
+- STOP_WIDTH_PCT        = 15%   *** v1.2 (2026-08-06): REVERTED from 35%. ***
+                                 ENFORCED IN CODE: risk_controls.STOP_WIDTH_PCT.
+                                 This file is documentation; the code is the rule.
+                                 EVIDENCE for the revert (STRATEGY_REVIEW_2026-08-06.md
+                                 and replay_controls.py): across all 26 closes NO
+                                 winning trade ever drew down past -14.70%, so the
+                                 extra 20 points of room rescued ZERO winners and
+                                 enlarged every loser. Replaying the v1.1 era at 15%
+                                 turns +$88.84 into +$192.84, a +$104.00 improvement.
+                                 The v1.1 rationale below is retained for the record
+                                 but was INVERTED: "losers never traded above entry"
+                                 is evidence of a bad ENTRY, not a tight stop. A
+                                 trade with MFE=0 cannot be rescued by a wider stop.
+                                 SUPERSEDED v1.1 TEXT FOLLOWS ---
                                  Initial broker stop sits 35% below fill, and
                                  the trail uses the same 35% width off the
                                  high-water mark. At the 7-13x effective
@@ -246,7 +261,8 @@ DISCIPLINE RULES  (added 2026-07-14 after first live session)
   into every trade.
 - BROKER_STOPS: on every entry fill, immediately place a GTC stop-limit
   sell-to-close at the initial stop level (STOP_WIDTH_PCT below entry mark —
-  35% under v1.1, was 15% under v1.0), confirmed
+  15% under v1.0, widened to 35% under v1.1, REVERTED to 15% under v1.2;
+  compute it with risk_controls.compute_stop(), never by hand), confirmed
   by the human as part of the entry decision. Monitoring passes RATCHET the
   stop up (cancel/replace) as the high-water mark rises; the floor always
   rests at the broker so protection exists BETWEEN monitoring passes, not
