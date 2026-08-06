@@ -7,7 +7,7 @@
   "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
   "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
  },
- "last_updated_utc": "2026-08-06T13:40:00Z",
+ "last_updated_utc": "2026-08-06T15:38:00Z",
  "account": {
   "number_masked": "****4177",
   "equity_approx": 4207.12,
@@ -40,7 +40,45 @@
    }
   }
  },
- "open_positions": [],
+ "open_positions": [
+  {
+   "symbol": "IREN",
+   "contract": "IREN $41.00C 2026-08-14",
+   "qty": 1,
+   "entry_price": 2.41,
+   "entry_utc": "2026-08-06T15:36:43Z",
+   "cost_usd": 241.04,
+   "hwm": 2.41,
+   "hwm_direction": "call (favorable = price rises as IREN rises)",
+   "trail_pct": 15,
+   "management": "trail-only (1-lot, per directive 5: qty==1 bypasses scale-out)",
+   "resting_stop_order_id": "6a74aa47-a6f1-44ef-9017-cf32a1725998",
+   "stop_trigger": 1.57,
+   "stop_limit": 1.45,
+   "stop_qty": 1,
+   "stop_order_state": "confirmed (GTC resting, verified via get_option_orders)",
+   "entry_order_id": "6a74aa0b-51c5-4934-8270-4edb03bba515",
+   "cluster": "crypto_beta (1/2 slots used)",
+   "gates_at_entry": {
+    "underlying_at_fill": 40.09,
+    "move_pct": 3.09,
+    "pct_off_intraday_high": 0.94,
+    "intraday_high": 4.04695e1,
+    "delta": 0.481,
+    "spread_pct": 6.51,
+    "leverage": 8.36,
+    "implied_underlying_stop_pct": 4.19,
+    "iv": 1.134,
+    "open_interest": 527,
+    "bid_depth_at_recommendation": 154,
+    "bid_depth_at_confirmation": 283,
+    "risk_usd": 84.0,
+    "risk_pct_of_equity": 2.0
+   },
+   "earnings_clearance": "Next IREN report 2026-08-27 pm (tentative, verified=false) -- 13 days PAST the 08-14 expiry. EARNINGS_GATE_FULL_LIFE clear across the entire contract life.",
+   "entry_note": "Re-quote PASSED for the first time in 6 attempts. Broker review returned zero order_checks. Momentum had decayed from +3.57%/0.47%-off-high at recommendation to +3.09%/0.94%-off-high at fill -- both gates still passing but both marginal; flagged to the user before placing rather than after. Entered in a CHOP regime (QQQ -0.11%), which the directive says to prefer passing on -- the mechanical gates were clean but the tape was not confirming."
+  }
+ ],
  "open_positions_ARCHIVE_2026-07-24": [
   {
    "symbol": "RIVN",
@@ -114,8 +152,25 @@
    ]
   }
  ],
- "exception_slot": "FREE (account flat)",
- "resting_stop_orders": [],
+ "exception_slot": "RETIRED (equity > $1,100 since 2026-07-20); all positions size to the v1.1 risk-based cap",
+ "resting_stop_orders": [
+  {
+   "order_id": "6a74aa47-a6f1-44ef-9017-cf32a1725998",
+   "symbol": "IREN",
+   "contract": "IREN $41.00C 2026-08-14",
+   "side": "sell",
+   "position_effect": "close",
+   "type": "stop_limit",
+   "stop_price": 1.57,
+   "limit_price": 1.45,
+   "qty": 1,
+   "time_in_force": "gtc",
+   "market_hours": "regular_hours",
+   "state": "confirmed",
+   "placed_utc": "2026-08-06T15:37:43Z",
+   "note": "Placed 60 seconds after the entry fill and verified resting via get_option_orders. 35% v1.1 stop width off the 2.41 fill (2.41 * 0.65 = 1.5665 -> 1.57). INTRADAY ONLY -- market_hours=regular_hours, and IREN's chain shows extended_hours_state=disabled, so there is no overnight protection on this position. The $84 quoted risk is an intraday figure."
+  }
+ ],
  "realized_pnl_by_day": {
   "2026-07-14": 15.68,
   "2026-07-15": -11.08,
@@ -637,6 +692,18 @@
    "underlying": 19.425,
    "move_pct": -4.68,
    "reason": "Eighth re-quote, fifth block. Best leverage ever measured -- 5.59x, 6.26% implied underlying stop, beating the IREN put that returned +$106.90. Thesis was strong: post-earnings day-2 continuation with a seven-name crypto-miner breakdown confirming. Blocked purely on execution: in the ~2 minutes between recommendation and confirmation, CIFR bounced off its low and market makers widened EVERY strike of the put chain past the 8% gate at once (19.5: 7.3%->8.6%, 19.0: 8.0%->9.5%, 20.0: 7.3%->8.3%, 18.5: 10.5%->11.5%), with bid depth on the 19.5 falling 372 -> 58. A whole-chain widening is a market-maker response to the move, not a per-strike artifact, so no strike substitution was available. NOTE FOR SCORING: the user was -$110 on the day and had explicitly asked to make it back. The trade was recommended on merit and refused on process. If CIFR keeps falling this will look like a miss; the rule is still correct, because the same discipline blocked four earlier trades whose spreads had blown out."
+  },
+  {
+   "utc": "2026-08-06T15:36:43Z",
+   "symbol": "IREN",
+   "side": "call",
+   "action": "ENTERED",
+   "underlying": 40.09,
+   "move_pct": 3.09,
+   "reason": "IREN $41C 08-14 x1 @ 2.41 (vs 2.43 limit, 2c improvement). First fill since 08-04. Stop 1.57/1.45 GTC confirmed resting 60s after fill. PROCESS NOTE -- this entry came from the STANDING WATCHLIST, not from the market-wide scan, and that gap is the finding of the session: IREN's RVOL sits under the saved scan's 1.5 floor, so a name up 3.6% with clean liquidity never appeared in the 91-name call-side result. The scans and the watchlist are not redundant; running only the scans would have produced NO TRADE today. AGENT ERROR CORRECTED THIS SESSION: three prior 'scans' this session checked only a 7-ticker post-earnings watchlist and were reported to the user as scans. dynamic_scanner_directive.txt and scanner_instructions.txt had not been read at all -- gates were being applied from memory. The user called this out directly. Both files read before this pass.",
+   "market_wide_scan_result": "Structurally empty on BOTH sides. Call side 91 matches (scan 5ef6974d, +3%/RVOL>1.5): every liquid affordable name was a GAP-DAY earnings reaction -- CHYM +25.8 (08-05 pm), PAYC +23.9 (08-05 pm), MGNI +20.6 (08-05 pm), AEVA +38.4 (08-05 pm), TRUP +15.7 (08-05 pm), IOVA +37.0 (08-06 am) -- all killed by the anti-gap-chase rule. WPP +28.1% has no earnings record at all (UK ADR); a move that size with no print reads as M&A/special situation, which does not drift like momentum, so it was passed rather than guessed at. Remainder was micro-cap, sub-$5, or leveraged 2x single-stock ETFs (Corgi/Tradr/Defiance), all structurally excluded. The quality-filtered Momentum Breakout scan (1ae663e1: +4%/RVOL>2/mcap>2B/price>5) returned exactly ONE name, PAYC -- gap-day AND priced out at $217. Put side 72 matches (scan a86b9a60): same pattern -- HONA -19.8, TS -7.3, BROS -16.2, CELH -15.6, ATS -23.4, UTI -32.8 all gap-day prints. CLS -12.4% on 3.0x RVOL was the ONE genuine non-earnings breakdown in the entire put list (reported 07-27, ten days prior, next print 10-26) and was rejected on contract economics, not thesis: 12.32% spread, $1,120/lot against a $420.71 hard cap, 8-lot bid / 7-lot ask.",
+   "two_sided_reporting": "PUT side reported explicitly and was NOT empty of triggers -- HIMS -3.60% was a clean watchlist breakdown trigger, rejected by EARNINGS_GATE_FULL_LIFE because HIMS reports 2026-08-10 pm (verified), inside the 08-14 contract life. Notable: HIMS is the exact name a stale earnings file let through on 07-31. Fresh per-symbol data caught it this time.",
+   "structural_finding_SCAN_RVOL_BLINDSPOT": "On a peak-earnings-season day, a raw %-move + RVOL screen returns almost exclusively earnings gaps, which this ruleset then throws away wholesale -- 163 combined matches produced ZERO tradeable candidates. Meanwhile the two names that DID trigger cleanly (IREN +3.57% call, HIMS -3.60% put) were both invisible to the scans because their relative volume is unremarkable. The miners tell the same story: CIFR +4.4% and RIOT +4.2% also failed the RVOL 1.5 floor. Implication: RVOL is a poor discriminator for continuation setups in names that have ALREADY been heavily traded for several sessions -- their 30-day average volume has risen to meet current volume, so a real move reads as ordinary. Worth a tuning question on whether the breakout path should have an RVOL-optional branch for known-liquid watchlist names."
   },
   {
    "utc": "2026-08-06T15:26:15Z",
