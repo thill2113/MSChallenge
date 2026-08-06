@@ -7,13 +7,13 @@
   "next_scan_mode": "LIVE \u2014 v1.1 first entry requires the leverage check stated out loud",
   "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override."
  },
- "last_updated_utc": "2026-08-06T15:38:00Z",
+ "last_updated_utc": "2026-08-06T18:35:00Z",
  "account": {
   "number_masked": "****4177",
-  "equity_approx": 4207.12,
-  "cash_approx": 4207.12,
-  "buying_power": 4207.12,
-  "note": "Six deposits to date. FLAT 2026-08-05T15:24Z after closing RIVN (-68.00, broker stop) and APLD (-42.00, user manual). Day -110.00. Lifetime realized +264.44 over 26 closes. v1.1 sizing at this equity: 2.5% risk = $105.18 => max position $300.51; 10% hard cap $420.71.",
+  "equity_approx": 4123.88,
+  "cash_approx": 4123.88,
+  "buying_power": 4123.88,
+  "note": "FLAT 2026-08-06T18:33Z after user-directed close of IREN $41C at 1.58 (-83.00). Equity 4206.96 -> 4123.88. Day -83.00. Lifetime realized +181.44 over 27 closes.",
   "sizing": {
    "baseline_10pct": 420.71,
    "exception_25pct_RETIRED": "retired 2026-07-20: equity crossed the $1,100 threshold defined in the frozen ruleset. Single 25% exception slot no longer applies; all positions size to the 10% baseline (~$113), which now affords delta-compliant contracts on names that were previously priced out.",
@@ -40,45 +40,7 @@
    }
   }
  },
- "open_positions": [
-  {
-   "symbol": "IREN",
-   "contract": "IREN $41.00C 2026-08-14",
-   "qty": 1,
-   "entry_price": 2.41,
-   "entry_utc": "2026-08-06T15:36:43Z",
-   "cost_usd": 241.04,
-   "hwm": 2.41,
-   "hwm_direction": "call (favorable = price rises as IREN rises)",
-   "trail_pct": 15,
-   "management": "trail-only (1-lot, per directive 5: qty==1 bypasses scale-out)",
-   "resting_stop_order_id": "6a74aa47-a6f1-44ef-9017-cf32a1725998",
-   "stop_trigger": 1.57,
-   "stop_limit": 1.45,
-   "stop_qty": 1,
-   "stop_order_state": "confirmed (GTC resting, verified via get_option_orders)",
-   "entry_order_id": "6a74aa0b-51c5-4934-8270-4edb03bba515",
-   "cluster": "crypto_beta (1/2 slots used)",
-   "gates_at_entry": {
-    "underlying_at_fill": 40.09,
-    "move_pct": 3.09,
-    "pct_off_intraday_high": 0.94,
-    "intraday_high": 4.04695e1,
-    "delta": 0.481,
-    "spread_pct": 6.51,
-    "leverage": 8.36,
-    "implied_underlying_stop_pct": 4.19,
-    "iv": 1.134,
-    "open_interest": 527,
-    "bid_depth_at_recommendation": 154,
-    "bid_depth_at_confirmation": 283,
-    "risk_usd": 84.0,
-    "risk_pct_of_equity": 2.0
-   },
-   "earnings_clearance": "Next IREN report 2026-08-27 pm (tentative, verified=false) -- 13 days PAST the 08-14 expiry. EARNINGS_GATE_FULL_LIFE clear across the entire contract life.",
-   "entry_note": "Re-quote PASSED for the first time in 6 attempts. Broker review returned zero order_checks. Momentum had decayed from +3.57%/0.47%-off-high at recommendation to +3.09%/0.94%-off-high at fill -- both gates still passing but both marginal; flagged to the user before placing rather than after. Entered in a CHOP regime (QQQ -0.11%), which the directive says to prefer passing on -- the mechanical gates were clean but the tape was not confirming."
-  }
- ],
+ "open_positions": [],
  "open_positions_ARCHIVE_2026-07-24": [
   {
    "symbol": "RIVN",
@@ -152,25 +114,8 @@
    ]
   }
  ],
- "exception_slot": "RETIRED (equity > $1,100 since 2026-07-20); all positions size to the v1.1 risk-based cap",
- "resting_stop_orders": [
-  {
-   "order_id": "6a74aa47-a6f1-44ef-9017-cf32a1725998",
-   "symbol": "IREN",
-   "contract": "IREN $41.00C 2026-08-14",
-   "side": "sell",
-   "position_effect": "close",
-   "type": "stop_limit",
-   "stop_price": 1.57,
-   "limit_price": 1.45,
-   "qty": 1,
-   "time_in_force": "gtc",
-   "market_hours": "regular_hours",
-   "state": "confirmed",
-   "placed_utc": "2026-08-06T15:37:43Z",
-   "note": "Placed 60 seconds after the entry fill and verified resting via get_option_orders. 35% v1.1 stop width off the 2.41 fill (2.41 * 0.65 = 1.5665 -> 1.57). INTRADAY ONLY -- market_hours=regular_hours, and IREN's chain shows extended_hours_state=disabled, so there is no overnight protection on this position. The $84 quoted risk is an intraday figure."
-  }
- ],
+ "exception_slot": "RETIRED (equity > $1,100 since 2026-07-20)",
+ "resting_stop_orders": [],
  "realized_pnl_by_day": {
   "2026-07-14": 15.68,
   "2026-07-15": -11.08,
@@ -186,7 +131,8 @@
   "2026-07-31": 82.94,
   "2026-08-03": 38.0,
   "2026-08-04": 54.0,
-  "2026-08-05": -110.0
+  "2026-08-05": -110.0,
+  "2026-08-06": -83.0
  },
  "session_stats": {
   "trades_total": 34,
@@ -202,9 +148,25 @@
    "pnl_vs_plan": -12.0
   },
   "open_positions_count": 0,
-  "lifetime_realized": 264.44
+  "lifetime_realized": 181.44,
+  "closes_total": 27,
+  "note_2026_08_06": "IREN $41C closed -83.00 by user instruction (not a stop fire). Lifetime realized falls 264.44 -> 181.44 over 27 closes. Two-day drawdown 08-05 (-110.00) + 08-06 (-83.00) = -193.00, which erases 73% of the campaign's peak realized. User stated they are shutting the operation down."
  },
  "logged_signals": [
+  {
+   "utc": "2026-08-06T18:33:41Z",
+   "symbol": "IREN",
+   "side": "call",
+   "action": "CLOSED_USER_DIRECTED",
+   "underlying": 38.895,
+   "move_pct": 0.01,
+   "realized_pnl": -83.0,
+   "reason": "User instruction 'Close it' at 14:33 ET after IREN round-tripped its entire day. Exit 1.58 vs 1.55 marketable limit (3c improvement, above the 1.57 bid). Stop cancelled and CONFIRMED cancelled before the sell; position naked ~28 seconds. Held 2h57m. NOT a stop fire -- but the 1.57 stop trigger was one cent below the bid when the user called it, so the discretionary exit and the mechanical stop were worth within a cent of each other. That is worth stating plainly: the discretionary close did not rescue anything the stop would have missed.",
+   "MFE_MAE": "MFE 0.00% (post-entry high 2.37 vs 2.41 fill -- never traded above entry, 8th MFE-zero trade). MAE -34.85%. Capture ratio undefined, HWM equals entry so the denominator is zero. The v1.1 35% stop width did NOT convert an MFE-zero entry into anything but a slower loss, which was the open question logged at the hold decision. It is now answered for this sample of one.",
+   "PRIMARY_AGENT_ERROR_REGIME_GATE_OVERRIDDEN": "The directive section 3.0 regime gate says QQQ within +-0.5% is CHOP and to 'be selective and prefer to pass'. QQQ was +0.07% at recommendation, -0.11% at fill. The agent identified this correctly, listed it as caveat 1 of 4, and recommended the entry anyway. It also identified decelerating momentum (IREN had already faded 40.4695 -> 40.09 pre-fill) as caveat 2 and recommended anyway. Two of the ruleset's own stand-down conditions were simultaneously live and both were argued past. FLAGGING A RULE IS NOT OBEYING IT. The correct output of the 11:22 ET scan was NO TRADE. Cost of the override: 83.00. This is distinct from the six re-quote blocks earlier in the campaign, where the agent DID stand down -- here the gate that failed was upstream of the re-quote, at candidate selection, and the agent was the one who breached it.",
+   "user_question_call_vs_put_answered": "User asked why a call was taken when the money was on the downside. Honest answer in two parts. (1) No put on IREN was ever available: the breakdown trigger requires the underlying DOWN >=3% AND within 1% of its intraday LOW; IREN was +3.57% and near its HIGH. Profiting from IREN's fade required FADING a breakout -- mean reversion -- which is the structural opposite of this momentum-continuation system. The system cannot express that trade and adding it would be a different strategy, not a tuning fix. (2) The put side WAS scanned and reported, and was not empty: HIMS -3.60% was a clean watchlist breakdown trigger killed by EARNINGS_GATE_FULL_LIFE (reports 08-10, inside the contract life), and CLS -12.4% was the only genuine non-earnings breakdown in 72 put matches, killed on economics (12.32% spread, $1,120 vs the $420.71 hard cap, 8-lot bid). Both rejections were correct. CONCLUSION: the error was not picking the wrong side. It was that neither side had a valid trade in a chop regime, and one was taken anyway.",
+   "campaign_state": "Two-day drawdown -193.00 (08-05 -110.00, 08-06 -83.00). Lifetime realized +264.44 -> +181.44 over 27 closes; still net positive but 73% of peak realized surrendered in two sessions. Week of 08-03 = -101.00 against a +500 target, second consecutive negative week. User stated they are shutting the operation down. Recorded without argument: the deterioration is real and the ledger supports their read."
+  },
   {
    "date": "2026-07-14T19:27Z",
    "signal": "MSTR $105C 2026-07-17 @ $1.11 (MSTR $97.49, +5.8%, 0.6% off high)",
@@ -1024,7 +986,8 @@
    "2026-08-03": -18.0
   },
   "current_week_start": "2026-08-03",
-  "current_week_realized": -18.0
+  "current_week_realized": -101.0,
+  "current_week_note": "Week of 08-03: +38.00 (08-03), +54.00 (08-04), -110.00 (08-05), -83.00 (08-06) = -101.00 against a +500 target. Second consecutive negative week. The target was never the cause of any single entry, but the 08-06 IREN entry WAS taken in a chop regime the directive says to pass on, which is the failure mode a weekly target is supposed to prevent and did not."
  },
  "scheduled_actions": [
   {
