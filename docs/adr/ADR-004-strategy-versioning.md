@@ -3,7 +3,7 @@
 - **Status:** Accepted
 - **Date:** 2026-08-07
 - **Phase:** 0/1
-- **Related:** ADR-001, ADR-005
+- **Related:** ADR-001, ADR-005, ADR-008
 
 ## Context
 
@@ -29,11 +29,11 @@ artifact it produces.**
    parameters. Changing any parameter produces a different fingerprint.
 3. `stage` is deliberately **excluded** from the fingerprint. Promoting a
    version through the lifecycle is not a change to what it does, and an
-   approval issued at `PAPER` must remain valid when it reaches `PRODUCTION`.
+   approval issued at `SHADOW` must remain valid when it reaches `PAPER`.
 4. `StrategyRegistry.register` **rejects redefinition**. Registering the same
    key with a different fingerprint raises; registering identical content is
    idempotent. There is no way to "update" a version — you publish a new one.
-5. Versions must be registered at `RESEARCH`. Stages are earned through
+5. Versions must be registered at `DEVELOPMENT`. Stages are earned through
    `promote()`, not declared at construction.
 6. `TradeCandidate`, `NoTrade`, `OrderIntent` and every `TradeRecord` carry
    `strategy_id` and `strategy_version`. Any historical decision resolves to the

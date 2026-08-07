@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import datetime
+from datetime import date, datetime, time
 from decimal import Decimal
 from enum import Enum
 from typing import Any, ClassVar
@@ -59,6 +59,9 @@ def canonical_form(value: Any) -> Any:
     if isinstance(value, Enum):
         return canonical_form(value.value)
     if isinstance(value, datetime):
+        return value.isoformat()
+    # datetime subclasses date, so this must stay below the datetime branch.
+    if isinstance(value, (date, time)):
         return value.isoformat()
     if isinstance(value, UUID):
         return str(value)

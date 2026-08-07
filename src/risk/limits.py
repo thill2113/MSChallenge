@@ -38,8 +38,15 @@ class RiskLimits(AuthoritativeModel):
         "max_gross_exposure_fraction",
         "max_open_positions",
         "max_daily_loss_fraction",
+        "max_weekly_loss_fraction",
+        "max_drawdown_fraction",
+        "max_consecutive_losses",
+        "max_open_portfolio_risk_fraction",
+        "max_correlated_exposure_fraction",
         "min_reward_risk_ratio",
         "allowed_asset_classes",
+        "max_market_data_age_seconds",
+        "max_account_state_age_seconds",
     )
 
     name: str = Field(min_length=1, max_length=64, pattern=r"^[a-z0-9_]+$")
@@ -58,6 +65,32 @@ class RiskLimits(AuthoritativeModel):
     max_daily_loss_fraction: Ratio = Field(
         description="Realised loss for the day, as a positive fraction of equity, "
         "beyond which no new candidate is approved."
+    )
+    max_weekly_loss_fraction: Ratio = Field(
+        description="Realised loss for the trailing week, as a positive fraction of "
+        "equity, beyond which no new candidate is approved."
+    )
+    max_drawdown_fraction: Ratio = Field(
+        description="Decline from the equity high-water mark that halts new risk."
+    )
+    max_consecutive_losses: int = Field(
+        ge=1,
+        description="Consecutive losing trades after which the strategy stops. A losing "
+        "streak is the cheapest available signal that the market has changed shape.",
+    )
+    max_open_portfolio_risk_fraction: Ratio = Field(
+        description="Sum of risk still on the table across all open positions, as a "
+        "fraction of equity. Bounds correlated stop-outs on a single bad day."
+    )
+    max_correlated_exposure_fraction: Ratio = Field(
+        description="Ceiling on notional within one correlation group. Five positions "
+        "in the same sector is one position wearing five hats."
+    )
+    max_market_data_age_seconds: int = Field(
+        gt=0, description="Beyond this age a snapshot is stale and no order is built from it."
+    )
+    max_account_state_age_seconds: int = Field(
+        gt=0, description="Beyond this age broker account state must be refetched."
     )
     min_reward_risk_ratio: ExactDecimal = Field(
         gt=0,

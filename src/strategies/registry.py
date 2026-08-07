@@ -38,9 +38,9 @@ class StrategyRegistry:
                 f"{version.key} is already registered with a different fingerprint; "
                 "publish a new version instead of redefining an existing one"
             )
-        if version.stage is not PromotionStage.RESEARCH:
+        if version.stage is not PromotionStage.DEVELOPMENT:
             raise PromotionAuthorityError(
-                f"{version.key} must be registered at {PromotionStage.RESEARCH}; "
+                f"{version.key} must be registered at {PromotionStage.DEVELOPMENT}; "
                 f"got {version.stage}. Stages are earned through promote(), not declared."
             )
         self._versions[version.key] = version
@@ -77,8 +77,12 @@ class StrategyRegistry:
         return promoted
 
     def production_versions(self) -> tuple[StrategyVersion, ...]:
-        """Every version currently cleared for production."""
-        return tuple(v for v in self._versions.values() if v.stage is PromotionStage.PRODUCTION)
+        """Every version currently cleared to trade real money."""
+        return tuple(v for v in self._versions.values() if v.stage is PromotionStage.LIMITED_LIVE)
+
+    def versions_at(self, stage: PromotionStage) -> tuple[StrategyVersion, ...]:
+        """Every version currently at ``stage``."""
+        return tuple(v for v in self._versions.values() if v.stage is stage)
 
     def history(self) -> tuple[PromotionRecord, ...]:
         """Append-only promotion audit trail, oldest first."""

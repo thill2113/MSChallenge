@@ -40,14 +40,18 @@ class ReadinessResponse(BaseModel):
 class CapabilitiesResponse(BaseModel):
     """What this build is and is not allowed to do.
 
-    Exposed so an operator can confirm from the outside that a running instance
-    cannot trade, rather than inferring it from the deployed commit.
+    Exposed so an operator can confirm from the outside what a running instance
+    can reach, rather than inferring it from the deployed commit. Now that
+    individual trades are automatic, "which modes are even implemented" is a
+    question worth being able to ask over HTTP.
     """
 
     phase: str
-    live_trading_enabled: bool
-    autonomous_execution_enabled: bool
+    live_trading_implemented: bool
+    implemented_execution_modes: list[str]
+    per_trade_human_approval_required: bool
     agent_authority: str
+    agent_in_execution_path: bool
     notes: list[str]
 
 
@@ -79,15 +83,20 @@ def create_app() -> FastAPI:
     def capabilities() -> CapabilitiesResponse:
         """Declare the authority boundaries this build enforces."""
         return CapabilitiesResponse(
-            phase="0/1",
-            live_trading_enabled=False,
-            autonomous_execution_enabled=False,
-            agent_authority="veto-only",
+            phase="0/1 + architecture amendment",
+            live_trading_implemented=False,
+            implemented_execution_modes=["DISABLED", "SHADOW", "PAPER", "LIMITED_LIVE"],
+            per_trade_human_approval_required=False,
+            agent_authority="veto-only, asynchronous",
+            agent_in_execution_path=False,
             notes=[
                 "Strategy engine is the sole author of trading parameters (ADR-001).",
-                "Agent layer may veto only; it cannot alter any parameter (ADR-002).",
+                "Agents publish cached context out of band and may veto only; the "
+                "execution path never waits for an inference (ADR-002, ADR-006).",
                 "Raw source data under data/raw is immutable (ADR-003).",
-                "Promotion to production requires recorded human approval (ADR-005).",
+                "Human approval gates the control plane and strategy promotion, not "
+                "individual trades (ADR-005, ADR-008).",
+                "ExecutionMode.LIVE is reserved and refused by the control plane.",
             ],
         )
 

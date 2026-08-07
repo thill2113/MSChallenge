@@ -1,13 +1,19 @@
 """Promotion of strategy versions between lifecycle stages.
 
-Promotion to ``PRODUCTION`` is the moment a piece of code gains the ability to
-move real money. That transition is gated on an explicit, recorded human
-approval that binds to the exact version fingerprint being promoted — so
-approving version ``1.2.0`` cannot be replayed to promote ``1.2.1`` (ADR-005).
+``PAPER`` is the first stage that reaches an external venue and ``LIMITED_LIVE``
+is the first that reaches money. Both transitions are gated on an explicit,
+recorded human approval that binds to the exact version fingerprint being
+promoted — so approving version ``1.2.0`` cannot be replayed to promote
+``1.2.1`` (ADR-005).
 
-Stages also advance one step at a time. Skipping from ``RESEARCH`` straight to
-``PRODUCTION`` is rejected even with a valid approval, because the intermediate
-stages are where the evidence for that approval is supposed to come from.
+Stages advance one step at a time. Skipping from ``DEVELOPMENT`` straight to
+``LIMITED_LIVE`` is rejected even with a valid approval, because the
+intermediate stages are where the evidence for that approval is supposed to come
+from.
+
+Note that individual *trades* need no approval once a version reaches
+``LIMITED_LIVE`` and the control plane enables it. Human authority moved to the
+control plane; it did not disappear (ADR-008).
 """
 
 from __future__ import annotations
@@ -22,15 +28,31 @@ from domain.errors import PromotionAuthorityError
 from domain.values import NonEmptyText, TimestampUTC
 
 ALLOWED_TRANSITIONS: Final[dict[PromotionStage, frozenset[PromotionStage]]] = {
-    PromotionStage.RESEARCH: frozenset({PromotionStage.BACKTEST, PromotionStage.RETIRED}),
-    PromotionStage.BACKTEST: frozenset({PromotionStage.PAPER, PromotionStage.RETIRED}),
-    PromotionStage.PAPER: frozenset({PromotionStage.PRODUCTION, PromotionStage.RETIRED}),
-    PromotionStage.PRODUCTION: frozenset({PromotionStage.RETIRED, PromotionStage.PAPER}),
+    PromotionStage.DEVELOPMENT: frozenset({PromotionStage.BACKTEST, PromotionStage.RETIRED}),
+    PromotionStage.BACKTEST: frozenset({PromotionStage.OUT_OF_SAMPLE, PromotionStage.RETIRED}),
+    PromotionStage.OUT_OF_SAMPLE: frozenset({PromotionStage.WALK_FORWARD, PromotionStage.RETIRED}),
+    PromotionStage.WALK_FORWARD: frozenset({PromotionStage.SHADOW, PromotionStage.RETIRED}),
+    PromotionStage.SHADOW: frozenset({PromotionStage.PAPER, PromotionStage.RETIRED}),
+    PromotionStage.PAPER: frozenset({PromotionStage.LIMITED_LIVE, PromotionStage.RETIRED}),
+    PromotionStage.LIMITED_LIVE: frozenset({PromotionStage.PAPER, PromotionStage.RETIRED}),
     PromotionStage.RETIRED: frozenset(),
 }
+"""One step at a time, plus retirement from anywhere.
 
-HUMAN_APPROVAL_REQUIRED: Final[frozenset[PromotionStage]] = frozenset({PromotionStage.PRODUCTION})
-"""Stages that no automated process may enter on its own."""
+``LIMITED_LIVE`` may fall back to ``PAPER`` — demoting a misbehaving strategy
+must never require the same ceremony as promoting one.
+"""
+
+HUMAN_APPROVAL_REQUIRED: Final[frozenset[PromotionStage]] = frozenset(
+    {PromotionStage.PAPER, PromotionStage.LIMITED_LIVE}
+)
+"""Stages that no automated process may enter on its own.
+
+Everything up to ``SHADOW`` is analysis against recorded or simulated data and
+can be driven by an automated pipeline. ``PAPER`` is the first stage that touches
+an external venue, and ``LIMITED_LIVE`` is the first that touches money — the two
+points where the consequences change kind rather than degree.
+"""
 
 
 class HumanApproval(FrozenModel):

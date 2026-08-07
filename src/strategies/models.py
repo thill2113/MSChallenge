@@ -92,7 +92,7 @@ class StrategyVersion(AuthoritativeModel):
         "to behaviour must produce a new version, not a new fingerprint on an old one.",
     )
     parameters: tuple[StrategyParameter, ...] = ()
-    stage: PromotionStage = PromotionStage.RESEARCH
+    stage: PromotionStage = PromotionStage.DEVELOPMENT
     created_at: TimestampUTC
     parent_version: str | None = Field(default=None, pattern=SEMVER_PATTERN)
     notes: NonEmptyText | None = None

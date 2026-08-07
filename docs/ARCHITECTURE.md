@@ -1,31 +1,33 @@
 # Hybrid Trading System — Architecture
 
-**Phase:** 0/1 foundation. No live trading, no autonomous execution, no
-strategies, no production risk values.
+**Status:** Phase 0/1 foundation **+ architecture amendment applied.**
+No live trading. No strategies. No production risk values.
 
-> **Note on the PRD.** This document was written against the Phase 0/1 task
-> brief. `docs/PRD.md` does not exist in this repository — see blocker B-1 in
-> `PHASE_1_STATUS.md`. Where the PRD and this document disagree, the PRD wins
-> and this document gets corrected.
+> **Note on the PRD.** `docs/PRD.md` does not exist in this repository. This
+> document reflects the Phase 0/1 brief as superseded by the architecture
+> amendment. See blocker B-1 in `PHASE_1_STATUS.md`.
 
 ---
 
 ## 1. The one idea
 
-Everything below follows from a single constraint: **deterministic code decides,
-AI reviews, humans promote.**
+**A deterministic automated trading platform that operates independently, with
+agents attached as intelligence, research, auditing and veto layers.**
+
+Not "a safer way for Claude to trade." Claude is not in the execution path, and
+the platform trades without it.
 
 | Layer | May do | May never do |
 |---|---|---|
-| Strategy engine | Author every trading parameter | Read the clock, the network, or global state |
+| Strategy engine | Author every trading parameter | Read the clock, network, or global state |
 | Risk engine | Approve or reject a candidate | Resize, re-stop, re-target |
-| Agent layer | Veto; attach rationale | Alter any parameter; create a trade |
-| Execution layer | Transmit an approved intent | Compute, round or adjust anything |
-| Human | Promote to production | — |
+| Agent layer | Veto (from cache); publish context | Alter a parameter; create a trade; change mode; clear a kill switch; promote |
+| Final validator | Refuse an order | Be overridden — there is no flag |
+| Execution engine | Validate, translate, transmit | Compute, round or adjust anything |
+| Broker adapter | Translate to a venue's dialect | Reinterpret what was asked for |
+| Human | Approve the control plane and promotions | — |
 
-Each row is enforced by types and tested, not by convention. See
-[ADR-001](adr/ADR-001-deterministic-trading-authority.md) and
-[ADR-002](adr/ADR-002-ai-veto-only-authority.md).
+Each row is enforced by types and tested. See the [ADRs](adr/).
 
 ---
 
@@ -33,242 +35,313 @@ Each row is enforced by types and tested, not by convention. See
 
 ```mermaid
 flowchart TD
+    subgraph ASYNC["ASYNCHRONOUS — off the hot path"]
+        AG[agents<br/>analyse context] -->|publish, expiring| CS[(Context / Veto Store)]
+        JR[(journaling<br/>trade ledger)]
+        AN[analytics / reports]
+    end
+
     MD[market_data<br/>MarketSnapshot] --> CTX
-    SIG[signals<br/>SignalSet] --> CTX
-    REG[regime<br/>RegimeAssessment] --> CTX
+    SIG[signals] --> CTX
+    REG[regime] --> CTX
     PF[portfolio<br/>PortfolioState] --> CTX
 
     CTX[EvaluationContext<br/>frozen, fingerprinted] --> STRAT
 
     STRAT{strategies<br/>evaluate}
-    STRAT -->|no setup| NT[NoTrade<br/>journalled]
-    STRAT -->|setup| TC[TradeCandidate<br/>fingerprinted]
+    STRAT -->|no setup| NT[NoTrade]
+    STRAT -->|setup| TC[TradeCandidate]
 
     TC --> RISK{risk<br/>evaluate}
-    RISK -->|REJECTED + violations| STOP1[Blocked<br/>journalled]
-    RISK -->|APPROVED<br/>bound to fingerprint| AGENT
+    RISK -->|REJECTED| STOP1[Blocked]
+    RISK -->|APPROVED| OI
 
-    AGENT{agents<br/>review}
-    AGENT -->|VETO| STOP2[Blocked<br/>journalled]
-    AGENT -->|AFFIRM<br/>same object, unchanged| OI
+    OI[OrderIntent<br/>immutable, embeds approval] --> FV
 
-    OI[OrderIntent<br/>embeds the approval] --> GW
-    GW[execution<br/>ExecutionGateway] --> BR[brokers<br/>SimulatedBroker only in Phase 1]
-    BR --> ER[ExecutionResult]
+    FV{FinalValidator<br/>25 hard gates}
+    CS -.->|cached read,<br/>never waits| FV
+    CP[(control_plane<br/>human-approved config)] -.-> FV
+    KS[(kill switches)] -.-> FV
 
-    NT --> JR[(journaling<br/>trade ledger)]
-    STOP1 --> JR
-    STOP2 --> JR
-    ER --> JR
+    FV -->|ORDER_REJECTED| STOP2[Blocked]
+    FV -->|approved| EE
+
+    EE[execution<br/>ExecutionEngine] --> BR
+    BR[brokers<br/>Broker adapter] --> VENUE[(Venue)]
+    VENUE --> ER[ExecutionResult]
+
+    NT --> EV
+    STOP1 --> EV
+    STOP2 --> EV
+    ER --> EV
+    EV[[EventBus]] -.->|deferred| JR
+    EV -.->|deferred| AN
+    EV -.->|deferred| AG
 
     style STRAT fill:#2d6a4f,color:#fff
     style RISK fill:#9c6644,color:#fff
-    style AGENT fill:#5a4fcf,color:#fff
-    style GW fill:#7f5539,color:#fff
+    style FV fill:#a4161a,color:#fff
+    style EE fill:#7f5539,color:#fff
+    style ASYNC fill:#2b2d42,color:#fff
 ```
 
-A veto and a rejection are both **journalled outcomes**, not silences. A system
-that records only its trades cannot distinguish "the strategy passed" from "the
+Dotted lines are reads and deferred writes. **Nothing in the hot path waits on
+anything dotted.**
+
+A rejection, a veto and a no-trade are all **journalled outcomes**. A system that
+records only its trades cannot distinguish "the strategy passed" from "the
 strategy never ran".
 
 ---
 
-## 3. Repository layout
+## 3. The hot path
+
+```
+Market event
+  → update market state
+  → Strategy.evaluate()          pure, no I/O
+  → Risk.evaluate()              pure, no I/O
+  → context store lookup         dict read, never blocks
+  → FinalValidator.validate()    25 gates, arithmetic only
+  → OrderIntent                  immutable
+  → Broker.submit_order()        the only network call
+```
+
+Explicitly absent: synchronous inference, GitHub calls, report generation,
+database round trips, analytics, human confirmation.
+
+Journalling, analytics and agent triggers are **deferred event handlers**, drained
+outside the path. A handler that raises is logged and counted, never propagated —
+a broken metrics sink must not abort a trade that already passed every risk gate.
+
+**Risk validation is never traded away for latency.** All 25 gates run on every
+order.
+
+---
+
+## 4. Repository layout
 
 ```
 src/
 ├── domain/          shared kernel — value types, enums, frozen bases, fingerprints
+├── control_plane/   human-approved configuration: mode, instruments, sessions,
+│                    allocation, limits binding                        [NEW]
 ├── market_data/     MarketSnapshot, Bar, Quote, provider protocol
 ├── signals/         Signal, SignalSet, SignalComputer protocol   (no indicators yet)
-├── regime/          MarketRegime, RegimeAssessment, classifier protocol (no classifier yet)
+├── regime/          MarketRegime, RegimeAssessment, classifier protocol (none yet)
 ├── strategies/      TradeCandidate, NoTrade, StrategyVersion, registry, promotion,
 │                    determinism harness                          (no strategies)
 ├── risk/            RiskLimits, RiskDecision, RiskEngine          (no production values)
 ├── portfolio/       Position, PortfolioState (read model)
-├── execution/       OrderIntent, ExecutionResult, ExecutionGateway, SimulatedBroker
-├── brokers/
-│   └── robinhood_mcp/   read-only MCP adapter; submit() raises
-├── agents/          AgentReview, gate, AgentReviewer protocol     (no LLM client)
-├── backtesting/     deterministic decision replay                (no P&L simulation)
-├── journaling/      TradeRecord, SQLAlchemy schema, evidence store, import interfaces
-└── observability/   JSON logging, redaction, ops API
+├── agents/          models.py + gate.py     — synchronous review (research only)
+│                    context.py + store.py   — asynchronous context/veto  [NEW]
+├── execution/       OrderIntent, ExecutionResult,
+│                    validator.py  — FinalValidator                      [NEW]
+│                    engine.py     — ExecutionEngine                     [NEW]
+│                    killswitch.py — layered kill switches               [NEW]
+├── brokers/         base.py — generic Broker interface                  [NEW]
+│                    simulated/    — full simulator with failure modes   [NEW]
+│                    robinhood_mcp/— read-only adapter, no capabilities
+├── backtesting/     deterministic decision replay through the real components
+├── journaling/      trade ledger, evidence store, import interfaces
+└── observability/   JSON logging, events.py — event bus  [NEW], ops API
 ```
-
-Each directory is one bounded context and one importable package.
 
 ### Dependency direction
 
 ```
-domain  ←  everything (depends on nothing)
-market_data ← signals, regime, strategies
-portfolio   ← risk
-strategies  ← risk, agents, execution, backtesting
-risk        ← execution, backtesting
-agents      ← execution, backtesting
-execution   ← backtesting
+domain          ← everything (depends on nothing)
+strategies      ← control_plane, risk, agents, execution, backtesting
+control_plane   ← execution
+portfolio       ← risk, execution
+risk            ← execution, backtesting
+agents          ← execution, backtesting
+brokers         ← execution, backtesting
+execution       ← backtesting
 ```
 
-Dependencies flow **downstream along the decision pipeline** and never back.
-Risk imports strategies because it judges candidates; strategies cannot import
-risk, which is precisely why a strategy cannot consult the risk engine to size
-itself. The graph is acyclic and the pipeline order is legible from the imports
-alone.
-
-`domain/` is the only shared kernel. It holds value types, enums, the frozen
-model base and fingerprinting, and imports nothing from `src/`.
+Dependencies flow downstream along the decision pipeline and never back. Risk
+imports strategies because it judges candidates; strategies cannot import risk,
+which is why a strategy cannot consult the risk engine to size itself. The graph
+is acyclic and the pipeline order is legible from the imports alone.
 
 ---
 
-## 4. Domain models
+## 5. Domain models
 
 | Model | Package | Purpose |
 |---|---|---|
 | `MarketSnapshot` | `market_data` | The only market input a strategy may read |
 | `Signal` / `SignalSet` | `signals` | Named, versioned measurements |
 | `RegimeAssessment` | `regime` | Market-state context |
-| `PortfolioState` / `Position` | `portfolio` | Current exposure (read model) |
+| `PortfolioState` / `Position` | `portfolio` | Exposure, open risk, drawdown, streaks |
 | `TradeCandidate` | `strategies` | A fully specified proposal |
 | `NoTrade` | `strategies` | An explicit, journalled decision not to act |
-| `StrategyMetadata` | `strategies` | Identity of a strategy |
-| `StrategyVersion` | `strategies` | Immutable, promotable revision |
+| `StrategyMetadata` / `StrategyVersion` | `strategies` | Identity and immutable revision |
 | `RiskDecision` | `risk` | Binding approve/reject verdict |
-| `AgentReview` | `agents` | Veto or affirm; no trading parameters |
+| `AgentReview` | `agents` | Synchronous veto (research path) |
+| `AgentContext` | `agents` | **Cached, expiring veto/context (production path)** |
+| `ControlPlaneConfig` | `control_plane` | **The human-approved operating envelope** |
 | `OrderIntent` | `execution` | Approved, immutable instruction to trade |
-| `ExecutionResult` | `execution` | What the venue reported |
+| `ExecutionResult` | `execution` | The system's record of what happened |
+| `BrokerOrderRequest` / `BrokerOrder` | `brokers` | **Venue-neutral translation boundary** |
+| `KillSwitch` | `execution` | **One engaged halt, with its trigger** |
+| `DomainEvent` | `observability` | **One thing that happened** |
 | `TradeRecord` | `journaling` | One normalized ledger event |
-
-Models live in the layer that owns them rather than in a shared `models.py`, so
-an import is a statement about authority: `risk` importing `TradeCandidate` says
-risk judges candidates, and the absence of the reverse import says a strategy
-cannot ask risk for permission mid-decision.
 
 ### Guarantees on every record
 
-- **Frozen.** `frozen=True`. Attribute assignment raises.
-- **Closed.** `extra="forbid"`. Undeclared keys are rejected, so nothing can be
-  smuggled through `model_validate`.
-- **Exact.** `float` is *rejected* for money and size, not coerced —
-  `Decimal(0.1)` is not `Decimal("0.1")`, and a fingerprint over a widened float
-  is not reproducible.
-- **Aware.** Naive datetimes are rejected; everything is normalised to UTC.
-- **No hidden inputs.** No `default_factory=datetime.now`, no `uuid4()` default.
-  Timestamps and ids are supplied or derived, which is what makes replay exact.
+- **Frozen** — attribute assignment raises.
+- **Closed** — `extra="forbid"`; nothing can be smuggled through `model_validate`.
+- **Exact** — `float` is *rejected* for money and size, not coerced.
+- **Aware** — naive datetimes rejected; everything normalised to UTC.
+- **No hidden inputs** — no clock defaults, no `uuid4()` defaults. Ids are
+  derived, which is what makes replay exact.
 
-### Fingerprinting
+### Fingerprint chain
 
-`AuthoritativeModel.authoritative_fingerprint()` is a SHA-256 over the fields
-that determine *what the market would feel*, canonicalised so `Decimal("1.50")`
-and `Decimal("1.5")` hash identically. Commentary, review ids and audit
-timestamps are excluded — rewording a rationale must not change the trade.
+```
+MarketSnapshot ─┐
+SignalSet ──────┼─→ EvaluationContext.fingerprint()
+RegimeAssessment┘         │
+                          ↓ recorded as inputs_fingerprint
+              TradeCandidate.authoritative_fingerprint()
+                          │
+      ┌───────────────────┼────────────────────┐
+      ↓                   ↓                    ↓
+ RiskDecision       AgentContext         OrderIntent
+ .candidate_        (scoped, not         .candidate_fingerprint
+  fingerprint        bound)              .idempotency_key = sha256(fp)
+                                         .configuration_hash → ControlPlaneConfig
+```
 
 Downstream layers bind to the fingerprint, which turns "please don't swap the
 candidate after approval" from a rule into a caught error.
 
+**The idempotency key derives from the authoritative fingerprint alone** —
+deliberately *not* from the configuration hash or creation time. A retry after a
+timeout must reach the venue as the same logical order; a key that shifted when
+an unrelated setting changed would turn one order into two.
+
+### Field naming
+
+The amendment's `direction` and `asset_type` are this codebase's `side` and
+`asset_class`. The names were kept because the risk engine, portfolio and ledger
+already use them and renaming across 30 files buys nothing; the semantics are
+identical. Every other field the amendment names exists: `order_id`
+(`order_intent_id`), `decision_id`, `risk_amount`, `configuration_hash`,
+`market_snapshot_hash`.
+
 ---
 
-## 5. Boundary enforcement, concretely
+## 6. Boundary enforcement, concretely
 
-**Agent cannot alter a trade** — `AgentReview` declares no trading parameter
-fields; `FORBIDDEN_REVIEW_FIELDS` is derived from
-`TradeCandidate.AUTHORITATIVE_FIELDS` so new parameters are covered
-automatically; an import-time assertion fails the package if that is ever
-violated; `apply_reviews` returns the candidate *by identity*.
+**Agent cannot alter a trade** — `AgentReview` and `AgentContext` both declare
+no trading-parameter fields; the forbidden set is derived from
+`TradeCandidate.AUTHORITATIVE_FIELDS`, so new parameters are covered
+automatically; import-time assertions fail the package if that is violated. The
+only candidate fields a context may name are `symbol` and `strategy_id`, which
+are *addressing* — they narrow what a veto covers and cannot widen anything.
+
+**Agent cannot delay a trade** — the store is a dict read. `resolve_agent_gate`
+takes `now` as an argument and performs no I/O.
 
 **Risk cannot be bypassed** — `OrderIntent` embeds the `RiskDecision` rather than
-its id, and `assert_authorized` checks verdict, coherence, candidate id and
-fingerprint at both construction and submission. `ExecutionGateway.submit`
-rejects anything that is not an `OrderIntent`.
+its id; `assert_authorized` checks verdict, coherence, candidate id and
+fingerprint at both construction and submission.
 
-**Live trading is unbuilt** — `ExecutionMode.LIVE` raises at gateway
-construction; `RobinhoodMCPAdapter.submit` raises; the MCP adapter's tool
-allowlist is read-only, so a new mutating tool upstream cannot silently widen
-what the system can do.
+**The validator cannot be overridden** — no `force`, no `skip_checks`, no partial
+run. Asserted structurally by inspecting the signature, not left to convention.
+
+**Live trading is unbuilt** — `apply_configuration_change` refuses
+`ExecutionMode.LIVE`; the Robinhood adapter declares no capabilities, so the
+engine refuses it before an order is even built.
 
 **No production risk values** — every `RiskLimits` field is required with no
-default. A limit set cannot be half-specified or inherit a number nobody chose.
+default.
 
 ---
 
-## 6. Data and the ledger
+## 7. Execution modes and the stage ladder
+
+| Mode | Reaches venue | Requires strategy stage ≥ |
+|---|---|---|
+| `DISABLED` | no | — |
+| `SHADOW` | no (validates fully) | `SHADOW` |
+| `PAPER` | paper endpoint | `PAPER` |
+| `LIMITED_LIVE` | real money | `LIMITED_LIVE` |
+| `LIVE` | — | reserved, unimplemented |
 
 ```
-data/raw/          immutable, content-addressed source evidence (ADR-003)
-data/normalized/   regenerable derived output (git-ignored)
-data/fixtures/     small, clearly-fake test inputs
+DEVELOPMENT → BACKTEST → OUT_OF_SAMPLE → WALK_FORWARD → SHADOW ═══► PAPER ═══► LIMITED_LIVE
+└─────────── automated pipeline may drive ───────────┘        ▲              ▲
+                                                    human approval   human approval
 ```
 
-The ledger normalizes five sources into **one** `TradeRecord` shape:
+Mode and stage must **both** permit the trade. Two independent controls agree
+before an order leaves the building.
 
-| Source | Event type |
+**SHADOW is a real path**, not a dry run: every gate executes, only the broker
+call is skipped. A shadow run that would have been rejected is recorded as
+rejected — which is what makes shadow evidence worth anything.
+
+---
+
+## 8. Failure handling
+
+| Failure | Response |
 |---|---|
-| Claude recommendations | `RECOMMENDATION` |
-| Robinhood orders | `ORDER` |
-| Robinhood fills | `FILL` |
-| MCP tool calls | `TOOL_CALL` |
-| This system's own decisions | `STRATEGY_DECISION` |
+| Broker timeout | Record `UNKNOWN`, engage strategy kill switch, **do not retry**. Reconcile. |
+| Broker unavailable | Nothing sent; release the key; engage broker kill switch |
+| Broker rejection | Terminal; record and stop |
+| Duplicate submission | `DuplicateOrderError` — reconcile, don't resubmit |
+| Partial fill | Reported as `PARTIALLY_FILLED` with the actual quantity |
+| Stale data | Gate rejects before submission |
+| Agent down | Behaviour per configured `AgentContextPolicy` |
+| Handler exception | Logged and counted; never propagates |
 
-Five bespoke tables would each need their own queries and migrations, and
-answering "what happened to this idea between recommendation and fill" would
-mean stitching them together by hand. One shape, with source-specific fields
-preserved verbatim in a JSONB `payload` that nothing authoritative ever reads.
+**A timeout is not a failure.** The order may be working. Retrying is how one
+intended position becomes two.
 
-Tables: `raw_documents` (evidence pointers), `ingestion_runs` (one row per
-import attempt, so a partial failure is visible), `trade_records` (the ledger).
-Imports are idempotent on `fingerprint`, so re-running after a partial failure
-is safe. Externally-sourced rows are *required* to carry a
-`raw_document_sha256`.
+### Kill switches: easy to engage, hard to clear
 
-**Import interfaces exist; parsers do not.** Writing a parser against a format
-nobody has inspected produces code that is confidently wrong — it mis-reads a
-column, and the error surfaces months later as a ledger that disagrees with the
-brokerage. Each placeholder importer records the specific questions a human must
-answer first (see `journaling/importers/placeholders.py`).
+Five scopes: `SYSTEM`, `STRATEGY`, `SYMBOL`, `BROKER`, `ACCOUNT`.
+
+Only `BROKER_UNAVAILABLE` and `STALE_MARKET_DATA` may be cleared automatically —
+both describe a transient infrastructure condition that is directly observable.
+Every other trigger describes a risk event, and a risk event that resolves itself
+without anyone looking is exactly what this mechanism exists to prevent.
 
 ---
 
-## 7. Observability
+## 9. Deliberate non-choices
 
-Structured JSON, one object per line, because an incident review means
-correlating a decision, a verdict and a broker response milliseconds apart, and
-grep over prose does not do that. `correlation_scope()` propagates an id across
-modules via contextvars. Sensitive field names are redacted as a backstop; DSNs
-are redacted separately in `journaling.database`.
-
-The FastAPI surface is `/healthz`, `/readyz`, `/capabilities` — **and nothing
-else**. `/capabilities` reports `live_trading_enabled: false` so an operator can
-verify from outside that a running instance cannot trade. A test asserts the
-route list contains no fourth endpoint.
-
----
-
-## 8. Deliberate non-choices
-
-- **No microservices.** One repository, one process, in-process function calls.
-  Network boundaries between a strategy and its risk check add failure modes and
-  buy nothing at this scale.
-- **No message broker, no async, no cache.** Nothing here is latency-bound.
+- **No microservices.** One repository, one process, in-process calls. Network
+  boundaries between a strategy and its risk check add failure modes and buy
+  nothing at this scale.
+- **No message broker.** The event bus is in-process, with an explicit
+  immediate/deferred split so observability cannot lengthen the hot path.
+- **No async/await.** The hot path is arithmetic and one network call.
 - **No P&L backtest.** Decision replay only. Fill and slippage modelling needs
   assumptions nobody has agreed; a number that looks like a return but isn't is
   worse than no number.
-- **No ORM-level business logic.** SQLAlchemy stores rows; Pydantic validates
-  domain records; the mapping between them lives in exactly one place.
-- **No `data/raw` deletion path.** Storage grows monotonically. Revisit only at
-  a scale we are nowhere near.
+- **No slippage in the simulator.** Same reason.
+- **No `data/raw` deletion path.** Storage grows monotonically.
 
 ---
 
-## 9. Where later phases plug in
+## 10. Where later phases plug in
 
-| Capability | Plugs into | Blocked on |
+| Capability | Interface | Blocked on |
 |---|---|---|
-| Real market data | `MarketDataProvider` | vendor choice (D-2) |
+| Real market data | `MarketDataProvider` | D-2 |
 | Indicators | `SignalComputer` | strategy definition |
-| Regime classifier | `RegimeClassifier` | human definition of the boundaries (D-4) |
-| Actual strategies | `Strategy` + registry | out of Phase 0/1 scope |
-| LLM reviewer | `AgentReviewer` | prompt/model choice (Q-2) |
+| Regime classifier | `RegimeClassifier` | D-4 |
+| Actual strategies | `Strategy` + registry | **D-7** |
+| Claude context publisher | writes `AgentContext` | Q-2 |
+| Tradier / IBKR / Alpaca | `Broker` | D-2 |
 | Historical import | `SourceImporter` | inspecting real payloads |
-| Paper trading | `BrokerAdapter` | D-5 |
-| Live trading | — | D-5 + full ADR-005 workflow |
+| Live trading | — | D-5 + ADR-008 workflow |
 
 Every one is an interface that already exists. None requires changing the
 authority model — which is the point of building it first.

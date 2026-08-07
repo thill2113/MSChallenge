@@ -1,9 +1,17 @@
 # ADR-005: Human-controlled production promotion
 
-- **Status:** Accepted
+- **Status:** Accepted (amended by ADR-008)
 - **Date:** 2026-08-07
 - **Phase:** 0/1
-- **Related:** ADR-004
+- **Related:** ADR-004, ADR-008
+
+> **Amendment note.** Human control over *promotion* is unchanged and is now
+> enforced at two transitions rather than one: `SHADOW → PAPER` (first external
+> venue) and `PAPER → LIMITED_LIVE` (first real money). What changed is that
+> individual trades no longer require confirmation — see
+> [ADR-008](ADR-008-automated-execution-and-hard-gates.md). Human authority moved
+> to the control plane, where it bounds what an approved strategy may do instead
+> of approving each thing it does. `PRODUCTION` is now called `LIMITED_LIVE`.
 
 ## Context
 
@@ -20,10 +28,10 @@ The automation does not add a check; it launders the absence of one.
 
 ## Decision
 
-**No automated process may promote a strategy version to `PRODUCTION`.**
+**No automated process may promote a strategy version into `PAPER` or `LIMITED_LIVE`.**
 
 1. `authorize_promotion()` raises `PromotionAuthorityError` unless a
-   `HumanApproval` is supplied for a transition into `PRODUCTION`.
+   `HumanApproval` is supplied for a transition into `PAPER` or `LIMITED_LIVE`.
 2. `HumanApproval` records `approver` (a person, never a service account),
    `approved_at`, `evidence_uri` (PR, signed commit, ticket) and
    `version_fingerprint`.
@@ -31,26 +39,32 @@ The automation does not add a check; it launders the absence of one.
    replayed to promote `1.2.1`, and if the parameters change after approval the
    fingerprint no longer matches and the promotion is refused with
    "the version changed after approval".
-4. **Stages advance one at a time:** `RESEARCH → BACKTEST → PAPER → PRODUCTION`,
-   plus `→ RETIRED` from anywhere. Skipping straight to production is refused
-   *even with a valid approval*, because the intermediate stages are where the
-   evidence for that approval is supposed to come from.
+4. **Stages advance one at a time:** `DEVELOPMENT → BACKTEST → OUT_OF_SAMPLE →
+   WALK_FORWARD → SHADOW → PAPER → LIMITED_LIVE`, plus `→ RETIRED` from
+   anywhere, and `LIMITED_LIVE → PAPER` so demoting a misbehaving strategy never
+   needs the same ceremony as promoting one. Skipping is refused *even with a
+   valid approval*, because the intermediate stages are where the evidence for
+   that approval is supposed to come from. Everything up to `SHADOW` runs against
+   recorded or simulated data and can be driven unattended by an automated
+   research pipeline.
 5. `RETIRED` is terminal. A retired version cannot be revived; publish a new one.
 6. Every transition appends a `PromotionRecord` carrying the approval, forming
    an audit trail of who authorised what and on what evidence.
-7. The same principle gates execution: `ExecutionGateway` refuses
-   `ExecutionMode.LIVE` outright in Phase 0/1, and `RobinhoodMCPAdapter.submit`
-   raises. Live trading is not a flag waiting to be flipped — it is unbuilt
-   until this workflow exists end to end.
+7. The same principle gates execution mode, which lives in the control plane
+   and changes only by recorded human approval. `ExecutionMode.LIVE` is refused
+   by `apply_configuration_change` outright, and the strategy's stage must
+   independently permit the mode. Live trading is not a flag waiting to be
+   flipped — it is unbuilt.
 
 ## Consequences
 
 **Good**
 
-- A named person is accountable for every strategy that can trade real money.
+- A named person is accountable for every strategy that can trade real money,
+  and for the envelope it trades inside.
 - The approval is auditable: fingerprint, timestamp, and a link to the evidence.
-- An automated pipeline can take a version all the way to `PAPER` unattended,
-  so the human decision is the only manual step.
+- An automated pipeline can take a version all the way to `SHADOW` unattended,
+  so the two human decisions are the only manual steps.
 
 **Costs**
 
@@ -65,4 +79,4 @@ The automation does not add a check; it launders the absence of one.
 ## Enforcement
 
 - `tests/unit/test_strategy_promotion.py::TestPromotionRequiresHumanApproval`
-- `tests/unit/test_risk_enforcement.py::TestGatewayReVerifies::test_live_mode_is_refused_outright`
+- `tests/unit/test_kill_switch_and_control_plane.py::TestControlPlaneAuthority`

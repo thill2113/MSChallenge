@@ -1,25 +1,46 @@
-"""Execution layer — transmits, never decides.
+"""Execution layer — validates and transmits, never decides.
 
-Boundary contract (ADR-001):
+Boundary contract (ADR-001, ADR-008):
 
 * **Accepts** an approved, immutable :class:`~execution.models.OrderIntent` and
   nothing else.
+* **Validates** it against every hard gate immediately before submission
+  (:class:`~execution.validator.FinalValidator`). There is no override.
+* **Translates** it for the configured broker without recomputing any price or
+  size.
 * **Produces** an :class:`~execution.models.ExecutionResult`.
-* **Never** computes, rounds, resizes or re-prices anything. Every parameter is
-  copied verbatim from the candidate the risk engine approved.
 
-Live order placement is not implemented in Phase 0/1.
+Per-trade human confirmation is deliberately absent: human authority moved to
+the control plane (:mod:`control_plane`), where it bounds what an approved
+strategy may do rather than approving each thing it does.
 """
 
-from execution.gateway import ExecutionGateway, ExecutionMode, SimulatedBroker
-from execution.models import ExecutionResult, OrderIntent
-from execution.protocols import BrokerAdapter
+from execution.engine import ExecutionEngine
+from execution.killswitch import (
+    KillSwitch,
+    KillSwitchRegistry,
+    KillSwitchTrigger,
+)
+from execution.models import ExecutionResult, OrderIntent, assert_authorized
+from execution.validator import (
+    FinalValidator,
+    GateFailure,
+    RejectionCode,
+    ValidationOutcome,
+    ValidationRequest,
+)
 
 __all__ = [
-    "BrokerAdapter",
-    "ExecutionGateway",
-    "ExecutionMode",
+    "ExecutionEngine",
     "ExecutionResult",
+    "FinalValidator",
+    "GateFailure",
+    "KillSwitch",
+    "KillSwitchRegistry",
+    "KillSwitchTrigger",
     "OrderIntent",
-    "SimulatedBroker",
+    "RejectionCode",
+    "ValidationOutcome",
+    "ValidationRequest",
+    "assert_authorized",
 ]

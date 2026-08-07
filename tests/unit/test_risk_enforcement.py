@@ -14,15 +14,50 @@ from decimal import Decimal
 import pytest
 from pydantic import ValidationError
 
-from domain.enums import AssetClass, ExecutionStatus, RiskVerdict
-from domain.errors import AuthorityViolationError, RiskBypassError
-from execution.gateway import ExecutionGateway, ExecutionMode, SimulatedBroker
+from brokers.simulated import SimulatedBroker
+from domain.enums import AssetClass, ExecutionMode, ExecutionStatus, RiskVerdict
+from domain.errors import RiskBypassError
+from execution.engine import ExecutionEngine
+from execution.killswitch import KillSwitchRegistry
 from execution.models import ExecutionResult, OrderIntent
+from execution.validator import FinalValidator, ValidationRequest
 from portfolio.models import PortfolioState, Position
 from risk.models import RiskDecision, RiskViolation, RiskViolationCode
 from strategies.models import TradeCandidate
 
 pytestmark = pytest.mark.invariant
+
+CONFIG_HASH = "c" * 64
+
+
+def _engine(kill_switches: KillSwitchRegistry) -> ExecutionEngine:
+    return ExecutionEngine(
+        broker=SimulatedBroker(),
+        validator=FinalValidator(kill_switches=kill_switches),
+        kill_switches=kill_switches,
+    )
+
+
+def _valid_intent_placeholder(candidate: TradeCandidate) -> OrderIntent:
+    """A structurally valid intent, used only to satisfy ValidationRequest when
+    the test is about the engine rejecting a *different* object."""
+    from risk.models import RiskDecision
+
+    fingerprint = candidate.authoritative_fingerprint()
+    approved = RiskDecision(
+        decision_id=RiskDecision.derive_id(
+            candidate_fingerprint=fingerprint, limits_fingerprint="b" * 64
+        ),
+        candidate_id=candidate.candidate_id,
+        candidate_fingerprint=fingerprint,
+        verdict=RiskVerdict.APPROVED,
+        limits_name="fixture_limits",
+        limits_fingerprint="b" * 64,
+        evaluated_at=candidate.as_of,
+    )
+    return OrderIntent.from_approved(
+        candidate, approved, created_at=candidate.as_of, configuration_hash=CONFIG_HASH
+    )
 
 
 def _other_candidate_id(candidate: TradeCandidate) -> object:
@@ -132,7 +167,10 @@ class TestRejectionCannotBeBypassed:
     def test_rejected_decision_cannot_produce_an_order_intent(self, candidate, base_time):
         with pytest.raises(RiskBypassError, match="requires an APPROVED risk decision"):
             OrderIntent.from_approved(
-                candidate, _rejected_decision(candidate), created_at=base_time
+                candidate,
+                _rejected_decision(candidate),
+                created_at=base_time,
+                configuration_hash=CONFIG_HASH,
             )
 
     def test_rejected_decision_cannot_be_edited_into_an_approval(self, candidate):
@@ -158,7 +196,9 @@ class TestRejectionCannotBeBypassed:
         forged = _rejected_decision(candidate).model_copy(update={"verdict": RiskVerdict.APPROVED})
         assert forged.is_approved
         with pytest.raises(RiskBypassError, match="claims APPROVED while carrying violations"):
-            OrderIntent.from_approved(candidate, forged, created_at=base_time)
+            OrderIntent.from_approved(
+                candidate, forged, created_at=base_time, configuration_hash=CONFIG_HASH
+            )
 
     def test_rejection_must_state_a_reason(self, candidate):
         fingerprint = candidate.authoritative_fingerprint()
@@ -187,7 +227,9 @@ class TestApprovalIsBoundToTheExactCandidate:
         assert decision.is_approved
         widened = candidate.model_copy(update={"quantity": Decimal("500")})
         with pytest.raises(RiskBypassError, match="different version of this candidate"):
-            OrderIntent.from_approved(widened, decision, created_at=base_time)
+            OrderIntent.from_approved(
+                widened, decision, created_at=base_time, configuration_hash=CONFIG_HASH
+            )
 
     def test_moving_the_stop_after_approval_invalidates_it(
         self, risk_engine, portfolio, candidate, base_time
@@ -195,7 +237,9 @@ class TestApprovalIsBoundToTheExactCandidate:
         decision = risk_engine.evaluate(candidate, portfolio, evaluated_at=base_time)
         loosened = candidate.model_copy(update={"stop_price": Decimal("80.00")})
         with pytest.raises(RiskBypassError, match="different version of this candidate"):
-            OrderIntent.from_approved(loosened, decision, created_at=base_time)
+            OrderIntent.from_approved(
+                loosened, decision, created_at=base_time, configuration_hash=CONFIG_HASH
+            )
 
     def test_approval_for_another_candidate_cannot_be_reused(
         self, risk_engine, portfolio, candidate, base_time
@@ -205,7 +249,9 @@ class TestApprovalIsBoundToTheExactCandidate:
             update={"symbol": "OTHR", "candidate_id": _other_candidate_id(candidate)}
         )
         with pytest.raises(RiskBypassError, match="approves candidate"):
-            OrderIntent.from_approved(other, decision, created_at=base_time)
+            OrderIntent.from_approved(
+                other, decision, created_at=base_time, configuration_hash=CONFIG_HASH
+            )
 
     def test_intent_cannot_be_hand_built_around_the_binding(self, candidate, base_time):
         rejected = _rejected_decision(candidate)
@@ -213,6 +259,7 @@ class TestApprovalIsBoundToTheExactCandidate:
             OrderIntent(
                 order_intent_id=candidate.candidate_id,
                 candidate_id=candidate.candidate_id,
+                decision_id=rejected.decision_id,
                 candidate_fingerprint=candidate.authoritative_fingerprint(),
                 strategy_id=candidate.strategy_id,
                 strategy_version=candidate.strategy_version,
@@ -223,42 +270,67 @@ class TestApprovalIsBoundToTheExactCandidate:
                 order_type=candidate.order_type,
                 limit_price=candidate.limit_price,
                 quantity=candidate.quantity,
+                reference_price=candidate.reference_price,
                 stop_price=candidate.stop_price,
                 target_price=candidate.target_price,
                 time_in_force=candidate.time_in_force,
+                risk_amount=candidate.quantity * candidate.risk_per_unit,
+                account_risk_fraction=candidate.account_risk_fraction,
+                configuration_hash=CONFIG_HASH,
                 created_at=base_time,
             )
 
 
-class TestGatewayReVerifies:
+class TestEngineReVerifies:
     """The last gate re-checks, because an intent may have been deserialised."""
 
-    def test_gateway_refuses_a_non_intent(self, candidate):
-        gateway = ExecutionGateway(SimulatedBroker(), mode=ExecutionMode.SIMULATED)
+    def test_engine_refuses_a_non_intent(
+        self, candidate, kill_switches, config, limits, portfolio, snapshot, base_time
+    ):
+        engine = _engine(kill_switches)
         with pytest.raises(TypeError, match="accepts OrderIntent only"):
-            gateway.submit(candidate)
+            engine.submit(
+                candidate,
+                config=config,
+                validation=ValidationRequest(
+                    intent=_valid_intent_placeholder(candidate),
+                    now=base_time,
+                    config=config,
+                    limits=limits,
+                    portfolio=portfolio,
+                    snapshot=snapshot,
+                ),
+            )
 
-    def test_gateway_transmits_a_valid_intent(self, risk_engine, portfolio, candidate, base_time):
-        broker = SimulatedBroker()
-        gateway = ExecutionGateway(broker, mode=ExecutionMode.SIMULATED)
+    def test_live_mode_is_refused_by_the_control_plane(self, config):
+        from control_plane.config import apply_configuration_change
+        from domain.errors import ControlPlaneError
+        from strategies.promotion import HumanApproval
+
+        proposed = config.model_copy(update={"revision": 2, "execution_mode": ExecutionMode.LIVE})
+        approval = HumanApproval(
+            approver="timmy.hill23@gmail.com",
+            version_key="control_plane@2",
+            version_fingerprint=proposed.configuration_hash,
+            approved_at=config.approved_at,
+            evidence_uri="https://example.invalid/pr/1",
+        )
+        with pytest.raises(ControlPlaneError, match="LIVE is reserved"):
+            apply_configuration_change(config, proposed, approval)
+
+    def test_result_timestamps_must_be_ordered(
+        self, risk_engine, portfolio, candidate, base_time, config
+    ):
         decision = risk_engine.evaluate(candidate, portfolio, evaluated_at=base_time)
-        intent = OrderIntent.from_approved(candidate, decision, created_at=base_time)
-        result = gateway.submit(intent)
-        assert result.status.value == "SIMULATED"
-        assert broker.submitted == (intent,)
-
-    def test_live_mode_is_refused_outright(self):
-        with pytest.raises(AuthorityViolationError, match="live execution is not implemented"):
-            ExecutionGateway(SimulatedBroker(), mode=ExecutionMode.LIVE)
-
-    def test_result_timestamps_must_be_ordered(self, risk_engine, portfolio, candidate, base_time):
-        decision = risk_engine.evaluate(candidate, portfolio, evaluated_at=base_time)
-        intent = OrderIntent.from_approved(candidate, decision, created_at=base_time)
+        intent = OrderIntent.from_approved(
+            candidate, decision, created_at=base_time, configuration_hash=config.configuration_hash
+        )
         with pytest.raises(ValidationError, match="cannot precede submitted_at"):
             ExecutionResult(
                 result_id=intent.order_intent_id,
                 order_intent_id=intent.order_intent_id,
                 order_intent_fingerprint=intent.authoritative_fingerprint(),
+                idempotency_key=intent.idempotency_key,
                 status=ExecutionStatus.ACCEPTED,
                 venue="simulator",
                 submitted_at=base_time,

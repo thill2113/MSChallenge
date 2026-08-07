@@ -38,6 +38,7 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = [
     "src/domain",
+    "src/control_plane",
     "src/market_data",
     "src/signals",
     "src/regime",
@@ -114,7 +115,7 @@ ban-relative-imports = "all"
 
 [tool.ruff.lint.isort]
 known-first-party = [
-    "domain", "market_data", "signals", "regime", "strategies", "risk",
+    "domain", "control_plane", "market_data", "signals", "regime", "strategies", "risk",
     "portfolio", "execution", "brokers", "agents", "backtesting",
     "journaling", "observability",
 ]

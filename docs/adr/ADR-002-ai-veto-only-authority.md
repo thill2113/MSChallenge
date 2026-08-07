@@ -1,9 +1,17 @@
 # ADR-002: AI veto-only authority
 
-- **Status:** Accepted
+- **Status:** Accepted (amended by ADR-006)
 - **Date:** 2026-08-07
 - **Phase:** 0/1
-- **Related:** ADR-001
+- **Related:** ADR-001, ADR-006
+
+> **Amendment note.** The veto-only rule below is unchanged and now applies to
+> two paths. [ADR-006](ADR-006-asynchronous-agent-context.md) moved the
+> production agent *out* of the execution path: agents publish expiring
+> `AgentContext` records out of band and the hot path reads a cache. The
+> synchronous `AgentReview` flow described here is retained for research and
+> backtesting. Both models are structurally incapable of carrying a trading
+> parameter, and both are checked at import time.
 
 ## Context
 

@@ -42,6 +42,63 @@ class ImmutableEvidenceError(DomainError):
     """
 
 
+class ValidationGateError(DomainError):
+    """The final validator refused an order intent.
+
+    Carries the failed gate codes so an operator sees every blocker at once
+    rather than one per retry. See ADR-008.
+    """
+
+    def __init__(self, message: str, codes: tuple[str, ...] = ()) -> None:
+        super().__init__(message)
+        self.codes = codes
+
+
+class KillSwitchEngagedError(DomainError):
+    """A kill switch covering this order is active.
+
+    No agent, strategy or automated process may clear a kill switch that was
+    engaged by a risk control. See ADR-008.
+    """
+
+
+class ControlPlaneError(DomainError):
+    """An attempt to change protected configuration without human authority.
+
+    Execution mode, risk ceilings, enabled instruments and broker configuration
+    live in the control plane and change only by recorded human approval.
+    """
+
+
+class BrokerError(DomainError):
+    """Base class for broker transport failures."""
+
+
+class BrokerUnavailableError(BrokerError):
+    """The venue could not be reached, or reported itself unhealthy."""
+
+
+class BrokerRejectedError(BrokerError):
+    """The venue explicitly refused the order. A definite, terminal answer."""
+
+
+class BrokerTimeoutError(BrokerError):
+    """A request timed out with the outcome unknown.
+
+    This is *not* a failure. The order may be working. Callers must reconcile
+    rather than assume nothing happened — re-sending here is how a duplicate
+    position gets opened. See ADR-008.
+    """
+
+
+class DuplicateOrderError(DomainError):
+    """An order with this idempotency key was already submitted.
+
+    Raised rather than silently returning the prior result so that a caller
+    which believes it is placing a new trade is corrected rather than confirmed.
+    """
+
+
 class ImporterNotImplementedError(DomainError):
     """An import interface exists but its source format has not been inspected.
 

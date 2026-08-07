@@ -121,9 +121,13 @@ class TestOperationsApi:
 
     def test_capabilities_declares_the_authority_boundaries(self, client):
         body = client.get("/capabilities").json()
-        assert body["live_trading_enabled"] is False
-        assert body["autonomous_execution_enabled"] is False
-        assert body["agent_authority"] == "veto-only"
+        assert body["live_trading_implemented"] is False
+        assert body["agent_in_execution_path"] is False
+        assert body["agent_authority"] == "veto-only, asynchronous"
+        # Automatic per-trade execution is the amended design, stated plainly
+        # so an operator can verify it from outside the process.
+        assert body["per_trade_human_approval_required"] is False
+        assert "LIVE" not in body["implemented_execution_modes"]
 
     def test_there_are_no_trading_routes(self, client):
         paths = set(client.app.openapi()["paths"])

@@ -170,24 +170,29 @@ class TestExecutionRejectsAgentInfluence:
     """A veto cannot be laundered into an order, and edits cannot ride along."""
 
     def test_vetoed_candidate_cannot_become_an_order_intent(
-        self, candidate, risk_engine, portfolio, base_time
+        self, candidate, risk_engine, portfolio, base_time, config
     ):
         decision = risk_engine.evaluate(candidate, portfolio, evaluated_at=base_time)
         assert decision.is_approved
         veto = _review(candidate, ReviewVerdict.VETO)
         with pytest.raises(AuthorityViolationError, match="vetoed"):
             OrderIntent.from_approved(
-                candidate, decision, created_at=base_time, agent_reviews=[veto]
+                candidate,
+                decision,
+                created_at=base_time,
+                configuration_hash=config.configuration_hash,
+                agent_reviews=[veto],
             )
 
     def test_order_intent_copies_parameters_verbatim(
-        self, candidate, risk_engine, portfolio, base_time
+        self, candidate, risk_engine, portfolio, base_time, config
     ):
         decision = risk_engine.evaluate(candidate, portfolio, evaluated_at=base_time)
         intent = OrderIntent.from_approved(
             candidate,
             decision,
             created_at=base_time,
+            configuration_hash=config.configuration_hash,
             agent_reviews=[_review(candidate, ReviewVerdict.AFFIRM)],
         )
         assert intent.stop_price == candidate.stop_price
@@ -197,14 +202,19 @@ class TestExecutionRejectsAgentInfluence:
         assert intent.side is candidate.side
         assert intent.time_in_force is candidate.time_in_force
         assert intent.matches_candidate(candidate)
+        assert intent.risk_amount == candidate.quantity * candidate.risk_per_unit
 
     def test_review_written_against_an_edited_candidate_is_rejected_at_the_gate(
-        self, candidate, risk_engine, portfolio, base_time
+        self, candidate, risk_engine, portfolio, base_time, config
     ):
         decision = risk_engine.evaluate(candidate, portfolio, evaluated_at=base_time)
         tightened = candidate.model_copy(update={"stop_price": Decimal("99.50")})
         review_of_edit = _review(tightened, ReviewVerdict.AFFIRM)
         with pytest.raises(AuthorityViolationError, match="different version"):
             OrderIntent.from_approved(
-                candidate, decision, created_at=base_time, agent_reviews=[review_of_edit]
+                candidate,
+                decision,
+                created_at=base_time,
+                configuration_hash=config.configuration_hash,
+                agent_reviews=[review_of_edit],
             )

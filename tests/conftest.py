@@ -8,12 +8,27 @@ open decision D-1.
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, time
 from decimal import Decimal
 
 import pytest
 
-from domain.enums import AssetClass, OrderType, Side, TimeInForce
+from agents.store import InMemoryAgentContextStore
+from control_plane.config import (
+    AccountAllocation,
+    ControlPlaneConfig,
+    InstrumentPermission,
+    TradingSession,
+)
+from domain.enums import (
+    AgentContextPolicy,
+    AssetClass,
+    ExecutionMode,
+    OrderType,
+    Side,
+    TimeInForce,
+)
+from execution.killswitch import KillSwitchRegistry
 from market_data.models import Bar, MarketSnapshot, Quote
 from portfolio.models import PortfolioState
 from risk.engine import RiskEngine
@@ -97,6 +112,13 @@ def limits() -> RiskLimits:
         max_gross_exposure_fraction=Decimal("1.5"),
         max_open_positions=5,
         max_daily_loss_fraction=Decimal("0.03"),
+        max_weekly_loss_fraction=Decimal("0.06"),
+        max_drawdown_fraction=Decimal("0.10"),
+        max_consecutive_losses=4,
+        max_open_portfolio_risk_fraction=Decimal("0.05"),
+        max_correlated_exposure_fraction=Decimal("0.40"),
+        max_market_data_age_seconds=60,
+        max_account_state_age_seconds=120,
         min_reward_risk_ratio=Decimal("1.5"),
         allowed_asset_classes=(AssetClass.EQUITY,),
     )
@@ -128,4 +150,57 @@ def strategy_version(base_time: datetime) -> StrategyVersion:
         version="1.0.0",
         code_fingerprint="a" * 64,
         created_at=base_time,
+    )
+
+
+@pytest.fixture
+def kill_switches() -> KillSwitchRegistry:
+    """An empty kill-switch registry."""
+    return KillSwitchRegistry()
+
+
+@pytest.fixture
+def agent_store() -> InMemoryAgentContextStore:
+    """An empty, healthy agent context store."""
+    return InMemoryAgentContextStore()
+
+
+@pytest.fixture
+def config(limits: RiskLimits, base_time: datetime) -> ControlPlaneConfig:
+    """TEST-ONLY control-plane configuration in SHADOW mode.
+
+    SHADOW is the default for fixtures on purpose: a test that wants to reach a
+    venue has to say so explicitly.
+    """
+    return ControlPlaneConfig(
+        revision=1,
+        execution_mode=ExecutionMode.SHADOW,
+        agent_context_policy=AgentContextPolicy.ALLOW_WITHOUT_AGENT_CONTEXT,
+        agent_context_max_age_seconds=900,
+        enabled_strategy_keys=("fixture_double@1.0.0",),
+        instruments=(
+            InstrumentPermission(
+                symbol="ACME",
+                asset_class=AssetClass.EQUITY,
+                max_position_notional_fraction=Decimal("0.25"),
+                correlation_group="fixture_group",
+            ),
+        ),
+        allocation=AccountAllocation(
+            account_id="TEST-ACCOUNT",
+            allocated_equity_fraction=Decimal("1"),
+            broker_id="simulator",
+        ),
+        sessions=(
+            TradingSession(
+                name="regular",
+                exchange_timezone="America/New_York",
+                opens_at=time(9, 30),
+                closes_at=time(16, 0),
+            ),
+        ),
+        risk_limits_name=limits.name,
+        risk_limits_fingerprint=limits.authoritative_fingerprint(),
+        approved_by="timmy.hill23@gmail.com",
+        approved_at=base_time,
     )
