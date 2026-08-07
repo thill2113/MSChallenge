@@ -1,0 +1,42 @@
+# Local development stack. Not a deployment manifest.
+#
+# No credentials are stored here. POSTGRES_PASSWORD has no default and no
+# fallback: compose fails with the message below unless it is set in an
+# untracked .env file. See .env.example.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env (see .env.example)}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env (see .env.example)}
+      POSTGRES_DB: ${POSTGRES_DB:-trading}
+    ports:
+      - "127.0.0.1:5432:5432"  # loopback only; never expose the dev database
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      target: runtime
+    environment:
+      TRADING_DATABASE_URL: ${TRADING_DATABASE_URL:?set TRADING_DATABASE_URL in .env}
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+
+volumes:
+  postgres_data:

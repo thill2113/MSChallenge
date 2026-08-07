@@ -1,0 +1,12 @@
+{
+  "_comment": "TEST DATA ONLY. Every value below is arbitrary and exists to show the shape of a RiskLimits record. These are NOT recommended production limits. Production values require a human decision - see docs/PHASE_1_STATUS.md, open decision D-1.",
+  "name": "example_limits",
+  "revision": 1,
+  "max_account_risk_fraction": "0.01",
+  "max_position_notional_fraction": "0.25",
+  "max_gross_exposure_fraction": "1.5",
+  "max_open_positions": 5,
+  "max_daily_loss_fraction": "0.03",
+  "min_reward_risk_ratio": "1.5",
+  "allowed_asset_classes": ["EQUITY"]
+}

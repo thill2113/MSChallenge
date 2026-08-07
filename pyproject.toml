@@ -1,0 +1,177 @@
+[project]
+name = "hybrid-trading-system"
+version = "0.1.0"
+description = "Hybrid Trading System — deterministic strategy authority with AI veto-only review (Phase 0/1 foundation)."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Proprietary" }
+
+dependencies = [
+    "pydantic>=2.9",
+    "pydantic-settings>=2.5",
+    "sqlalchemy>=2.0.36",
+    "alembic>=1.14",
+    "psycopg[binary]>=3.2",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "hypothesis>=6.112",
+    "ruff>=0.7",
+    "mypy>=1.13",
+    "pip-audit>=2.7",
+    "bandit>=1.7",
+    "httpx2>=0.29",  # starlette's TestClient transport
+    "types-psycopg2>=2.9",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# The monorepo intentionally exposes one importable package per bounded context,
+# rooted at src/. See docs/ARCHITECTURE.md for the dependency direction rules.
+[tool.hatch.build.targets.wheel]
+packages = [
+    "src/domain",
+    "src/market_data",
+    "src/signals",
+    "src/regime",
+    "src/strategies",
+    "src/risk",
+    "src/portfolio",
+    "src/execution",
+    "src/brokers",
+    "src/agents",
+    "src/backtesting",
+    "src/journaling",
+    "src/observability",
+]
+
+[tool.uv]
+package = true
+
+# ---------------------------------------------------------------------------
+# pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+]
+markers = [
+    "invariant: proves a documented architectural invariant (see docs/adr/).",
+    "integration: requires an external service such as PostgreSQL.",
+]
+filterwarnings = ["error"]
+
+# ---------------------------------------------------------------------------
+# ruff
+# ---------------------------------------------------------------------------
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",    # pycodestyle
+    "F",         # pyflakes
+    "I",         # isort
+    "B",         # bugbear
+    "C4",        # comprehensions
+    "UP",        # pyupgrade
+    "ANN",       # annotations
+    "S",         # bandit-style security rules
+    "T20",       # no print()
+    "RET",       # return simplification
+    "SIM",       # simplify
+    "TID",       # tidy imports
+    "PTH",       # pathlib
+    "RUF",       # ruff-specific
+]
+ignore = [
+    "ANN401",  # explicit Any is occasionally required at boundaries
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "S101",  # asserts are the point of a test suite
+    "ANN",   # pytest fixtures are typed by the fixture definition, not the call site
+]
+"scripts/**" = ["T20"]  # scripts report to stdout by design
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "domain", "market_data", "signals", "regime", "strategies", "risk",
+    "portfolio", "execution", "brokers", "agents", "backtesting",
+    "journaling", "observability",
+]
+
+# ---------------------------------------------------------------------------
+# mypy
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "src"
+strict = true
+warn_unreachable = true
+disallow_any_unimported = true
+plugins = ["pydantic.mypy"]
+files = ["src", "tests", "scripts"]
+
+# Full strictness applies to src/ and scripts/. Test modules relax the
+# annotation rules only: fixtures are typed at their definition, and requiring
+# the same signatures at every call site adds noise without catching anything.
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_untyped_calls = false
+warn_unused_ignores = false
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+# ---------------------------------------------------------------------------
+# coverage
+# ---------------------------------------------------------------------------
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "\\.\\.\\.",
+]
+
+# ---------------------------------------------------------------------------
+# bandit
+# ---------------------------------------------------------------------------
+[tool.bandit]
+exclude_dirs = ["tests", ".venv"]
+# B404/B603/B607 fire on the single `git diff` call in
+# scripts/check_raw_immutability.py: fixed argv, no shell, no user-controlled
+# input. They are skipped here rather than suppressed inline because bandit's
+# import-level finding (B404) has no useful per-line anchor. The same ground is
+# covered by ruff's `S` rules, which are enabled repo-wide and require an
+# explicit `# noqa` at every occurrence — so a new subprocess call still has to
+# be justified in review.
+skips = ["B404", "B603", "B607"]
