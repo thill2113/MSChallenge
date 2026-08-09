@@ -35,3 +35,6 @@ htmlcov/
 data/normalized/*
 !data/normalized/.gitkeep
 !data/normalized/README.md
+
+# Handoff bundles produced by `make bundle`.
+build/

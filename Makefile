@@ -1,4 +1,6 @@
-.PHONY: help install lint format typecheck test invariants security data-check check api clean
+.PHONY: help install lint format typecheck test invariants security data-check check api bundle clean
+
+BUNDLE_OUT ?= build/handoff
 
 UV ?= uv
 
@@ -40,7 +42,10 @@ check: lint typecheck test security data-check  ## Everything CI runs
 api:  ## Serve the operations API locally
 	$(UV) run uvicorn observability.api:app --reload --port 8000
 
+bundle:  ## Package src+tests+docs as plain-text parts and a zip for external review
+	$(UV) run python scripts/package_source.py --out $(BUNDLE_OUT)
+
 clean:  ## Remove caches and derived files
 	rm -rf .pytest_cache .mypy_cache .ruff_cache .hypothesis htmlcov \
-		coverage.xml .coverage requirements-audit.txt
+		coverage.xml .coverage requirements-audit.txt build
 	find . -type d -name __pycache__ -not -path "./.venv/*" -exec rm -rf {} +
