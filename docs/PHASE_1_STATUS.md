@@ -3,8 +3,12 @@
 **Date:** 2026-08-07
 **Branch:** `claude/hybrid-trading-foundation-ra4xfx`
 
-**Quality gate:** 291 tests passing (178 marked `invariant`) · mypy `--strict`
-clean across 84 files · ruff + format clean · pip-audit clean · bandit clean.
+**Quality gate:** 321 tests passing (178 marked `invariant`) · mypy `--strict`
+clean across 89 files · ruff + format clean · pip-audit clean · bandit clean.
+
+**2026-08-09 update:** Robinhood history captured and analysed; **strategy v1
+(`trend_breakout@1.0.0`) authored** — see [STRATEGY_V1.md](STRATEGY_V1.md).
+Decision D-7 is answered. New blocker **B-5** below.
 
 ---
 
@@ -154,7 +158,7 @@ Amendment build order items **1–13 are complete**.
 | 12 | Kill-switch framework | ✅ |
 | 13 | Event/audit model | ✅ |
 | 14 | One paper/sandbox broker adapter | ⬜ blocked on **D-2** |
-| 15 | Deterministic strategy v1 | ⬜ blocked on **D-7** |
+| 15 | Deterministic strategy v1 | ✅ `trend_breakout@1.0.0` — authored, tested, **not backtested** |
 | 16 | Shadow execution | 🟡 **infrastructure complete and tested**; needs a real strategy to be meaningful |
 | 17 | Async AgentContext / veto store | ✅ (store + policies; no publisher) |
 | 18 | Claude integration | ⬜ blocked on **Q-2** |
@@ -168,7 +172,7 @@ Amendment build order items **1–13 are complete**.
 | Live money disabled | ✅ refused by the control plane and by capability declaration |
 | Historical data can be normalized | 🟡 schema + interfaces ready; no parsers (by design, ADR-003) |
 | Market data creates `MarketSnapshot` | ✅ (from fixtures; no live feed — D-2) |
-| A deterministic strategy evaluates it | 🟡 **harness proven with a test double; no real strategy — D-7** |
+| A deterministic strategy evaluates it | ✅ `trend_breakout@1.0.0` (untested hypothesis, but real) |
 | `RiskEngine` approves/rejects | ✅ |
 | `FinalValidator` works | ✅ 25 gates, 42 tests |
 | `OrderIntent` is immutable | ✅ |
@@ -179,9 +183,9 @@ Amendment build order items **1–13 are complete**.
 | **Claude not required to execute** | ✅ **proven directly** — `test_the_pipeline_runs_with_no_agent_store_at_all` |
 | Automated tests verify risk cannot be bypassed | ✅ 178 invariant tests |
 
-**Everything except a real strategy is done.** The pipeline is proven end to end
-with a fixture double explicitly documented as having no market thesis. Writing
-the real one is decision **D-7**, below.
+**The §16 first working concept is complete.** Every criterion is met. The one
+remaining qualifier is that strategy v1 is an *untested hypothesis* — the
+machinery is proven, the edge is not. Backtesting it is the next task.
 
 ---
 
@@ -192,7 +196,9 @@ the real one is decision **D-7**, below.
 | **B-1** | `docs/PRD.md` absent | Requirements that contradict these choices are unknown | You: supply it, or confirm the briefs are the source of truth |
 | **B-2** | No historical data captured | Importers cannot be written (ADR-003); ledger schema untested against real shapes | You: export Claude history; authorise read-only MCP pulls |
 | **B-3** | No production risk values | Nothing can be approved. **Now higher-stakes than before** — the limits replaced per-trade confirmation as the backstop | You: **D-1** |
-| **B-4** | No strategy exists | SHADOW mode has nothing meaningful to shadow | You: **D-7** |
+| **B-4** | ~~No strategy exists~~ | **RESOLVED** — `trend_breakout@1.0.0` authored, 30 tests, DEVELOPMENT stage | Backtest it |
+| **B-5** | **The funded account is not agent-accessible** | `agentic_allowed=false` on the $6,474 margin account; `true` only on the $157.94 cash account. At $157.94 the strategy correctly refuses every trade — the risk budget buys less than one share. Automation has nothing to run against. | You: enable agent access on the funded account, **or** accept that automation runs paper-only |
+| **B-6** | No historical price series | The strategy needs ≥10y of daily bars to backtest. `get_equity_historicals` can supply them, but nothing has been captured yet. | Nothing — next task |
 
 ---
 
@@ -200,11 +206,14 @@ the real one is decision **D-7**, below.
 
 In order, with dependencies:
 
-1. **Capture Robinhood + Claude history into `data/raw`** *(no dependency — start here)*
-   Write `scripts/capture_robinhood_history.py` using `RobinhoodMCPAdapter.fetch`
-   and `RawDocumentStore`. Redact before storing; ADR-003 makes it permanent.
-2. **Inspect the payloads and write `RobinhoodOrderImporter`** *(depends on 1)*
-   Answers the questions in `RobinhoodOrderImporter.open_questions`.
+1. ~~**Capture Robinhood history**~~ — **DONE.** 19 equity orders, 122 option
+   orders, 66 realizing trades, 2 accounts. `scripts/capture_robinhood_history.py`
+   written (redact-then-store). Payload shapes now inspected, so
+   `RobinhoodOrderImporter.open_questions` are answerable.
+2. **Capture daily price history and backtest strategy v1** *(the critical path)*
+   `get_equity_historicals` supplies ≥10y of split-adjusted daily bars. Then run
+   `run_replay` over them and find out whether v1 has any expectancy.
+3. **Write `RobinhoodOrderImporter`** — the shapes are known now.
 3. **Alembic migration + PostgreSQL load** *(depends on 2)*
 4. **Persist the strategy registry, promotion history and control-plane
    revisions** *(no dependency)* — all three are in-process only today.
@@ -290,13 +299,18 @@ many trades, what agreement between shadow and paper results?
 
 ### D-6 — Scope of Claude recommendation history export
 
-### D-7 — **What is strategy v1?** *(new)*
-The pipeline is proven with a test double that has no market thesis. A real
-strategy needs: instrument(s), entry condition, stop placement rule, target rule,
-position sizing rule, and the signals it depends on. **I have not invented one** —
-the original brief said not to, and the amendment did not revoke that. If you
-want me to author one, say so explicitly and tell me the thesis; otherwise supply
-it and I'll implement, version and test it.
+### D-7 — ~~What is strategy v1?~~ **ANSWERED 2026-08-09**
+`trend_breakout@1.0.0` — long-only 20-bar breakout in a 50/200 uptrend, 2×ATR
+stop, 3×ATR target, 0.5% risk sizing. Designed against the account's actual loss
+mechanism (0.24 payoff ratio, no stops ever used). **Not backtested.** Full
+rationale, honest expectancy assessment and kill criteria in
+[STRATEGY_V1.md](STRATEGY_V1.md).
+
+What still needs you: **the universe.** The strategy deliberately does not pick
+its own instruments — that lives in control-plane configuration. Which symbols
+should it be allowed to trade? My suggestion for a first pass: 5–10 liquid
+large-cap ETFs and megacaps (SPY, QQQ, IWM, AAPL, MSFT…), nothing under $10 and
+nothing with a spread problem.
 
 ### D-8 — **Which `AgentContextPolicy` for production?** *(new)*
 Three implemented, no default:
