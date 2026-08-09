@@ -1,12 +1,15 @@
 # Strategy v1 — `trend_breakout@1.0.0`
 
-**Status:** DEVELOPMENT. Not backtested. **This is a hypothesis, not an edge.**
+**Status:** BACKTEST. **Backtested 2026-08-09 — the honest answer is "probably
+a small edge, not proven".** See §8 for the numbers and §9 for what they don't
+cover.
 
-I was asked for the best strategy I can produce. This is it — but "best I can
-produce" and "profitable" are different claims, and I am only making the first
-one. Nothing below has been tested against a single day of real price history.
-Its purpose is to be the thing that goes through BACKTEST → OUT_OF_SAMPLE →
-WALK_FORWARD → SHADOW and *finds out*. It may not survive that. Most don't.
+Short version: on a universe I picked with hindsight it looks excellent
+(+0.30 R/trade, t = 5.6). On a control universe of large caps that
+*underperformed* over the same period it drops to +0.058 R with **t = 0.83 —
+statistically indistinguishable from zero**. Most of the headline was my own
+selection bias. The truth is somewhere between, and the strategy is not yet
+worth real money.
 
 ---
 
@@ -163,3 +166,87 @@ The two approvals are yours and cannot be automated (ADR-005).
 walk-forward expectancy ≤ 0 after costs · max drawdown > 20% · fewer than 100
 trades in 10 years (too rare to evaluate) · win rate below 30% *and* payoff
 below 1.5.
+
+
+---
+
+## 8. Backtest results (2026-08-09)
+
+**Data:** Robinhood daily bars, split-adjusted, 2015-01-02 → 2026-08-07
+(2,916 bars/symbol). **Entry:** limit at the signal close, exactly as the
+strategy specifies. **Costs:** 0.02% slippage per side. **Intrabar ambiguity
+always resolves to the stop.** Gaps fill at the open, not the level.
+
+| Universe | Trades | Win rate | Payoff | **Expectancy** | **t-stat** | Total | Max DD |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 10 megacaps/ETFs *(cherry-picked)* | 592 | 50.0% | 1.62 | **+0.301 R** | **5.63** | +178 R | −17.0 R |
+| 9 large-cap laggards *(control)* | 360 | 40.3% | 1.63 | **+0.058 R** | **0.83** | +21 R | −19.5 R |
+| Combined, 19 symbols | 952 | 46.3% | 1.62 | **+0.209 R** | **4.91** | +199 R | −25.6 R |
+
+Break-even win rate is 38.2%. Both universes clear it; the control clears it by
+2.2 points, which is noise.
+
+**Time splits** (cherry-picked universe):
+
+| Period | Trades | Win rate | Expectancy |
+|---|---:|---:|---:|
+| 2015–2020 | 288 | 52.8% | +0.381 R |
+| 2021–2026 *(holdout)* | 307 | 47.2% | +0.222 R |
+| 2022 bear only | **10** | 10.0% | −0.729 R |
+
+### What these say
+
+**The regime filter works.** In 2022 the strategy took **10 trades all year**
+instead of ~55 — the 200-bar filter kept it out of the market almost entirely.
+It still lost 7.3 R, but at 0.5% risk that is −3.7% of the account in the worst
+year of the sample. That is the behaviour the filter is for.
+
+**The edge degrades but survives out of sample.** +0.38 R early, +0.22 R late.
+Degradation of that size across a 6/5-year split is normal and not alarming.
+
+**Selection bias was doing most of the work.** This is the finding that matters.
+The gap between +0.301 and +0.058 is the difference between the symbols I chose
+and the symbols I chose *as a control*. Neither is unbiased — I picked the
+laggards with hindsight too, which biases that number *down*. The combined
+19-symbol figure (+0.209 R) is the least-bad estimate I have, and it is still
+not survivorship-free.
+
+**Consecutive losses will trip the kill switch.** Observed max is 13–17. The
+shadow limits set `max_consecutive_losses: 6`. As configured, this strategy
+**will** halt itself and need a human to clear it, probably more than once a
+year. Either the limit rises to ~15 or that is accepted as intended friction —
+that is decision D-1, and it is now a concrete question rather than an abstract
+one.
+
+## 9. What the backtest does *not* cover
+
+- **Survivorship.** Both universes contain only companies that still exist. No
+  delistings, no bankruptcies, no acquisitions. A proper test needs point-in-time
+  index constituents, which I do not have. This biases results **up**, and it is
+  the largest remaining unknown.
+- **One position per symbol, not one position total.** The backtest allows
+  concurrent positions across 19 symbols. The shadow limits allow **one open
+  position at a time**. Real deployment would take a small fraction of these 952
+  trades — whichever fired first — so the realised sequence, and its drawdown,
+  will differ from anything above.
+- **No walk-forward.** Parameters were fixed before the first run and never
+  tuned, so there is no overfitting *to this data* — but there is also no
+  evidence they would have been chosen without hindsight about what works.
+- **11.6 years, one bull market with two corrections.** 2022 is the only real
+  bear in the sample and it produced 10 trades.
+- **Liquidity and spread are assumed benign.** True for these 19 names, not for
+  a wider universe.
+
+## 10. Verdict
+
+Against the kill criteria in §7: expectancy is positive after costs in every
+cut except the 2022 bear ✓; max drawdown 25.6 R ≈ 12.8% of account at 0.5% risk,
+inside the 20% limit ✓; 952 trades over 11 years, well past the 100 floor ✓;
+win rate 46.3% with payoff 1.62 ✓.
+
+**It passes, but the control universe says the honest expectancy is somewhere
+between +0.06 and +0.21 R, and the low end is not distinguishable from zero.**
+
+That is enough to justify SHADOW. It is not enough to justify money. The next
+evidence that would actually move this is a survivorship-free universe — every
+S&P constituent as of each date, including the ones that no longer exist.
