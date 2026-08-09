@@ -53,12 +53,38 @@ class EvaluationContext(FrozenModel):
         Stored on the resulting decision as ``inputs_fingerprint``, giving a
         two-sided audit trail: which inputs produced this decision, and whether
         those inputs have since changed.
+
+        Built as a digest *of digests* rather than a deep walk of every nested
+        field. Each member already fingerprints itself and memoises the result,
+        so a snapshot shared by two hundred overlapping look-back windows is
+        hashed once rather than two hundred times. The security property is the
+        same — a change anywhere still changes the answer — and the cost drops
+        from quadratic to linear, which matters in the hot path as much as in a
+        backtest.
         """
-        payload = {
-            name: canonical_form(getattr(self, name)) for name in sorted(type(self).model_fields)
-        }
-        encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
-        return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+        parts: list[str] = [
+            "symbol",
+            self.symbol,
+            "as_of",
+            self.as_of.isoformat(),
+            "snapshot",
+            self.snapshot.authoritative_fingerprint(),
+            "history",
+            *(s.authoritative_fingerprint() for s in self.history),
+        ]
+        for name in ("signals", "regime", "portfolio"):
+            member = getattr(self, name)
+            parts.append(name)
+            parts.append(
+                "\x00"
+                if member is None
+                else hashlib.sha256(
+                    json.dumps(
+                        canonical_form(member), sort_keys=True, separators=(",", ":")
+                    ).encode()
+                ).hexdigest()
+            )
+        return hashlib.sha256("\x1f".join(parts).encode("utf-8")).hexdigest()
 
     @classmethod
     def build(

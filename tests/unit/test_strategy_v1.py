@@ -250,3 +250,42 @@ class TestDeterminism:
         context = _context(_uptrend())
         decision = TrendBreakoutV1().evaluate(context)
         assert decision.inputs_fingerprint == context.fingerprint()
+
+
+class TestContextFingerprintIntegrity:
+    """The context digest is a digest-of-digests. It must still detect any change."""
+
+    def test_changing_any_history_bar_changes_the_context_fingerprint(self):
+        series = _uptrend(n=205)
+        before = _context(series).fingerprint()
+        tampered = list(series)
+        tampered[10] = tampered[10].model_copy(update={"last_price": Decimal("999")})
+        assert _context(tampered).fingerprint() != before
+
+    def test_changing_the_current_snapshot_changes_it(self):
+        series = _uptrend(n=205)
+        before = _context(series).fingerprint()
+        moved = list(series)
+        moved[-1] = moved[-1].model_copy(update={"last_price": Decimal("999")})
+        assert _context(moved).fingerprint() != before
+
+    def test_reordering_history_changes_it(self):
+        series = _uptrend(n=205)
+        before = _context(series).fingerprint()
+        swapped = list(series)
+        swapped[5], swapped[6] = swapped[6], swapped[5]
+        assert _context(swapped).fingerprint() != before
+
+    def test_truncating_history_changes_it(self):
+        series = _uptrend(n=205)
+        assert _context(series).fingerprint() != _context(series[1:]).fingerprint()
+
+    def test_changing_the_portfolio_view_changes_it(self):
+        series = _uptrend(n=205)
+        before = _context(series).fingerprint()
+        other = PortfolioView(account_equity="99999.00")
+        assert _context(series, portfolio=other).fingerprint() != before
+
+    def test_dropping_the_portfolio_view_changes_it(self):
+        series = _uptrend(n=205)
+        assert _context(series).fingerprint() != _context(series, portfolio=None).fingerprint()

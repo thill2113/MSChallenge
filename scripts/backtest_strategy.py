@@ -81,9 +81,18 @@ def run(
     time_stop_bars: int | None,
     start: str | None = None,
     end: str | None = None,
+    strategy: TrendBreakoutV1 | None = None,
+    max_positions: int | None = None,
 ) -> BacktestReport:
-    """Replay the strategy across every symbol and resolve each candidate."""
-    strategy = TrendBreakoutV1()
+    """Replay the strategy across every symbol and resolve each candidate.
+
+    ``max_positions`` models the portfolio constraint the risk limits actually
+    impose — a ceiling on concurrent positions across the *whole book*, not one
+    per symbol. It changes which trades get taken, because a full book blocks
+    every signal until something closes. ``None`` means unlimited, which is what
+    a naive per-symbol backtest silently assumes.
+    """
+    strategy = strategy or TrendBreakoutV1()
     window = strategy.required_history()
     portfolio = PortfolioView(account_equity=equity)
 
@@ -91,37 +100,54 @@ def run(
     signals = 0
     signal_dates: list[str] = []
 
-    for symbol, snapshots in sorted(series.items()):
-        held_until = -1  # index before which no new entry may be taken
-        for index in range(window, len(snapshots) - 1):
-            if index <= held_until:
-                continue  # one position at a time, per the strategy's own rule
-            context = EvaluationContext.build(
-                snapshot=snapshots[index],
-                history=snapshots[max(0, index - window) : index],
-                portfolio=portfolio,
-            )
-            decision = strategy.evaluate(context)
-            if not isinstance(decision, TradeCandidate):
-                continue
-            signal_date = snapshots[index].as_of.date().isoformat()
-            if (start and signal_date < start) or (end and signal_date >= end):
-                continue
+    # Chronological sweep across all symbols, so a single-position book is
+    # allocated by whichever signal actually fired first.
+    events: list[tuple[datetime, str, int]] = []
+    for symbol, snapshots in series.items():
+        events.extend((snapshots[i].as_of, symbol, i) for i in range(window, len(snapshots) - 1))
+    events.sort()
 
-            signals += 1
-            signal_dates.append(signal_date)
-            trade = simulate_trade(
-                decision,
-                snapshots[index + 1 :],
-                entry_style=entry_style,
-                slippage_fraction=slippage,
-                time_stop_bars=time_stop_bars,
-            )
-            if trade is None:
+    held_until_per_symbol: dict[str, datetime] = {}
+    open_until: list[datetime] = []  # exit times of currently-open positions
+
+    for as_of, symbol, index in events:
+        snapshots = series[symbol]
+        # Re-entry only *after* the exit bar. Re-entering on the bar you exited
+        # assumes you knew intraday that the stop had filled, which a daily-bar
+        # system does not.
+        blocked_until = held_until_per_symbol.get(symbol)
+        if blocked_until is not None and as_of <= blocked_until:
+            continue
+        if max_positions is not None:
+            open_until[:] = [t for t in open_until if t >= as_of]
+            if len(open_until) >= max_positions:
                 continue
-            trades.append(trade)
-            held_until = index + 1 + trade.bars_held
-        print(f"  {symbol:6s} {len(snapshots):5d} bars", file=sys.stderr)
+        context = EvaluationContext.build(
+            snapshot=snapshots[index],
+            history=snapshots[max(0, index - window) : index],
+            portfolio=portfolio,
+        )
+        decision = strategy.evaluate(context)
+        if not isinstance(decision, TradeCandidate):
+            continue
+        signal_date = as_of.date().isoformat()
+        if (start and signal_date < start) or (end and signal_date >= end):
+            continue
+
+        signals += 1
+        signal_dates.append(signal_date)
+        trade = simulate_trade(
+            decision,
+            snapshots[index + 1 :],
+            entry_style=entry_style,
+            slippage_fraction=slippage,
+            time_stop_bars=time_stop_bars,
+        )
+        if trade is None:
+            continue
+        trades.append(trade)
+        held_until_per_symbol[symbol] = trade.exit_at
+        open_until.append(trade.exit_at)
 
     return BacktestReport(
         strategy_key=f"{strategy.metadata.strategy_id}@{strategy.version}",
@@ -178,6 +204,16 @@ def main() -> int:
     parser.add_argument("--start", default=None, help="Only signals on/after this ISO date.")
     parser.add_argument("--end", default=None, help="Only signals before this ISO date.")
     parser.add_argument("--by-symbol", action="store_true", help="Per-symbol contribution.")
+    parser.add_argument(
+        "--max-positions",
+        type=int,
+        default=None,
+        help="Concurrent positions across the whole book. Omit for unlimited.",
+    )
+    parser.add_argument("--stop-atr", default=None)
+    parser.add_argument("--target-atr", default=None)
+    parser.add_argument("--breakout", type=int, default=None)
+    parser.add_argument("--trend", type=int, default=None)
     args = parser.parse_args()
 
     print("loading bars...", file=sys.stderr)
@@ -190,6 +226,19 @@ def main() -> int:
         time_stop_bars=args.time_stop,
         start=args.start,
         end=args.end,
+        max_positions=args.max_positions,
+        strategy=TrendBreakoutV1(
+            **{
+                k: v
+                for k, v in {
+                    "stop_atr_multiple": Decimal(args.stop_atr) if args.stop_atr else None,
+                    "target_atr_multiple": Decimal(args.target_atr) if args.target_atr else None,
+                    "breakout_period": args.breakout,
+                    "trend_period": args.trend,
+                }.items()
+                if v is not None
+            }
+        ),
     )
     report(result, Decimal(args.slippage))
     if args.by_symbol:

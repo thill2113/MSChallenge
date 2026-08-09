@@ -1,8 +1,8 @@
 # Strategy v1 — `trend_breakout@1.0.0`
 
-**Status:** BACKTEST. **Backtested 2026-08-09 — the honest answer is "probably
-a small edge, not proven".** See §8 for the numbers and §9 for what they don't
-cover.
+**Status:** BACKTEST. **The edge is real but small, and the portfolio limit as
+configured makes it worthless.** See §8 for the backtest, §11 for the
+robustness and position-limit work that followed.
 
 Short version: on a universe I picked with hindsight it looks excellent
 (+0.30 R/trade, t = 5.6). On a control universe of large caps that
@@ -250,3 +250,91 @@ between +0.06 and +0.21 R, and the low end is not distinguishable from zero.**
 That is enough to justify SHADOW. It is not enough to justify money. The next
 evidence that would actually move this is a survivorship-free universe — every
 S&P constituent as of each date, including the ones that no longer exist.
+
+
+---
+
+## 11. Robustness and the position limit (2026-08-09, second pass)
+
+Two tests, chosen because they were the ones most likely to *kill* the strategy.
+A classic walk-forward was skipped deliberately: the parameters were never
+tuned, so re-fitting them per window would have introduced overfitting where
+there currently is none.
+
+### 11.1 The position limit is the binding constraint
+
+The §8 backtest allowed one position per *symbol* — up to 19 at once. The risk
+limits allow one position across the **whole book**. That is not a detail; it
+decides whether the strategy is worth running.
+
+| Max concurrent positions | Trades (11.6y) | Expectancy | t-stat | Total |
+|---:|---:|---:|---:|---:|
+| **1** *(as configured)* | 181 | +0.108 R | **1.13** | +19.5 R |
+| 2 | 308 | +0.127 R | 1.69 | +39.0 R |
+| 3 | 440 | +0.180 R | **2.89** | +79.3 R |
+| 5 | 665 | +0.232 R | **4.58** | +154.5 R |
+| 8 | 879 | +0.211 R | 4.79 | +185.6 R |
+| unlimited | 949 | +0.200 R | 4.69 | +190.0 R |
+
+**At one position the edge is not distinguishable from zero** — 181 trades in
+11.6 years, ~16 a year, +19.5 R total. At 0.5% risk per trade that is about
+**0.84% a year**, before tax. The machinery would work; the strategy would not
+be worth the electricity.
+
+Significance appears at **3** positions and the benefit plateaus around **5**.
+Beyond 5 the extra trades are marginal ones that dilute rather than add.
+
+### 11.2 Parameters are a plateau, not a spike
+
+Every variant tested at 5 concurrent positions, one parameter moved at a time:
+
+| Variant | Trades | Win rate | Expectancy | t-stat |
+|---|---:|---:|---:|---:|
+| **base** — stop 2.0, target 3.0, breakout 20, trend 200 | 665 | 37.9% | +0.232 R | 4.58 |
+| stop 1.5 | 759 | 31.4% | +0.269 R | 4.76 |
+| stop 2.5 | 606 | 43.9% | +0.141 R | 2.99 |
+| stop 3.0 / target 4.5 | 390 | 39.0% | +0.170 R | 2.60 |
+| target 2.5 (R:R 1.25) | 750 | 42.1% | +0.147 R | 3.41 |
+| target 4.0 (R:R 2.0) | 513 | 32.2% | +0.247 R | 3.69 |
+| target 6.0 (R:R 3.0) | 375 | 24.1% | **+0.415 R** | 4.12 |
+| breakout 10 | 684 | 38.7% | +0.149 R | 2.99 |
+| breakout 40 | 611 | 37.9% | +0.228 R | 4.32 |
+| breakout 60 | 582 | 37.7% | +0.254 R | 4.66 |
+| trend 100 | 662 | 38.4% | +0.242 R | 4.68 |
+| trend 150 | 649 | 38.7% | +0.224 R | 4.36 |
+| trend 250 | 649 | 38.1% | +0.217 R | 4.23 |
+
+**All thirteen are positive**, spanning +0.14 to +0.41 R with t from 2.6 to 4.8.
+That is the signature of a real effect rather than a curve fit: if the base
+parameters had been tuned to this data, the neighbours would fall off a cliff.
+They don't.
+
+I am deliberately **not** adopting the best cell. Picking `target 6.0` because
+it scored highest here is exactly the overfitting this test was designed to
+detect. It is a hypothesis for v2, not a change to v1.
+
+### 11.3 Three conflicts with the shadow limits
+
+The backtest turned three of my placeholder limits from guesses into known
+problems:
+
+| Limit | Placeholder | Observed | Consequence |
+|---|---|---|---|
+| `max_open_positions` | 1 | needs 3–5 | **Edge disappears.** The single largest issue. |
+| `max_open_portfolio_risk_fraction` | 0.01 | 5 × 0.5% = 0.025 | Caps the book at 2 positions regardless of the above. |
+| `max_consecutive_losses` | 6 | 10–17 observed | Kill switch trips, needs a human, more than once a year. |
+
+`data/fixtures/risk_limits.shadow.json` has been updated to values consistent
+with the strategy, still clearly labelled shadow-only. **Production values
+remain decision D-1 and remain yours.**
+
+### 11.4 Revised verdict
+
+The edge is real, robust to parameter choice, and survives out of sample — and
+it is **small**. At 5 concurrent positions and 0.5% risk, +154 R over 11.6 years
+is roughly **6.7% a year on risk deployed**, before tax, ignoring the
+survivorship problem in §9 which biases even that upward.
+
+That is worth running in SHADOW to validate the machinery end to end. It is not,
+on this evidence, worth funding — and I would not change that view without a
+survivorship-free universe.

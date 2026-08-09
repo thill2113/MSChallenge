@@ -18,13 +18,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Mapping
 from datetime import date, datetime, time
 from decimal import Decimal
 from enum import Enum
-from typing import Any, ClassVar
+from typing import Any, ClassVar, Self
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, PrivateAttr
 
 
 class FrozenModel(BaseModel):
@@ -38,6 +39,24 @@ class FrozenModel(BaseModel):
         populate_by_name=False,
         use_enum_values=False,
     )
+
+    def model_copy(self, *, update: Mapping[str, Any] | None = None, deep: bool = False) -> Self:
+        """Copy, discarding any memoised digest when fields change.
+
+        Pydantic carries private attributes onto the copy. For a cached
+        fingerprint that is a correctness hole with teeth: ``candidate.model_copy(
+        update={"quantity": 1000})`` would otherwise report the *original's*
+        fingerprint, and every downstream binding that ADR-001 depends on —
+        risk approval, agent review, order intent — would accept the widened
+        trade as the one that was approved.
+
+        A copy with no update is content-identical, so its digest is still
+        valid and is kept.
+        """
+        copied = super().model_copy(update=update, deep=deep)
+        if update:
+            object.__setattr__(copied, "_fingerprint_cache", None)
+        return copied
 
 
 def canonical_form(value: Any) -> Any:
@@ -92,6 +111,16 @@ class AuthoritativeModel(FrozenModel):
 
     AUTHORITATIVE_FIELDS: ClassVar[tuple[str, ...]] = ()
 
+    _fingerprint_cache: str | None = PrivateAttr(default=None)
+    """Memoised digest.
+
+    Safe because the model is frozen: the fields the digest covers cannot
+    change, so the answer cannot go stale. Worth caching because a snapshot
+    appears in every look-back window that contains it — up to 200 of them —
+    and recomputing its digest each time dominated both backtest runtime and
+    hot-path latency.
+    """
+
     @classmethod
     def __pydantic_init_subclass__(cls, **kwargs: Any) -> None:
         super().__pydantic_init_subclass__(**kwargs)
@@ -118,10 +147,14 @@ class AuthoritativeModel(FrozenModel):
         records with different fingerprints must never be treated as
         interchangeable by the risk or execution layers.
         """
+        if self._fingerprint_cache is not None:
+            return self._fingerprint_cache
         encoded = json.dumps(
             self.authoritative_payload(),
             sort_keys=True,
             separators=(",", ":"),
             ensure_ascii=False,
         ).encode("utf-8")
-        return hashlib.sha256(encoded).hexdigest()
+        digest = hashlib.sha256(encoded).hexdigest()
+        self._fingerprint_cache = digest
+        return digest

@@ -196,3 +196,50 @@ def _candidate(
         time_in_force=TimeInForce.DAY,
         account_risk_fraction=Decimal("0.005"),
     )
+
+
+class TestFingerprintMemoisation:
+    """The digest is cached. These prove the cache cannot lie.
+
+    Caching the fingerprint is a real speedup — a snapshot appears in up to 200
+    overlapping look-back windows — but the fingerprint is the security boundary
+    the whole authority model rests on. A stale digest would let a widened trade
+    present itself as the one risk approved.
+    """
+
+    def test_a_mutating_copy_reports_a_new_fingerprint(self, candidate):
+        # The exact bug memoisation introduced, caught by the invariant suite.
+        before = candidate.authoritative_fingerprint()
+        widened = candidate.model_copy(update={"quantity": Decimal("1000")})
+        assert widened.authoritative_fingerprint() != before
+
+    def test_the_cache_is_dropped_even_when_read_before_the_copy(self, candidate):
+        candidate.authoritative_fingerprint()  # warm the cache
+        moved = candidate.model_copy(update={"stop_price": Decimal("90")})
+        assert moved.authoritative_fingerprint() != candidate.authoritative_fingerprint()
+
+    def test_a_plain_copy_keeps_its_identity(self, candidate):
+        # No update means content-identical, so the digest is still correct.
+        assert (
+            candidate.model_copy().authoritative_fingerprint()
+            == candidate.authoritative_fingerprint()
+        )
+
+    def test_a_deep_copy_keeps_its_identity(self, candidate):
+        assert (
+            candidate.model_copy(deep=True).authoritative_fingerprint()
+            == candidate.authoritative_fingerprint()
+        )
+
+    def test_repeated_reads_agree(self, candidate):
+        assert candidate.authoritative_fingerprint() == candidate.authoritative_fingerprint()
+
+    def test_two_independently_built_equal_records_agree(self, base_time):
+        first = _candidate(base_time)
+        second = _candidate(base_time)
+        assert first.authoritative_fingerprint() == second.authoritative_fingerprint()
+
+    def test_a_revalidated_record_agrees_with_the_original(self, candidate):
+        # Round-tripping through serialisation must not change identity.
+        revalidated = TradeCandidate.model_validate(candidate.model_dump())
+        assert revalidated.authoritative_fingerprint() == candidate.authoritative_fingerprint()
