@@ -11,7 +11,7 @@ Run: python3 replay_controls.py
 from __future__ import annotations
 
 import csv
-from datetime import datetime
+from datetime import date, datetime
 
 import risk_controls as rc
 
@@ -94,7 +94,7 @@ def main() -> None:
 
     # State entering 2026-08-06, i.e. what a pre-trade check would have seen.
     prior = [c for c in closes if c["date"].isoformat() < "2026-08-06"]
-    dd_before = rc.drawdown_from_peak(prior)
+    dd_before = rc.drawdown_from_peak(prior, as_of=date(2026, 8, 6))
     print(f"\n  Drawdown entering 2026-08-06: ${dd_before:.2f} "
           f"({abs(dd_before) / equity * 100:.2f}% of equity)\n")
     print("  Would each candidate threshold have blocked the 08-06 trade?")

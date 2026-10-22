@@ -19,14 +19,14 @@ Paper trading and analysis are permitted. Live orders are not.
 
 ```
 python3 risk_controls.py SYMBOL SIDE ENTRY QTY EQUITY QQQ_PCT   # exit 0 = allowed, 1 = blocked
-python3 -m unittest test_risk_controls                          # 20 tests
+python3 -m unittest test_risk_controls                          # 26 tests
 python3 replay_controls.py                                      # what each control catches historically
 ```
 
 | P0 | Control | Where |
 |---|---|---|
 | 1 | Stop width **15%** (reverted from 35%) | `risk_controls.compute_stop()` |
-| 2 | Drawdown halt 2.5% + cross-session loss streak | `risk_controls.drawdown_from_peak()`, `consecutive_losses()` |
+| 2 | Drawdown halt 2.5% over the last **5 trading days** (not 5 ledger sessions — fixed 2026-10-22, the old window froze on the August losses) + cross-session loss streak | `risk_controls.drawdown_from_peak()`, `consecutive_losses()` |
 | 3 | **Chop regime = hard block**, not advisory | `risk_controls.is_chop()` |
 | 4 | Paper mode default; LIVE needs explicit opt-in | `risk_controls.Mode` |
 

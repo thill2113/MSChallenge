@@ -80,13 +80,13 @@ class DrawdownTests(unittest.TestCase):
     def test_no_drawdown_when_rising(self):
         led = _ledger([("2026-08-03T15:00:00", "A", 38.0),
                        ("2026-08-04T15:00:00", "B", 54.0)])
-        self.assertEqual(rc.drawdown_from_peak(rc.load_closes(led)), 0.0)
+        self.assertEqual(rc.drawdown_from_peak(rc.load_closes(led), date(2026, 8, 4)), 0.0)
 
     def test_measures_peak_to_trough(self):
         led = _ledger([("2026-08-03T15:00:00", "A", 100.0),
                        ("2026-08-04T15:00:00", "B", -30.0),
                        ("2026-08-05T15:00:00", "C", -20.0)])
-        self.assertAlmostEqual(rc.drawdown_from_peak(rc.load_closes(led)), -50.0)
+        self.assertAlmostEqual(rc.drawdown_from_peak(rc.load_closes(led), date(2026, 8, 5)), -50.0)
 
     def test_same_session_closes_aggregate(self):
         led = _ledger([("2026-08-05T14:00:00", "RIVN", -68.0),
@@ -108,7 +108,55 @@ class DrawdownTests(unittest.TestCase):
                        ("2026-08-05T15:00:00", "APLD", -42.0)])
         closes = rc.load_closes(led)
         self.assertAlmostEqual(sum(c["pnl"] for c in closes), 64.94, places=2)
-        self.assertAlmostEqual(rc.drawdown_from_peak(closes), -110.0, places=2)
+        self.assertAlmostEqual(rc.drawdown_from_peak(closes, date(2026, 8, 5)), -110.0, places=2)
+
+
+class DrawdownWindowTests(unittest.TestCase):
+    """The window is measured in trading days ending on the evaluation date.
+
+    Regression for 2026-10-22: the window used to be the last 5 sessions that
+    had closes, so with no trades after 08-06 it froze on the August losses and
+    blocked every proposal indefinitely.
+    """
+
+    AUG_LOSSES = [("2026-08-03T15:00:00", "SOFI", 38.0),
+                  ("2026-08-04T15:00:00", "IREN", 54.0),
+                  ("2026-08-05T14:00:00", "RIVN", -68.0),
+                  ("2026-08-05T15:00:00", "APLD", -42.0),
+                  ("2026-08-06T18:00:00", "IREN", -83.0)]
+
+    def test_window_counts_weekdays(self):
+        # Thu 10-22 back five weekdays -> Fri 10-16
+        self.assertEqual(rc.window_start(date(2026, 10, 22), 5), date(2026, 10, 16))
+
+    def test_window_from_weekend(self):
+        # Sat 10-24: weekend days are not sessions -> Mon 10-19 .. Fri 10-23
+        self.assertEqual(rc.window_start(date(2026, 10, 24), 5), date(2026, 10, 19))
+
+    def test_days_without_trades_still_count(self):
+        closes = rc.load_closes(_ledger(self.AUG_LOSSES))
+        # 08-07: window 08-03..08-07 still holds the whole drawdown
+        self.assertAlmostEqual(rc.drawdown_from_peak(closes, date(2026, 8, 7)), -193.0)
+        # 08-12: window 08-06..08-12 -- only the -83 day remains
+        self.assertAlmostEqual(rc.drawdown_from_peak(closes, date(2026, 8, 12)), -83.0)
+        # 08-13: window 08-07..08-13 -- nothing left; the losses have aged out
+        self.assertEqual(rc.drawdown_from_peak(closes, date(2026, 8, 13)), 0.0)
+
+    def test_closes_after_as_of_are_ignored(self):
+        """Replaying a past date must not see trades that had not happened yet."""
+        closes = rc.load_closes(_ledger(self.AUG_LOSSES))
+        self.assertEqual(rc.drawdown_from_peak(closes, date(2026, 8, 4)), 0.0)
+
+    def test_frozen_window_no_longer_blocks(self):
+        led = _ledger(self.AUG_LOSSES)
+        on_0807 = rc.evaluate(rc.TradeProposal("X", "put", 1.0, 1, 4123.88),
+                              rc.MarketState(-2.0), mode=rc.Mode.LIVE,
+                              ledger_path=led, as_of=date(2026, 8, 7))
+        on_1022 = rc.evaluate(rc.TradeProposal("X", "put", 1.0, 1, 4123.88),
+                              rc.MarketState(-2.0), mode=rc.Mode.LIVE,
+                              ledger_path=led, as_of=date(2026, 10, 22))
+        self.assertTrue(any("DRAWDOWN_HALT" in b for b in on_0807.blocks))
+        self.assertFalse(any("DRAWDOWN_HALT" in b for b in on_1022.blocks), on_1022.render())
 
 
 class LossStreakTests(unittest.TestCase):
@@ -153,6 +201,7 @@ class HistoricalRegressionTests(unittest.TestCase):
             rc.MarketState(qqq_change_pct=0.07),
             mode=rc.Mode.LIVE,
             ledger_path=led,
+            as_of=date(2026, 8, 6),
         )
         self.assertFalse(res.allowed, "the 08-06 trade must not pass")
         self.assertTrue(any("CHOP_REGIME" in b for b in res.blocks))
@@ -167,6 +216,7 @@ class HistoricalRegressionTests(unittest.TestCase):
             rc.MarketState(qqq_change_pct=1.5),  # neutralise the chop gate
             mode=rc.Mode.LIVE,
             ledger_path=led,
+            as_of=date(2026, 8, 6),
         )
         self.assertFalse(res.allowed)
         self.assertTrue(any("DRAWDOWN_HALT" in b for b in res.blocks),
@@ -181,12 +231,13 @@ class HistoricalRegressionTests(unittest.TestCase):
             rc.MarketState(qqq_change_pct=1.2),
             mode=rc.Mode.LIVE,
             ledger_path=led,
+            as_of=date(2026, 7, 31),
         )
         self.assertTrue(res.allowed, res.render())
         self.assertAlmostEqual(res.stop_trigger, 0.64, places=2)
 
-    def test_real_ledger_currently_halts(self):
-        """Against the live trades.csv, the account is in a halt state today."""
+    def test_real_ledger_halted_the_day_after(self):
+        """Against the live trades.csv, the account was in a halt state on 08-07."""
         if not Path("trades.csv").exists():
             self.skipTest("trades.csv not present")
         res = rc.evaluate(
@@ -194,8 +245,27 @@ class HistoricalRegressionTests(unittest.TestCase):
             rc.MarketState(qqq_change_pct=2.0),
             mode=rc.Mode.LIVE,
             ledger_path="trades.csv",
+            as_of=date(2026, 8, 7),
         )
         self.assertFalse(res.allowed, "3 straight losses + drawdown must halt")
+        self.assertTrue(any("DRAWDOWN_HALT" in b for b in res.blocks))
+
+    def test_real_ledger_drawdown_ages_out(self):
+        """The 2026-10-22 defect: the August losses must no longer block in October.
+
+        The loss streak still counts across sessions and still warns -- only the
+        drawdown window was frozen.
+        """
+        if not Path("trades.csv").exists():
+            self.skipTest("trades.csv not present")
+        res = rc.evaluate(
+            rc.TradeProposal("ANY", "call", 1.00, 1, 4123.88),
+            rc.MarketState(qqq_change_pct=2.0),
+            mode=rc.Mode.LIVE,
+            ledger_path="trades.csv",
+            as_of=date(2026, 10, 22),
+        )
+        self.assertFalse(any("DRAWDOWN_HALT" in b for b in res.blocks), res.render())
 
 
 if __name__ == "__main__":

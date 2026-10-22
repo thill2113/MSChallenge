@@ -27,7 +27,7 @@ import csv
 import json
 import sys
 from dataclasses import dataclass, field
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
@@ -56,7 +56,7 @@ CHOP_BAND_PCT = 0.5
 #: flagged as such rather than presented as a fitted optimum.
 MAX_DRAWDOWN_FROM_PEAK_PCT = 2.5
 
-#: Sessions in the rolling drawdown window.
+#: Trading days (Mon-Fri) in the rolling drawdown window, ending on the evaluation date.
 DRAWDOWN_WINDOW_SESSIONS = 5
 
 #: P0-2 (secondary). Consecutive losing closes, counted ACROSS sessions.
@@ -194,20 +194,60 @@ def session_pnl(closes: list[dict]) -> list[tuple[date, float]]:
 # ---------------------------------------------------------------------------
 
 
-def drawdown_from_peak(closes: list[dict], window: int = DRAWDOWN_WINDOW_SESSIONS) -> float:
-    """Realized drawdown below the high-water mark over the trailing `window` sessions.
+def market_today() -> date:
+    """Today's date on the US/Eastern market calendar (UTC runs a day ahead after 8pm ET)."""
+    try:
+        from zoneinfo import ZoneInfo
+
+        return datetime.now(ZoneInfo("America/New_York")).date()
+    except Exception:  # tzdata missing -- fall back to UTC
+        return datetime.utcnow().date()
+
+
+def window_start(as_of: date, window: int = DRAWDOWN_WINDOW_SESSIONS) -> date:
+    """First date of the `window`-trading-day span ending on `as_of` (inclusive).
+
+    Trading days are Mon-Fri. Exchange holidays are not modelled: a holiday inside
+    the span is counted as a day, which shortens the effective lookback by one
+    session. Accepted because it errs by at most one session and needs no
+    calendar dependency.
+    """
+    if window < 1:
+        raise ValueError("window must be >= 1")
+    d = as_of
+    counted = 1 if d.weekday() < 5 else 0
+    while counted < window:
+        d -= timedelta(days=1)
+        if d.weekday() < 5:
+            counted += 1
+    return d
+
+
+def drawdown_from_peak(
+    closes: list[dict],
+    as_of: date,
+    window: int = DRAWDOWN_WINDOW_SESSIONS,
+) -> float:
+    """Realized drawdown below the high-water mark over the `window` trading days ending `as_of`.
 
     Returns a non-positive number. 0.0 means at or above the running peak.
+
+    The window is measured in TRADING DAYS, not in sessions present in the ledger.
+    The original version took the last `window` sessions that had closes; with no
+    trades after 2026-08-06 that froze the window on the 08-05/08-06 losses, so the
+    halt could never lift and the paper-trade requirement for resuming live trading
+    became unreachable. Days without closes now count as flat sessions, so old
+    losses age out after `window` trading days.
 
     A rolling *sum* was considered and rejected: across 07-31..08-05 the sum was
     +$64.94 because two large winners masked the -$110 day. Peak-to-trough is the
     measure that reflects capital actually surrendered.
     """
-    sessions = session_pnl(closes)
-    if not sessions:
+    start = window_start(as_of, window)
+    recent = [(d, pnl) for d, pnl in session_pnl(closes) if start <= d <= as_of]
+    if not recent:
         return 0.0
 
-    recent = sessions[-window:]
     # Seed the peak with equity carried into the window, so a drawdown that
     # begins before the window still registers.
     equity = 0.0
@@ -247,8 +287,12 @@ def evaluate(
     *,
     mode: str = Mode.PAPER,
     ledger_path: str | Path = "trades.csv",
+    as_of: date | None = None,
 ) -> GateResult:
     """Run every P0 gate. Any single block denies the trade.
+
+    `as_of` is the evaluation date for the drawdown window; it defaults to today
+    on the US/Eastern calendar. Pass an explicit date only to replay history.
 
     Gates are evaluated in full rather than short-circuiting, so the caller sees
     every reason at once instead of fixing them one at a time.
@@ -273,12 +317,13 @@ def evaluate(
         )
 
     # P0-2 -- drawdown
-    dd = drawdown_from_peak(closes)
+    as_of = as_of or market_today()
+    dd = drawdown_from_peak(closes, as_of)
     dd_limit = -(proposal.equity * MAX_DRAWDOWN_FROM_PEAK_PCT / 100)
     if dd <= dd_limit:
         result.blocks.append(
-            f"DRAWDOWN_HALT: realized drawdown ${dd:.2f} over the last "
-            f"{DRAWDOWN_WINDOW_SESSIONS} sessions breaches the "
+            f"DRAWDOWN_HALT: realized drawdown ${dd:.2f} over the "
+            f"{DRAWDOWN_WINDOW_SESSIONS} trading days ending {as_of} breaches the "
             f"{MAX_DRAWDOWN_FROM_PEAK_PCT}% limit (${dd_limit:.2f})."
         )
     elif dd <= dd_limit * 0.6:
@@ -320,7 +365,7 @@ def evaluate(
 def main(argv: list[str]) -> int:
     if len(argv) < 6:
         print(
-            "usage: risk_controls.py SYMBOL SIDE ENTRY_PRICE QTY EQUITY QQQ_PCT [--live]",
+            "usage: risk_controls.py SYMBOL SIDE ENTRY_PRICE QTY EQUITY QQQ_PCT [--live] [--as-of YYYY-MM-DD] [--json]",
             file=sys.stderr,
         )
         print(
@@ -331,11 +376,15 @@ def main(argv: list[str]) -> int:
 
     symbol, side, entry, qty, equity, qqq = argv[:6]
     mode = Mode.LIVE if "--live" in argv else Mode.PAPER
+    as_of = None
+    if "--as-of" in argv:
+        as_of = date.fromisoformat(argv[argv.index("--as-of") + 1])
 
     res = evaluate(
         TradeProposal(symbol, side, float(entry), int(qty), float(equity)),
         MarketState(float(qqq)),
         mode=mode,
+        as_of=as_of,
     )
     print(res.render())
     if "--json" in argv:
