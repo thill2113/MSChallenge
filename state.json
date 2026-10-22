@@ -8,7 +8,7 @@
   "v1_0_note": "v1.0 froze 2026-07-15 pending 20-30 closes. Ledger hit 19 closes 2026-07-28; full-ledger evidence review run; v1.1 is the SCHEDULED revision batch, not a reactive override.",
   "TRADING_HALTED_2026-08-06": "REAL-MONEY TRADING HALTED by user instruction pending full strategy review. See STRATEGY_REVIEW_2026-08-06.md. Headline: 95% bootstrap CI on expectancy is [-8.83,+23.13] and CROSSES ZERO at n=26 -- the edge is not statistically established. v1.1 stop widening quantified as an error: no winner ever drew past -14.70%, so the extra room rescued zero winners; replaying v1.1 at a 15% stop yields +191.54 vs +88.84 actual, +102.70 improvement. Short holds (<6h) are net negative: n=16, PF 0.64, expectancy -4.44. Long holds (>=6h): n=10, PF 3.15, expectancy +25.25, permutation p=0.043. Recommendation: PAPER TRADING until 50 trades with a CI lower bound above zero. No real-money orders until go/no-go criteria in section 11 of the review are met."
  },
- "last_updated_utc": "2026-08-06T19:45:00Z",
+ "last_updated_utc": "2026-10-22T14:45:00Z",
  "account": {
   "number_masked": "****4177",
   "equity_approx": 4123.88,
@@ -716,6 +716,14 @@
    "underlying": 19.205,
    "move_pct": -5.76,
    "reason": "Second BID_DEPTH_COLLAPSE firing on the same chain, 84 minutes after the first. Depth 1194 -> 18 lots (-98.5%) in ~3 minutes, against a 528 floor. Spread tightened to 3.52% over the same window -- the best quote on this chain all day -- marking the third occasion today where the displayed price improved while the book emptied. 18 lots is exactly RIVN's depth when it delivered -68.00 at MFE 0.0%. Four CIFR attempts today with four distinct causes: whole-chain widening (15:27), depth 1244->63 (16:24), all gates PASSED but the MCP approval gate refused the order (17:45), depth 1194->18 (17:48). Only the 17:45 block was a tooling loss rather than a market one. Verdict: CIFR was untradeable today at acceptable execution quality even though the thesis ran -4.02% -> -5.79% in our favour throughout."
+  },
+  {
+   "utc": "2026-10-22T14:40:00Z",
+   "symbol": "MULTI",
+   "side": "both",
+   "action": "SCAN_BLOCKED_BY_CODE_GATE",
+   "regime": "QQQ -2.31% -> puts-only",
+   "reason": "Puts: 11 triggers, all earnings-clear for the 10-30 expiry (miners report 11-02..11-06): IREN -8.91, CIFR -8.76, HUT -8.07, APLD -7.05, RIOT -6.56, WULF -6.07, CLSK -5.89, CORZ -5.19, MARA -4.62, RGTI -3.84, TEM -3.71. Nine of the eleven are one crypto/AI-datacenter cluster. Calls: none up 3%, and regime-blocked. risk_controls.py (IREN put, paper equity 4123.88, QQQ -2.31) returned PAPER_MODE plus DRAWDOWN_HALT (-$193 over last 5 ledger sessions vs -$103.10 limit) and a 3-loss warning. No trade, paper or live. DEFECT SURFACED, NOT OVERRIDDEN: drawdown_from_peak() counts the last 5 sessions present in trades.csv, not the last 5 trading days. With no closes since 08-06, the window is frozen on 07-31..08-06 and will block every proposal indefinitely, which also makes the 50-paper-trade go/no-go criterion unreachable. Fix requires a user decision on a P0 control."
   }
  ],
  "watchlist": {
